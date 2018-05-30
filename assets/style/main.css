@@ -1,13 +1,667 @@
-body
+@font-face {
+    font-family: 'avenir_roman';
+    src: url('../fonts/avenir_roman.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'din_condensed';
+    src: url('../fonts/din_condensed.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media only screen and (max-height: 600px) {
+    /* div#overlay #buttonProject {
+        display:none;
+    } */
+
+    div#overlay #titleProject
+    {
+        margin-top: -9px!important;
+    }
+
+    div#overlay .top {
+        padding-top: 12px!important;
+        height: 21px!important;
+    }
+    div#overlay #about {
+        /* display:none; */
+    }
+
+    div#overlay #buttonProject #insideButtonProject
+    {
+        width: 50px!important;
+        height: 50px!important;
+        /* margin-top: 0px!important;
+        top: 20px!important; */
+    }
+
+    div#overlay #buttonProject #insideButtonProject:hover
+    {
+        width: 60px!important;
+        height: 60px!important;
+        /* margin-top: -5px!important; */
+        /* left: -5px; */
+    }
+
+    div#overlay #buttonProject #insideButtonProject:hover img
+    {
+        width: 30px!important;
+        height: 30px!important;
+        margin-top: -15px!important;
+        margin-left: -15px!important;
+    }
+
+
+    div#overlay #buttonProject #insideButtonProject img
+    {
+        width: 20px!important;
+        height: 20px!important;
+        margin-top: -10px!important;
+        margin-left: -10px!important;
+    }
+
+
+    #header
+    {
+        height: 40px!important;
+    }
+
+    #header span
+    {
+        font-size: 15px!important;
+    }
+
+    div#overlay #titleProject
+    {
+        font-size: 22px!important;
+    }
+
+    div#overlay #aboutScreen h2
+    {
+        font-size: 22px!important;
+    }
+
+    div#overlay
+    {
+        font-size: 10px!important;
+    }
+
+    div#overlay #aboutScreen #aboutSlideIn #aboutBack
+    {
+        margin-top: -25px!important;
+    }
+
+    div#overlay #aboutScreen #aboutSlideIn #aboutBack img
+    {
+        width: 20px!important;
+        height: 20px!important;
+        margin-left:10px!important;
+    }
+
+    div#overlay #aboutScreen #aboutSlideIn #inner
+    {
+        top: 45%!important;
+        max-height: 85%!important;
+    }
+
+
+    .font12
+    {
+        font-size: 8px!important;
+    }
+
+    .font14
+    {
+        font-size: 8px!important;
+    }
+
+    .font16
+    {
+        font-size: 10px!important;
+    }
+
+
+    .font28
+    {
+        font-size: 15px!important;
+    }
+
+    .font32
+    {
+        font-size: 18px!important;
+    }
+
+    .font40
+    {
+        font-size: 21px!important;
+    }
+
+    .font44
+    {
+        font-size: 30px!important;
+    }
+
+}
+
+
+body, html
 {
     border: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#loader
+{
+    width: 100%;
+    height: 100%;
+    position:fixed;
+    top:0;
+    left:0;
+    background-color: #000000;
+    z-index: 12;
+    text-transform: uppercase;
+    color: #fff;
+    font-family: "din_condensed";
+}
+
+#loader p
+{
+    letter-spacing: 3px;
+    text-align:center;
+    position:relative;
+    top:50%;
+    margin-top: -70px;
+}
+#loader img#imageLoader
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 80px;
+    height: 80px;
+
+    margin-left: -40px;
+    margin-top: -40px;
+}
+
+#loader #landscape
+{
+    display: none;
+    /* position: absolute; */
+    top: 80%;
+    font-size: 10px;
+    /* left: 50%; */
+
+    /* width: 70px;
+    height: 70px;
+
+    margin-left: -35px;
+    margin-top: -35px; */
 }
 
 canvas
 {
-    width: 100vw;
-    height: 100vh;
-    position: absolute;
+    width: 100%;
+    height: 100%;
+    position: fixed;
     left: 0;
     top: 0;
+}
+
+#header
+{
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: #000000;
+    height: 60px;
+    z-index: 10;
+    font-family: "din_condensed";
+    color: #fff;
+    letter-spacing: 3px;
+}
+
+#header .insideHeader {
+    position:absolute;
+    width: 100%;
+    height: 200%;
+    top: -100%;
+    background-color: #000000;
+
+}
+#header a
+{
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+#header #menu
+{
+    position:absolute;
+    top: 0;
+    left: 33px;
+    width: 50px;
+    height: 100%;
+    overflow:hidden;
+    cursor: pointer;
+}
+
+#header #menu #icon_close
+{
+    left: -100px;
+    top: 50%;
+    opacity: 1;
+}
+
+#header #menu #icon_menu
+{
+    left: 0px;
+    top: 50%;
+    opacity: 1;
+}
+
+#header img.twitter
+{
+    right: 33px;
+}
+
+#header img.github
+{
+    right: 100px;
+}
+
+#header img.github:hover, #header img.twitter:hover
+{
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-right: -3px;
+}
+
+#header img
+{
+    position: absolute;
+    top: 50%;
+    border: none;
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    margin-top: -17px;
+    text-decoration: none;
+    transition: all .1s ease;
+}
+
+div#overlay
+{
+    letter-spacing: 1px;
+}
+
+div#overlay #buttonProject
+{
+    text-align:center;
+    width: 100%;
+    position: absolute;
+    top: 50%
+}
+
+
+
+div#overlay #buttonProject #insideButtonProject
+{
+    margin: auto;
+    display:inline-block;
+    width: 90px;
+    height: 90px;
+    background-color: #000000;
+    transition: all .2s ease;
+    cursor: pointer;
+    position: relative;
+    margin-top: 0px;
+    top: 0;
+    left: 0;
+}
+
+div#overlay #buttonProject #insideButtonProject:hover
+{
+    width: 100px;
+    height: 100px;
+    margin-top: -5px;
+    /* left: -5px; */
+}
+
+div#overlay #buttonProject #insideButtonProject:hover img
+{
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-left: -20px;
+}
+
+
+div#overlay #buttonProject #insideButtonProject img
+{
+    width: 30px;
+    height: 30px;
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -15px;
+    margin-left: -15px;
+    transition: all .2s ease;
+}
+
+div#overlay .top
+{
+    height: 35px;
+    width: 0%;
+    padding-top: 25px;
+    margin: auto;
+    border-bottom: 1px solid #ffffff;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+}
+
+div#overlay .top #date
+{
+    left: 0;
+    position: absolute;
+}
+
+div#overlay .top #client
+{
+    position: absolute;
+    right: 0;
+    /* text-align: right; */
+}
+
+div#overlay #aboutScreen
+{
+    width: 100.2%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    display:none;
+    letter-spacing: 1.1px;
+}
+
+div#overlay #aboutScreen #aboutSlideIn #aboutBack
+{
+    position: absolute;
+    top: 100%;
+    margin-top: -36px;
+    cursor: pointer;
+}
+
+div#overlay #aboutScreen #aboutSlideIn #aboutBack img
+{
+    width: 30px;
+    height: 30px;
+    margin-left:10px;
+}
+
+div#overlay #aboutScreen #aboutSlideIn
+{
+    width: 101%;
+    height: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #000;
+
+
+}
+
+
+div#overlay #aboutScreen #aboutSlideIn #inner::-webkit-scrollbar {
+    display: none;
+}
+div#overlay #aboutScreen #aboutSlideIn #inner
+{
+    position: absolute;
+    width: 100%;
+    max-height: 90%;
+    top: 49%;
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+
+    /* overflow: scroll; */
+    overflow: auto;
+    -ms-overflow-style: none;
+    /* overflow: -moz-scrollbars-none; */
+}
+
+div#overlay #aboutScreen #aboutSlideIn #inner #scrollable
+{
+    padding: 5% 0;
+}
+
+div#overlay #aboutScreen h2
+{
+    font-family: "din_condensed";
+    font-size: 40px;
+    margin: 5px auto 0 auto;
+    width: 100%;
+    text-align: center;
+    position:relative;
+    letter-spacing: 1px;
+}
+
+
+div#overlay #aboutScreen #inner #teamSection
+{
+    padding-bottom: 5%;
+}
+
+div#overlay #aboutScreen .sub
+{
+    width: 40%;
+    text-align:center;
+
+}
+
+div#overlay #aboutScreen .sub ul li a
+{
+    text-decoration: none;
+    color: #ffffff;
+}
+
+div#overlay #aboutScreen .sub ul
+{
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+    text-decoration: none;
+    list-style-type: none;
+    text-transform: uppercase;
+    font-weight: 100;
+}
+
+div#overlay #aboutScreen #art
+{
+    margin-left: 5%;
+}
+div#overlay #aboutScreen #dev
+{
+    float:right;
+    margin-right: 5%;
+}
+
+.center
+{
+    text-align:center;
+}
+
+div#overlay #aboutScreen h2.team
+{
+    margin-top: 10px;
+}
+
+div#overlay #aboutScreen p#description a
+{
+    color: #fff;
+}
+
+div#overlay #aboutScreen p#description span
+{
+    width: 25px;
+    height: 25px;
+    background-color: #ff0000;
+    display: inline-block;
+}
+
+div#overlay #aboutScreen p#description
+{
+    text-align: justify;
+    /* text-justify: inter-word; */
+    padding: 0% 5% 5% 5%;
+}
+
+div#overlay #aboutScreen p#description .quote
+{
+    text-align:center;
+    font-family: 'din_condensed';
+    text-transform: uppercase;
+    line-height: 1.3;
+}
+
+
+.font12
+{
+    font-size: 12px;
+}
+
+.font14
+{
+    font-size: 14px;
+}
+
+.font16
+{
+    font-size: 16px;
+}
+
+
+.font28
+{
+    font-size: 28px;
+}
+
+.font32
+{
+    font-size: 32px;
+}
+
+.font40
+{
+    font-size: 40px;
+}
+
+.font44
+{
+    font-size: 44px;
+}
+
+div#overlay #about #link img
+{
+    width: 15px;
+    position: absolute;
+    right: 10px;
+    /* margin-top: -2px; */
+}
+
+div#overlay #about #link
+{
+    padding: 0;
+    margin: 0;
+    padding:  12px;
+    padding-right:  32px;
+    cursor: pointer;
+}
+
+div#overlay #about #buttonAbout
+{
+    background-color: #000;
+    text-align:right;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    position:relative;
+}
+
+div#overlay #about
+{
+
+    color: #fff;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    position:absolute;
+    top: 99.4%;
+    overflow: hidden;
+}
+
+div#overlay #titleProject
+{
+    margin:auto;
+    font-family: 'din_condensed';
+    font-size: 40px;
+    text-align:center;
+    position: relative;
+    margin-top: 0px;
+    letter-spacing: 6px;
+    max-width: 98%;
+    top: 0px;
+    text-transform: uppercase;
+}
+
+div#overlay .top #producer
+{
+    /* width: 100%; */
+    margin:auto;
+    text-align: center;
+    overflow: hidden;
+}
+
+div#overlay .top #producer a
+{
+    color: #fff;
+    text-decoration: none;
+}
+
+
+div#overlay
+{
+    font-family: 'avenir_roman';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 200px;
+    height: 200px;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+
+#title
+{
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px;
+    color: white;
+    letter-spacing: 6px;
+    font-size: 45px;
+    display:none;
 }
