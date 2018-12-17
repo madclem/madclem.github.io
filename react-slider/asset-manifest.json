@@ -1,7 +1,7 @@
 {
   "main.css": "/react-slider/static/css/main.30aa45c5.chunk.css",
-  "main.js": "/react-slider/static/js/main.7293dda8.chunk.js",
-  "main.js.map": "/react-slider/static/js/main.7293dda8.chunk.js.map",
+  "main.js": "/react-slider/static/js/main.3ed8b2ba.chunk.js",
+  "main.js.map": "/react-slider/static/js/main.3ed8b2ba.chunk.js.map",
   "static/js/1.394d8c5f.chunk.js": "/react-slider/static/js/1.394d8c5f.chunk.js",
   "static/js/1.394d8c5f.chunk.js.map": "/react-slider/static/js/1.394d8c5f.chunk.js.map",
   "runtime~main.js": "/react-slider/static/js/runtime~main.cbfa59d9.js",
@@ -9,6 +9,6 @@
   "static/media/loading-mark.svg": "/react-slider/static/media/loading-mark.e1014931.svg",
   "static/css/main.30aa45c5.chunk.css.map": "/react-slider/static/css/main.30aa45c5.chunk.css.map",
   "index.html": "/react-slider/index.html",
-  "precache-manifest.794f76523f9ab37129345cab2fcac002.js": "/react-slider/precache-manifest.794f76523f9ab37129345cab2fcac002.js",
+  "precache-manifest.a49024dfbb1eb2d9ccb1b8969b741b2f.js": "/react-slider/precache-manifest.a49024dfbb1eb2d9ccb1b8969b741b2f.js",
   "service-worker.js": "/react-slider/service-worker.js"
 }
