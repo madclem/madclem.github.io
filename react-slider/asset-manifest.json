@@ -1,14 +1,14 @@
 {
-  "main.css": "https://madclem.github.io/react-slider/static/css/main.c580d842.chunk.css",
-  "main.js": "https://madclem.github.io/react-slider/static/js/main.44040c85.chunk.js",
-  "main.js.map": "https://madclem.github.io/react-slider/static/js/main.44040c85.chunk.js.map",
-  "static/js/1.394d8c5f.chunk.js": "https://madclem.github.io/react-slider/static/js/1.394d8c5f.chunk.js",
-  "static/js/1.394d8c5f.chunk.js.map": "https://madclem.github.io/react-slider/static/js/1.394d8c5f.chunk.js.map",
-  "runtime~main.js": "https://madclem.github.io/react-slider/static/js/runtime~main.229c360f.js",
-  "runtime~main.js.map": "https://madclem.github.io/react-slider/static/js/runtime~main.229c360f.js.map",
-  "static/media/loading-mark.svg": "https://madclem.github.io/react-slider/static/media/loading-mark.e1014931.svg",
-  "static/css/main.c580d842.chunk.css.map": "https://madclem.github.io/react-slider/static/css/main.c580d842.chunk.css.map",
-  "index.html": "https://madclem.github.io/react-slider/index.html",
-  "precache-manifest.b1a12587b4a2237f8c74b6424d0018cc.js": "https://madclem.github.io/react-slider/precache-manifest.b1a12587b4a2237f8c74b6424d0018cc.js",
-  "service-worker.js": "https://madclem.github.io/react-slider/service-worker.js"
+  "main.css": "/react-slider/static/css/main.c580d842.chunk.css",
+  "main.js": "/react-slider/static/js/main.eb494b12.chunk.js",
+  "main.js.map": "/react-slider/static/js/main.eb494b12.chunk.js.map",
+  "static/js/1.394d8c5f.chunk.js": "/react-slider/static/js/1.394d8c5f.chunk.js",
+  "static/js/1.394d8c5f.chunk.js.map": "/react-slider/static/js/1.394d8c5f.chunk.js.map",
+  "runtime~main.js": "/react-slider/static/js/runtime~main.cbfa59d9.js",
+  "runtime~main.js.map": "/react-slider/static/js/runtime~main.cbfa59d9.js.map",
+  "static/media/loading-mark.svg": "/react-slider/static/media/loading-mark.e1014931.svg",
+  "static/css/main.c580d842.chunk.css.map": "/react-slider/static/css/main.c580d842.chunk.css.map",
+  "index.html": "/react-slider/index.html",
+  "precache-manifest.869c1c2c0f75503b900de752af42564f.js": "/react-slider/precache-manifest.869c1c2c0f75503b900de752af42564f.js",
+  "service-worker.js": "/react-slider/service-worker.js"
 }
