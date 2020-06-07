@@ -1,0 +1,104 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
+	<title>Project Template</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="./build-main.css">
+</head>
+<body>
+	<header></header>
+	<div class='ui'>
+		<button id='stop'>STOP</button>
+		<button id='start'>START</button>
+		<button id='pause'>PAUSE</button>
+		<button id='resume'>RESUME</button>
+	</div>
+	<div class="hotspot"></div>
+	<div class="container"></div>
+	
+	
+	
+	<script type="text/javascript" src=./webgl-build.js></script>
+
+	<script>
+
+  window.addEventListener('DOMContentLoaded', _init)
+
+let hotspot;
+
+	function _init() {
+
+
+		let url = new URL(window.location.href);
+		
+
+		hotspot = document.querySelector('.hotspot');
+		
+		let stopButton = document.getElementById('stop');
+		let startButton = document.getElementById('start');
+		let resumeButton = document.getElementById('resume');
+		let pauseButton = document.getElementById('pause');
+		
+
+		let scene = new WebGL();
+		console.log(scene);
+		scene.init({
+				version: 'a1r', // a3 or a1r
+        container: document.querySelector('.container'),
+        containerButtonAR: document.querySelector('header'),
+        assetsPath: "/",
+        onProgress: (p) => {
+          console.log(`loading: ${(p * 100)}%`)
+        },
+        onComplete: (o) => {
+					console.log(`Loading complete`, o)
+					
+					scene.start();
+
+					stopButton.onclick = () => {
+						scene.stop();
+					}
+
+					startButton.onclick = () => {
+						scene.start();
+					}
+
+					pauseButton.onclick = () => {
+						scene.stopControls();
+					}
+
+					resumeButton.onclick = () => {
+						scene.startControls();
+					}
+        },
+			});
+
+		scene.onSpotClicked.add((data) => {
+			console.log('go to spot : ', data)
+		})
+
+		scene.onSpotHover.add((spot, pos) => {
+			if (hotspot.style.display === 'none') {
+				hotspot.style.display = 'flex';
+				hotspot.innerHTML = spot.label;
+			}
+
+			hotspot.style.transform = `translate3d(${pos[0]}px, ${pos[1]}px, 0)`;
+		})
+
+		scene.onSpotOut.add(() => {
+			hotspot.style.display = 'none';
+		})
+
+		window.scene = scene;
+	}
+
+	</script>
+	
+	
+</body>
+</html>
