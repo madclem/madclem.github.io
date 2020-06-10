@@ -12,7 +12,7 @@
 <body>
 	<header></header>
 	<div class='ui'>
-		<p> version: 3 </p>
+		<p> version: 4 </p>
 		<button id='stop'>STOP</button>
 		<button id='start'>START</button>
 		<button id='pause'>PAUSE</button>
@@ -82,8 +82,8 @@ let hotspot;
 			console.log('spot clicked : ', data)
 		})
 
-		scene.onSessionError.add((data) => {
-			console.log('error callback')
+		scene.onSessionError.add((err) => {
+			console.log('error callback', err)
 		})
 
 		scene.onSpotHover.add((spot, pos) => {
