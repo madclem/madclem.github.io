@@ -10,7 +10,7 @@
 },
 "17-laptop.png":
 {
-	"frame": {"x":1444,"y":384,"w":414,"h":317},
+	"frame": {"x":639,"y":638,"w":414,"h":317},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":414,"h":317},
@@ -26,7 +26,7 @@
 },
 "18-laptop.png":
 {
-	"frame": {"x":1,"y":835,"w":414,"h":317},
+	"frame": {"x":1,"y":916,"w":414,"h":317},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":414,"h":317},
@@ -42,7 +42,7 @@
 },
 "19-laptop.png":
 {
-	"frame": {"x":1301,"y":703,"w":414,"h":317},
+	"frame": {"x":1343,"y":665,"w":414,"h":317},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":414,"h":317},
@@ -50,7 +50,7 @@
 },
 "20-copy.png":
 {
-	"frame": {"x":1,"y":626,"w":660,"h":207},
+	"frame": {"x":1383,"y":456,"w":660,"h":207},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":660,"h":207},
@@ -58,7 +58,7 @@
 },
 "20-laptop.png":
 {
-	"frame": {"x":417,"y":928,"w":414,"h":317},
+	"frame": {"x":1,"y":1235,"w":414,"h":317},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":414,"h":317},
@@ -66,7 +66,7 @@
 },
 "21-copy.png":
 {
-	"frame": {"x":663,"y":638,"w":636,"h":288},
+	"frame": {"x":1,"y":626,"w":636,"h":288},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":636,"h":288},
@@ -74,7 +74,7 @@
 },
 "21-laptop.png":
 {
-	"frame": {"x":1249,"y":1022,"w":414,"h":314},
+	"frame": {"x":1249,"y":984,"w":414,"h":314},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":414,"h":314},
@@ -90,7 +90,7 @@
 },
 "22-laptop.png":
 {
-	"frame": {"x":1,"y":1154,"w":414,"h":317},
+	"frame": {"x":1,"y":1554,"w":414,"h":317},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":414,"h":317},
@@ -106,7 +106,7 @@
 },
 "23-laptop.png":
 {
-	"frame": {"x":833,"y":928,"w":414,"h":317},
+	"frame": {"x":417,"y":957,"w":414,"h":317},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":414,"h":317},
@@ -122,7 +122,7 @@
 },
 "24-laptop.png":
 {
-	"frame": {"x":1,"y":1473,"w":414,"h":317},
+	"frame": {"x":833,"y":957,"w":414,"h":317},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":414,"h":317},
@@ -130,7 +130,7 @@
 },
 "back-icon.png":
 {
-	"frame": {"x":1949,"y":195,"w":80,"h":80},
+	"frame": {"x":1960,"y":1,"w":80,"h":80},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":80},
@@ -138,7 +138,7 @@
 },
 "close-icon.png":
 {
-	"frame": {"x":1949,"y":277,"w":80,"h":80},
+	"frame": {"x":1960,"y":83,"w":80,"h":80},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":80,"h":80},
@@ -146,7 +146,7 @@
 },
 "pixel-white.png":
 {
-	"frame": {"x":2007,"y":1,"w":37,"h":28},
+	"frame": {"x":1960,"y":165,"w":37,"h":28},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":37,"h":28},
@@ -154,15 +154,15 @@
 },
 "tutorial-1.png":
 {
-	"frame": {"x":1462,"y":1,"w":543,"h":192},
+	"frame": {"x":1462,"y":1,"w":496,"h":264},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":543,"h":192},
-	"sourceSize": {"w":543,"h":192}
+	"spriteSourceSize": {"x":0,"y":0,"w":496,"h":264},
+	"sourceSize": {"w":496,"h":264}
 },
 "tutorial-2.png":
 {
-	"frame": {"x":1717,"y":703,"w":286,"h":45},
+	"frame": {"x":1055,"y":638,"w":286,"h":45},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":286,"h":45},
@@ -170,7 +170,7 @@
 },
 "tutorial-3.png":
 {
-	"frame": {"x":1462,"y":195,"w":485,"h":187},
+	"frame": {"x":1444,"y":267,"w":485,"h":187},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":485,"h":187},
@@ -183,6 +183,6 @@
 	"format": "RGBA8888",
 	"size": {"w":2048,"h":2048},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:d51bee84c26b3f18b76685ca03374a34:bf88348793f4c415be8feb88a0f922a8:bb9a3a5c67821a3ce6eb294a3fb0f607$"
+	"smartupdate": "$TexturePacker:SmartUpdate:354b99ca23721d1b5283c992d9ef25b6:c810250c13b4d6f20a22f5c4e14c8018:bb9a3a5c67821a3ce6eb294a3fb0f607$"
 }
 }
