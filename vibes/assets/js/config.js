@@ -1,0 +1,14 @@
+var WEBGL_CONFIG = {
+  SHOW_LOADER_FAKE: false,
+  MIN_LOADING_TIME: 2,
+  DELAY_FADEOUT_INFOS: 3,
+  ASSETS_PATH: "assets/",
+  NAME_BUILD: "WebGLAnimation",
+  SOUND: false,
+  START_BUTTON: false,
+  TITLE: "2021 - POSITIVE VIBES",
+  INSTRUCTIONS: "",
+  DESCRIPTION: "",
+  COLOR: "white",
+  BACKGROUND_COLOR: "#F97A52",
+};
