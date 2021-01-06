@@ -6,7 +6,7 @@ var WEBGL_CONFIG = {
   NAME_BUILD: "WebGLAnimation",
   SOUND: false,
   START_BUTTON: false,
-  TITLE: "2021 - POSITIVE VIBES",
+  TITLE: "2021 - POSITIVE PROPAGANGA",
   INSTRUCTIONS: "",
   DESCRIPTION: "",
   COLOR: "white",
