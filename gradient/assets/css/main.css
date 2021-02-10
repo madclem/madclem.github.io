@@ -1,0 +1,279 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: content-box;
+}
+
+html {
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+text,
+div,
+a,
+button,
+p {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-webkit-font-smoothing: antialiased;
+  font-family: "Open Sans", sans-serif;
+}
+
+.top-right-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.info-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  pointer-events: none;
+  display: none !important;
+}
+
+.has-info-button .info-icon {
+  display: block !important;
+}
+
+.info-icon.show {
+  pointer-events: auto;
+}
+
+.sound-icon {
+  cursor: pointer;
+  display: none;
+  width: 35px;
+  height: 35px;
+
+  margin-left: 10px;
+}
+
+.has-sound .sound-icon {
+  display: block;
+}
+
+.is-experiment {
+  opacity: 0;
+}
+
+.hide {
+  -webkit-animation: hide 0.3s linear;
+  -moz-animation: hide 0.3s linear;
+  animation: hide 0.25s linear;
+}
+
+.show {
+  -webkit-animation: show 0.3s linear forwards;
+  -moz-animation: show 0.3s linear forwards;
+  animation: show 0.25s linear forwards;
+
+  /* animation-fill-mode: forwards; */
+}
+
+.loader {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  bottom: 20px;
+  right: 20px;
+  -webkit-animation: spin 0.3s linear infinite;
+  -moz-animation: spin 0.3s linear infinite;
+  animation: spin 0.25s linear infinite;
+}
+
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes hide {
+  100% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes hide {
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes hide {
+  100% {
+    opacity: 0;
+  }
+}
+@-moz-keyframes show {
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes show {
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes show {
+  100% {
+    opacity: 1;
+  }
+}
+
+.home-icon {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.loader-content-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.error {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.error-icon {
+  margin-right: 20px;
+}
+
+.headphones {
+  border-radius: 100%;
+  height: 30px;
+  width: 30px;
+  padding: 10px;
+  border: 1px solid white;
+  display: none;
+}
+
+.twitter-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: white;
+}
+
+.start-button {
+  margin-top: 20px;
+  border: 1px solid red;
+  background: none;
+  padding: 6px 10px;
+  font-size: 18px;
+  color: inherit;
+  display: none;
+  opacity: 0.4 !important;
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.start-button.active {
+  pointer-events: auto;
+  opacity: 1 !important;
+}
+
+.has-sound .start-button,
+.has-start-button .start-button {
+  display: block;
+}
+
+.twitter-icon {
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+}
+
+.has-sound .headphones {
+  display: block;
+  margin-top: 15px;
+}
+
+.credit-list {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.credit-list > * {
+  margin-top: 5px;
+}
+
+.credit-list a {
+  color: inherit;
+}
+
+.text {
+  text-align: center;
+  width: 90%;
+  line-height: 1.4;
+}
+
+.instructions {
+  user-select: none;
+  width: 80%;
+  padding: 0 10%;
+  margin-top: 60px;
+  text-align: center;
+  line-height: 1.4;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.experiment-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
