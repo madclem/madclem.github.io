@@ -71,7 +71,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "addfdd8082eda4e0d109"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "fe4df65314aaaa2bfb5c"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -1770,169 +1770,7 @@ GLShader.getUniformType = function (mValue) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-// Scheduler.js
-const FRAMERATE = 60;
-
-class Scheduler {
-
-	constructor() {
-		this._delayTasks = [];
-		this._nextTasks = [];
-		this._deferTasks = [];
-		this._highTasks = [];
-		this._usurpTask = [];
-		this._enterframeTasks = [];
-		this._idTable = 0;
-
-		this._startTime = new Date().getTime();
-
-		this._deltaTime = 0;
-		this._internalTime = 0;
-		this._isPaused = false;
-
-
-		this._loop();
-	}
-
-
-	//  PUBLIC METHODS
-
-	addEF(func, params) {
-		params = params || [];
-		const id = this._idTable;
-		this._enterframeTasks[id] = { func, params };
-		this._idTable ++;
-		return id;
-	}
-
-	removeEF(id) {
-		if (this._enterframeTasks[id] !== undefined) {
-			this._enterframeTasks[id] = null;
-		}
-		return -1;
-	}
-
-	delay(func, params, delay) {
-		const time = new Date().getTime();
-		const t = { func, params, delay, time };
-		this._delayTasks.push(t);
-	}
-
-	defer(func, params) {
-		const t = { func, params };
-		this._deferTasks.push(t);
-	}
-
-	next(func, params) {
-		const t = { func, params };
-		this._nextTasks.push(t);
-	}
-
-	usurp(func, params) {
-		const t = { func, params };
-		this._usurpTask.push(t);
-	}
-
-
-	pause() {
-		this._isPaused = true;
-	}
-
-
-	advance() {
-		this._internalTime += 1 / FRAMERATE;
-	}
-
-
-	resume() {
-		this._isPaused = false;
-	}
-
-	//  PRIVATE METHODS
-
-	_process() {
-		let i = 0;
-		let task;
-		let interval;
-		let current;
-		for (i = 0; i < this._enterframeTasks.length; i++) {
-			task = this._enterframeTasks[i];
-			if (task !== null && task !== undefined) {
-				task.func(task.params);
-			}
-		}
-
-		while (this._highTasks.length > 0) {
-			task = this._highTasks.pop();
-			task.func(task.params);
-		}
-
-
-		let startTime = new Date().getTime();
-		let _startTime = this._deltaTime;
-		this._deltaTime = (startTime - this._startTime)/1000;
-
-		for (i = 0; i < this._delayTasks.length; i++) {
-			task = this._delayTasks[i];
-			if (startTime - task.time > task.delay) {
-				task.func(task.params);
-				this._delayTasks.splice(i, 1);
-			}
-		}
-
-		startTime = new Date().getTime();
-		this._deltaTime = (startTime - this._startTime)/1000;
-		interval = 1000 / FRAMERATE;
-		while (this._deferTasks.length > 0) {
-			task = this._deferTasks.shift();
-			current = new Date().getTime();
-			if (current - startTime < interval) {
-				task.func(task.params);
-			} else {
-				this._deferTasks.unshift(task);
-				break;
-			}
-		}
-
-
-		startTime = new Date().getTime();
-		this._deltaTime = (startTime - this._startTime)/1000;
-		interval = 1000 / FRAMERATE;
-		while (this._usurpTask.length > 0) {
-			task = this._usurpTask.shift();
-			current = new Date().getTime();
-			if (current - startTime < interval) {
-				task.func(task.params);
-			}
-		}
-
-		this._highTasks = this._highTasks.concat(this._nextTasks);
-		this._nextTasks = [];
-		this._usurpTask = [];
-
-		if(!this._isPaused) {
-			this._internalTime += this._deltaTime - _startTime;
-		}
-	}
-
-
-	_loop() {
-		this._process();
-		window.requestAnimationFrame(() => this._loop());
-	}
-
-	get intervalTime() {
-		return this._internalTime;
-	}
-
-	get deltaTime() {
-		return this._deltaTime;
-	}
-}
-
-const scheduler = new Scheduler();
-
-/* harmony default export */ __webpack_exports__["a"] = (scheduler);
+let n=window,e=60,r=performance.now(),t=0,o=0,f=r;const u=[],c=[],a=[],i=[];let s=[],l=[],g=0;function m(){!function(){let n,g=0,m=1e3/e,p=0;for(g=0;g<u.length;g++)n=u[g],null!=n&&n.func(n.args);for(;s.length>0;)n=s.pop(),n.func(n.args);let h=performance.now();for(o=(h-r)/1e3,t=h-f,g=0;g<c.length;g++)n=c[g],h-n.time>n.delay&&(n.func(n.args),c.splice(g,1));for(h=performance.now();a.length>0;){if(n=a.shift(),p=performance.now(),!(p-h<m)){a.unshift(n);break}n.func(n.args)}for(h=performance.now();i.length>0;)n=i.shift(),p=performance.now(),p-h<m&&n.func(n.args);f=h,s=s.concat(l),l=[]}(),n.requestAnimationFrame(m)}m();var p={addEF:function(n,e){const r=++g;return u[r]={func:n,args:e},r},removeEF:function(n){return void 0!==u[n]&&(u[n]=null),-1},delay:function(n,e,r){const t=performance.now();c.push({func:n,args:e,delay:r,time:t})},next:function(n,e){l.push({func:n,args:e})},defer:function(n,e){a.push({func:n,args:e})},usurp:function(n,e){i.push({func:n,args:e})},setRequestAnimationFrameSource:function(e){n=e,m()},setFrameRate:function(n){e=n},getElapsedTime:function(){return o},getDeltaTime:function(){return t}};/* harmony default export */ __webpack_exports__["a"] = (p);
 
 
 /***/ }),
@@ -23445,6 +23283,7 @@ var ViewGradient = /*#__PURE__*/function () {
         0: colourTarget[0],
         1: colourTarget[1],
         2: colourTarget[2],
+        ease: "none",
         onComplete: function onComplete() {
           _this4.tweenColor(colour);
         }
