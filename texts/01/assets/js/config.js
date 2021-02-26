@@ -15,6 +15,6 @@ var WEBGL_CONFIG = {
   BACKGROUND_COLOR:
     "white",
   CREDITS: [
-    "Finale layout inspiration: <a href='http://www.aisleone.net/2016/11/04/kaffeepur-edition-architektur/' target='_blank'> aisleone </a>",
+    "End layout inspired by <a href='http://www.aisleone.net/2016/11/04/kaffeepur-edition-architektur/' target='_blank'> aisleone </a>",
   ],
 };
