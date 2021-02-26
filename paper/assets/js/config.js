@@ -6,7 +6,7 @@ var WEBGL_CONFIG = {
   NAME_BUILD: "WebGLAnimation",
   SOUND: false,
   START_BUTTON: false,
-  TITLE: "Paper 01 - Displacement",
+  TITLE: "Paper 01 - Animation",
   INSTRUCTIONS:
     "Tap your screen",
   DESCRIPTION:
@@ -15,5 +15,6 @@ var WEBGL_CONFIG = {
   BACKGROUND_COLOR:
     "white",
   CREDITS: [
+    "Finale layout inspiration: <a href='http://www.aisleone.net/2016/11/04/kaffeepur-edition-architektur/' target='_blank'> aisleone </a>",
   ],
 };
