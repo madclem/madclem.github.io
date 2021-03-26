@@ -6,7 +6,7 @@ var WEBGL_CONFIG = {
   NAME_BUILD: "WebGLAnimation",
   SOUND: false,
   START_BUTTON: false,
-  TITLE: "B&W - 04 - Coral",
+  TITLE: "B&W - 04 - Spacegoth Pompom",
   INSTRUCTIONS: "",
   DESCRIPTION: "",
   COLOR: "#d4d4d4",
