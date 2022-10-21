@@ -42354,8 +42354,6 @@ const style = new TextStyle({
 });
 const combinationsRipples = [...niceCombinationsRipples];
 const combinationsStarburst = [...niceCombinationsStarburst];
-let indexCombinationsRipples = -1;
-let indexCombinationsStarburst = -1;
 shuffleArray(combinationsRipples);
 shuffleArray(combinationsStarburst);
 const style2 = new TextStyle({
@@ -42382,35 +42380,6 @@ class CartoonText {
     this.view = new Container$1();
     this.planeRipples = new RipplesPlane();
     this.planeStarburst = new StarburstPlane();
-    const btnAnimateRipples = pane.addButton({
-      title: "Animate Ripples"
-    });
-    const animateRipples = () => {
-      indexCombinationsRipples++;
-      indexCombinationsRipples %= combinationsRipples.length;
-      const { colorsRipples, colorsText } = combinationsRipples[indexCombinationsRipples];
-      this.changeBackgroundRipples(colorsRipples.slice(0, 3), colorsRipples.slice(-3));
-      this.setLettersColors(colorsText);
-    };
-    btnAnimateRipples.on("click", animateRipples);
-    const btnAnimateStarburst = pane.addButton({
-      title: "Animate StarBurst"
-    });
-    btnAnimateStarburst.on("click", () => {
-      indexCombinationsStarburst++;
-      indexCombinationsStarburst %= combinationsStarburst.length;
-      const { fadeoutCenter, fadeoutOutter, colorsStarburst, colorsText } = combinationsStarburst[indexCombinationsStarburst];
-      this.planeStarburst.fadeoutCenter = fadeoutCenter;
-      this.planeStarburst.fadeoutOutter = fadeoutOutter;
-      this.changeBackgroundStarburst(colorsStarburst.slice(0, 3), colorsStarburst.slice(3, 6), colorsStarburst.slice(-3));
-      this.setLettersColors(colorsText);
-    });
-    const btnHideTitle = pane.addButton({
-      title: "Hide title"
-    });
-    btnHideTitle.on("click", () => {
-      this.animatedLettersTitle.hide();
-    });
     this.animatedLettersTitle = new AnimatedLetters("Happy birthday Tom", style);
     this.view.addChild(this.animatedLettersTitle.view);
     this.animatedLettersDescription = new AnimatedLetters("What a wonderful Kindeo it is, lucky you", style2, {
