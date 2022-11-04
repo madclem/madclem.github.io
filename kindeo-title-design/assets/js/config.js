@@ -6,7 +6,7 @@ var WEBGL_CONFIG = {
   NAME_BUILD: "WebGLAnimation",
   SOUND: false,
   START_BUTTON: false,
-  TITLE: "Kinde Title Slide",
+  TITLE: "Kindeo Title Slide",
   INSTRUCTIONS: "",
   DESCRIPTION: "",
   COLOR: "white",

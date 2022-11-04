@@ -41102,6 +41102,13 @@ class StarburstPlane {
     if (colour2)
       this.shader.uniforms.uColor2 = colour2;
   }
+  getColors() {
+    return [
+      this.shader.uniforms.uColor0,
+      this.shader.uniforms.uColor1,
+      this.shader.uniforms.uColor2
+    ];
+  }
   set fadeoutCenter(v) {
     this.shader.uniforms.fadeoutCenter = v;
   }
@@ -41123,7 +41130,6 @@ class StarburstPlane {
   setTexture(value) {
   }
   resize(w, h) {
-    console.log(w, h);
     this.geometry.width = w;
     this.geometry.height = h;
     this.shader.uniforms.uRatio = w / h;
@@ -41237,6 +41243,9 @@ class RipplesPlane {
     if (color2)
       this.shader.uniforms.uColor2 = color2;
   }
+  getColors() {
+    return [this.shader.uniforms.uColor1, this.shader.uniforms.uColor2];
+  }
   update() {
     this.tick += 0.01;
     this.shader.uniforms.uTime = this.tick;
@@ -41244,7 +41253,6 @@ class RipplesPlane {
   setTexture(value) {
   }
   resize(w, h) {
-    console.log(w, h);
     this.geometry.width = w;
     this.geometry.height = h;
     this.shader.uniforms.uRatio = w / h;
@@ -41252,6 +41260,17 @@ class RipplesPlane {
   }
 }
 const niceCombinationsRipples = [
+  {
+    colorsRipples: [1, 0.584, 0.501, 1, 0.792, 0.745],
+    colorsText: [
+      "#4646D8",
+      "#5C5CEB",
+      "#2828AC",
+      "#4646D8",
+      "#5C5CEB",
+      "#2828AC"
+    ]
+  },
   {
     colorsRipples: [
       0.6901960784313725,
@@ -41532,590 +41551,313 @@ const niceCombinationsRipples = [
     ]
   }
 ];
+const lauraCombinationsRipples = [
+  {
+    colorsRipples: [
+      0.6784313725490196,
+      0.6784313725490196,
+      0.9372549019607843,
+      0.09411764705882353,
+      0.9450980392156862,
+      0.8705882352941177
+    ],
+    colorsText: [
+      "#4646D8",
+      "#5C5CEB",
+      "#2828AC",
+      "#4646D8",
+      "#5C5CEB",
+      "#2828AC"
+    ]
+  },
+  {
+    colorsRipples: [
+      0.984313725490196,
+      0.7803921568627451,
+      0.9176470588235294,
+      0.9450980392156862,
+      0.09411764705882353,
+      0.4196078431372549
+    ],
+    colorsText: [
+      "#4646D8",
+      "#5C5CEB",
+      "#2828AC",
+      "#4646D8",
+      "#5C5CEB",
+      "#2828AC"
+    ]
+  },
+  {
+    colorsRipples: [
+      0.09803921568627451,
+      0.8509803921568627,
+      0.9490196078431372,
+      0.09411764705882353,
+      0.9450980392156862,
+      0.8705882352941177
+    ],
+    colorsText: [
+      "#7604EF",
+      "#9D4DF2",
+      "#B780F2",
+      "#7604EF",
+      "#9D4DF2",
+      "#7529C5"
+    ]
+  }
+];
+const lauraCombinationsStarburst = [
+  {
+    fadeoutCenter: 1,
+    fadeoutOutter: 1,
+    colorsStarburst: [
+      0.9294117647058824,
+      1,
+      0.9921568627450981,
+      0.08235294117647059,
+      0.9607843137254902,
+      0.8470588235294118,
+      0.27058823529411763,
+      0.8862745098039215,
+      0.807843137254902
+    ],
+    colorsText: [
+      "#D8107C",
+      "#CC3486",
+      "#F540A2",
+      "#D8107C",
+      "#CC3486",
+      "#F540A2"
+    ]
+  },
+  {
+    fadeoutCenter: 1,
+    fadeoutOutter: 1,
+    colorsStarburst: [
+      0.9882352941176471,
+      0.8431372549019608,
+      0.38823529411764707,
+      0.984313725490196,
+      0.7568627450980392,
+      0.11372549019607843,
+      1,
+      0.8,
+      0.23529411764705882
+    ],
+    colorsText: [
+      "#2767C4",
+      "#6392FC",
+      "#3078F9",
+      "#2767C4",
+      "#6392FC",
+      "#3078F9"
+    ]
+  },
+  {
+    fadeoutCenter: 1,
+    fadeoutOutter: 1,
+    colorsStarburst: [
+      1,
+      0.792156862745098,
+      0.9098039215686274,
+      1,
+      0.6235294117647059,
+      0.8392156862745098,
+      0.8862745098039215,
+      0.5490196078431373,
+      0.7450980392156863
+    ],
+    colorsText: [
+      "#2767C4",
+      "#6392FC",
+      "#3078F9",
+      "#2767C4",
+      "#6392FC",
+      "#3078F9"
+    ]
+  },
+  {
+    fadeoutCenter: 1,
+    fadeoutOutter: 1,
+    colorsStarburst: [
+      1,
+      0.9254901960784314,
+      0.8470588235294118,
+      1,
+      0.807843137254902,
+      0.611764705882353,
+      1,
+      0.8549019607843137,
+      0.7058823529411765
+    ],
+    colorsText: [
+      "#D8107C",
+      "#CC3486",
+      "#F540A2",
+      "#D8107C",
+      "#CC3486",
+      "#F540A2"
+    ]
+  },
+  {
+    fadeoutCenter: 1,
+    fadeoutOutter: 1,
+    colorsStarburst: [
+      0.9294117647058824,
+      1,
+      0.9921568627450981,
+      0.08235294117647059,
+      0.9607843137254902,
+      0.8470588235294118,
+      0.27058823529411763,
+      0.8862745098039215,
+      0.807843137254902
+    ],
+    colorsText: [
+      "#7604EF",
+      "#9D4DF2",
+      "#B780F2",
+      "#7604EF",
+      "#9D4DF2",
+      "#7529C5"
+    ]
+  },
+  {
+    fadeoutCenter: 1,
+    fadeoutOutter: 1,
+    colorsStarburst: [
+      0.9294117647058824,
+      1,
+      0.9921568627450981,
+      0.9764705882352941,
+      0.8980392156862745,
+      1,
+      0.5058823529411764,
+      1,
+      0.9333333333333333
+    ],
+    colorsText: [
+      "#4646D8",
+      "#5C5CEB",
+      "#2828AC",
+      "#4646D8",
+      "#5C5CEB",
+      "#2828AC"
+    ]
+  },
+  {
+    fadeoutCenter: 1,
+    fadeoutOutter: 1,
+    colorsStarburst: [
+      0.984313725490196,
+      0.7803921568627451,
+      0.9176470588235294,
+      0.9450980392156862,
+      0.09411764705882353,
+      0.4196078431372549
+    ],
+    colorsText: [
+      "#F5FFB7",
+      "#FFFFFF",
+      "#FFED5F",
+      "#F5FFB7",
+      "#FFFFFF",
+      "#FFED5F"
+    ]
+  }
+];
 const niceCombinationsStarburst = [
   {
     fadeoutCenter: 0.8913043478260869,
     fadeoutOutter: 1,
     colorsStarburst: [
-      0.07450980392156863,
-      0.20784313725490197,
-      0.34901960784313724,
-      0.1411764705882353,
-      0.2235294117647059,
-      0.4823529411764706,
-      0.23137254901960785,
-      0.22745098039215686,
-      0.596078431372549
-    ],
-    colorsText: ["#cfdcff", "#dccfff", "#f5cfff", "#ffcff5", "#ffcfdc"]
-  },
-  {
-    fadeoutCenter: 0.8913043478260869,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.07450980392156863,
-      0.20784313725490197,
-      0.34901960784313724,
-      0.1411764705882353,
-      0.2235294117647059,
-      0.4823529411764706,
-      0.23137254901960785,
-      0.22745098039215686,
-      0.596078431372549
-    ],
-    colorsText: ["#7386bf", "#8673bf", "#ac73bf", "#bf73ac", "#bf7386"]
-  },
-  {
-    fadeoutCenter: 0.8913043478260869,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.07450980392156863,
-      0.20784313725490197,
-      0.34901960784313724,
-      0.1411764705882353,
-      0.2235294117647059,
-      0.4823529411764706,
-      0.23137254901960785,
-      0.22745098039215686,
-      0.596078431372549
-    ],
-    colorsText: ["#ef64f2", "#f264ae", "#f26467", "#f2a864", "#f2ef64"]
-  },
-  {
-    fadeoutCenter: 0.8913043478260869,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.07450980392156863,
-      0.20784313725490197,
-      0.34901960784313724,
-      0.1411764705882353,
-      0.2235294117647059,
-      0.4823529411764706,
-      0.23137254901960785,
-      0.22745098039215686,
-      0.596078431372549
-    ],
-    colorsText: [
-      "#bca9a9",
-      "#c5b4b4",
-      "#cec0c0",
-      "#d7cbcb",
-      "#e0d7d7",
-      "#e9e2e2"
-    ]
-  },
-  {
-    fadeoutCenter: 0.8913043478260869,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.07450980392156863,
-      0.20784313725490197,
-      0.34901960784313724,
-      0.1411764705882353,
-      0.2235294117647059,
-      0.4823529411764706,
-      0.23137254901960785,
-      0.22745098039215686,
-      0.596078431372549
-    ],
-    colorsText: [
-      "#b37f9f",
-      "#f68caa",
-      "#f9afc4",
-      "#b9d1dc",
-      "#98bccb",
-      "#819bb3"
-    ]
-  },
-  {
-    fadeoutCenter: 0.8913043478260869,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.07450980392156863,
-      0.20784313725490197,
-      0.34901960784313724,
-      0.1411764705882353,
-      0.2235294117647059,
-      0.4823529411764706,
-      0.23137254901960785,
-      0.22745098039215686,
-      0.596078431372549
-    ],
-    colorsText: [
-      "#f1f0e9",
-      "#e3ebde",
-      "#cde8da",
-      "#b4e4e0",
-      "#a1deec",
-      "#9dd4f8"
-    ]
-  },
-  {
-    fadeoutCenter: 0.9565217391304348,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.13725490196078433,
-      0.2823529411764706,
-      0.058823529411764705,
-      0.14901960784313725,
-      0.4196078431372549,
-      0.12156862745098039,
-      0.20392156862745098,
-      0.5372549019607843,
-      0.2549019607843137
-    ],
-    colorsText: [
-      "#be8d6f",
-      "#d1ae98",
-      "#dabead",
-      "#dacead",
-      "#d1c298",
-      "#bea96f"
-    ]
-  },
-  {
-    fadeoutCenter: 0.9565217391304348,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.13725490196078433,
-      0.2823529411764706,
-      0.058823529411764705,
-      0.14901960784313725,
-      0.4196078431372549,
-      0.12156862745098039,
-      0.20392156862745098,
-      0.5372549019607843,
-      0.2549019607843137
-    ],
-    colorsText: ["#ef64f2", "#f264ae", "#f26467", "#f2a864", "#f2ef64"]
-  },
-  {
-    fadeoutCenter: 0.9565217391304348,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.13725490196078433,
-      0.2823529411764706,
-      0.058823529411764705,
-      0.14901960784313725,
-      0.4196078431372549,
-      0.12156862745098039,
-      0.20392156862745098,
-      0.5372549019607843,
-      0.2549019607843137
-    ],
-    colorsText: [
-      "#f1f0e9",
-      "#e3ebde",
-      "#cde8da",
-      "#b4e4e0",
-      "#a1deec",
-      "#9dd4f8"
-    ]
-  },
-  {
-    fadeoutCenter: 0.8043478260869565,
-    fadeoutOutter: 0.8913043478260869,
-    colorsStarburst: [
-      0.6901960784313725,
-      0.403921568627451,
-      0.8980392156862745,
-      0.6627450980392157,
-      0.4745098039215686,
-      0.9294117647058824,
-      0.6392156862745098,
-      0.5372549019607843,
-      0.9529411764705882
-    ],
-    colorsText: ["#cfdcff", "#dccfff", "#f5cfff", "#ffcff5", "#ffcfdc"]
-  },
-  {
-    fadeoutCenter: 1,
-    fadeoutOutter: 0.8913043478260869,
-    colorsStarburst: [
-      0.6901960784313725,
-      0.403921568627451,
-      0.8980392156862745,
-      0.6627450980392157,
-      0.4745098039215686,
-      0.9294117647058824,
-      0.6392156862745098,
-      0.5372549019607843,
-      0.9529411764705882
-    ],
-    colorsText: ["#e5dcfe", "#f6dcfe", "#fedcf5", "#fedce4", "#fee5dc"]
-  },
-  {
-    fadeoutCenter: 1,
-    fadeoutOutter: 0.8913043478260869,
-    colorsStarburst: [
-      1,
-      0.6549019607843137,
-      0.5803921568627451,
-      1,
-      0.5843137254901961,
-      0.5019607843137255,
-      1,
-      0.792156862745098,
-      0.7450980392156863
-    ],
-    colorsText: ["#cfdcff", "#dccfff", "#f5cfff", "#ffcff5", "#ffcfdc"]
-  },
-  {
-    fadeoutCenter: 1,
-    fadeoutOutter: 0.8913043478260869,
-    colorsStarburst: [
-      1,
-      0.6549019607843137,
-      0.5803921568627451,
-      1,
-      0.5843137254901961,
-      0.5019607843137255,
-      1,
-      0.792156862745098,
-      0.7450980392156863
-    ],
-    colorsText: ["#6178bd", "#7861bd", "#a661bd", "#bd61a6", "#bd6178"]
-  },
-  {
-    fadeoutCenter: 1,
-    fadeoutOutter: 0.8913043478260869,
-    colorsStarburst: [
-      1,
-      0.6549019607843137,
-      0.5803921568627451,
-      1,
-      0.5843137254901961,
-      0.5019607843137255,
-      1,
-      0.792156862745098,
-      0.7450980392156863
-    ],
-    colorsText: ["#7386bf", "#8673bf", "#ac73bf", "#bf73ac", "#bf7386"]
-  },
-  {
-    fadeoutCenter: 1,
-    fadeoutOutter: 0.8913043478260869,
-    colorsStarburst: [
-      1,
-      0.6549019607843137,
-      0.5803921568627451,
-      1,
-      0.5843137254901961,
-      0.5019607843137255,
-      1,
-      0.792156862745098,
-      0.7450980392156863
-    ],
-    colorsText: ["#e5dcfe", "#f6dcfe", "#fedcf5", "#fedce4", "#fee5dc"]
-  },
-  {
-    fadeoutCenter: 1,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.592156862745098,
-      0.6862745098039216,
-      0.7058823529411765,
-      0.4196078431372549,
-      0.5529411764705883,
-      0.5803921568627451,
-      0.29411764705882354,
+      0.9882352941176471,
+      0.8431372549019608,
       0.38823529411764707,
-      0.40784313725490196
-    ],
-    colorsText: ["#e5dcfe", "#f6dcfe", "#fedcf5", "#fedce4", "#fee5dc"]
-  },
-  {
-    fadeoutCenter: 1,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.592156862745098,
-      0.6862745098039216,
-      0.7058823529411765,
-      0.4196078431372549,
-      0.5529411764705883,
-      0.5803921568627451,
-      0.29411764705882354,
-      0.38823529411764707,
-      0.40784313725490196
-    ],
-    colorsText: [
-      "#f1f0e9",
-      "#e3ebde",
-      "#cde8da",
-      "#b4e4e0",
-      "#a1deec",
-      "#9dd4f8"
-    ]
-  },
-  {
-    fadeoutCenter: 1,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.592156862745098,
-      0.6862745098039216,
-      0.7058823529411765,
-      0.4196078431372549,
-      0.5529411764705883,
-      0.5803921568627451,
-      0.29411764705882354,
-      0.38823529411764707,
-      0.40784313725490196
-    ],
-    colorsText: [
-      "#232629",
-      "#4b4e51",
-      "#292923",
-      "#51514b",
-      "#262329",
-      "#4e4b51"
-    ]
-  },
-  {
-    fadeoutCenter: 0.8804347826086957,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.8980392156862745,
-      1,
-      0.9333333333333333,
-      1,
-      0.8117647058823529,
-      0.9372549019607843,
-      1,
-      0.8784313725490196,
-      0.9607843137254902
-    ],
-    colorsText: [
-      "#b37f9f",
-      "#f68caa",
-      "#f9afc4",
-      "#b9d1dc",
-      "#98bccb",
-      "#819bb3"
-    ]
-  },
-  {
-    fadeoutCenter: 0.8804347826086957,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.8980392156862745,
-      1,
-      0.9333333333333333,
-      1,
-      0.8117647058823529,
-      0.9372549019607843,
-      1,
-      0.8784313725490196,
-      0.9607843137254902
-    ],
-    colorsText: ["#6178bd", "#7861bd", "#a661bd", "#bd61a6", "#bd6178"]
-  },
-  {
-    fadeoutCenter: 0.8804347826086957,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.8980392156862745,
-      1,
-      0.9333333333333333,
-      1,
-      0.8117647058823529,
-      0.9372549019607843,
-      1,
-      0.8784313725490196,
-      0.9607843137254902
-    ],
-    colorsText: [
-      "#ff2ec7",
-      "#e000ac",
-      "#c20091",
-      "#a40078",
-      "#87005f",
-      "#6a0047"
-    ]
-  },
-  {
-    fadeoutCenter: 0.17391304347826086,
-    fadeoutOutter: 0,
-    colorsStarburst: [
-      0.9725490196078431,
-      0.9686274509803922,
-      0.9568627450980393,
-      0.9921568627450981,
-      0.9882352941176471,
       0.984313725490196,
-      0.9647058823529412,
-      0.9607843137254902,
-      0.9411764705882353
+      0.7568627450980392,
+      0.11372549019607843,
+      1,
+      0.8,
+      0.23529411764705882
     ],
     colorsText: [
-      "#be8d6f",
-      "#d1ae98",
-      "#dabead",
-      "#dacead",
-      "#d1c298",
-      "#bea96f"
+      "#2767C4",
+      "#6392FC",
+      "#3078F9",
+      "#2767C4",
+      "#6392FC",
+      "#3078F9"
     ]
   },
   {
-    fadeoutCenter: 0,
-    fadeoutOutter: 0,
-    colorsStarburst: [
-      0.9725490196078431,
-      0.9686274509803922,
-      0.9568627450980393,
-      0.9921568627450981,
-      0.9882352941176471,
-      0.984313725490196,
-      0.9647058823529412,
-      0.9607843137254902,
-      0.9411764705882353
-    ],
-    colorsText: [
-      "#b37f9f",
-      "#f68caa",
-      "#f9afc4",
-      "#b9d1dc",
-      "#98bccb",
-      "#819bb3"
-    ]
-  },
-  {
-    fadeoutCenter: 0,
-    fadeoutOutter: 0,
-    colorsStarburst: [
-      0.9725490196078431,
-      0.9686274509803922,
-      0.9568627450980393,
-      0.9921568627450981,
-      0.9882352941176471,
-      0.984313725490196,
-      0.9647058823529412,
-      0.9607843137254902,
-      0.9411764705882353
-    ],
-    colorsText: [
-      "#232629",
-      "#4b4e51",
-      "#292923",
-      "#51514b",
-      "#262329",
-      "#4e4b51"
-    ]
-  },
-  {
-    fadeoutCenter: 0,
-    fadeoutOutter: 0,
-    colorsStarburst: [
-      0.9725490196078431,
-      0.9686274509803922,
-      0.9568627450980393,
-      0.9921568627450981,
-      0.9882352941176471,
-      0.984313725490196,
-      0.9647058823529412,
-      0.9607843137254902,
-      0.9411764705882353
-    ],
-    colorsText: ["#6178bd", "#7861bd", "#a661bd", "#bd61a6", "#bd6178"]
-  },
-  {
-    fadeoutCenter: 0,
-    fadeoutOutter: 0,
-    colorsStarburst: [
-      0.9725490196078431,
-      0.9686274509803922,
-      0.9568627450980393,
-      0.9921568627450981,
-      0.9882352941176471,
-      0.984313725490196,
-      0.9647058823529412,
-      0.9607843137254902,
-      0.9411764705882353
-    ],
-    colorsText: ["#2c4140", "#23807d", "#289390", "#78a5a4", "#547d7c"]
-  },
-  {
-    fadeoutCenter: 1,
+    fadeoutCenter: 0.8913043478260869,
     fadeoutOutter: 1,
     colorsStarburst: [
-      0.29411764705882354,
-      0.2901960784313726,
-      0.27058823529411763,
-      0.1568627450980392,
-      0.1568627450980392,
-      0.13333333333333333,
-      0.44313725490196076,
-      0.44313725490196076,
-      0.41568627450980394
-    ],
-    colorsText: ["#e5dcfe", "#f6dcfe", "#fedcf5", "#fedce4", "#fee5dc"]
-  },
-  {
-    fadeoutCenter: 1,
-    fadeoutOutter: 1,
-    colorsStarburst: [
-      0.29411764705882354,
-      0.2901960784313726,
-      0.27058823529411763,
-      0.1568627450980392,
-      0.1568627450980392,
-      0.13333333333333333,
-      0.44313725490196076,
-      0.44313725490196076,
-      0.41568627450980394
+      1,
+      0.792156862745098,
+      0.9098039215686274,
+      1,
+      0.6235294117647059,
+      0.8392156862745098,
+      0.8862745098039215,
+      0.5490196078431373,
+      0.7450980392156863
     ],
     colorsText: [
-      "#be8d6f",
-      "#d1ae98",
-      "#dabead",
-      "#dacead",
-      "#d1c298",
-      "#bea96f"
+      "#2767C4",
+      "#6392FC",
+      "#3078F9",
+      "#2767C4",
+      "#6392FC",
+      "#3078F9"
     ]
   },
   {
-    fadeoutCenter: 1,
+    fadeoutCenter: 0.8913043478260869,
     fadeoutOutter: 1,
     colorsStarburst: [
-      0.29411764705882354,
-      0.2901960784313726,
-      0.27058823529411763,
-      0.1568627450980392,
-      0.1568627450980392,
-      0.13333333333333333,
-      0.44313725490196076,
-      0.44313725490196076,
-      0.41568627450980394
+      1,
+      0.9254901960784314,
+      0.8470588235294118,
+      1,
+      0.807843137254902,
+      0.611764705882353,
+      1,
+      0.8549019607843137,
+      0.7058823529411765
     ],
     colorsText: [
-      "#bca9a9",
-      "#c5b4b4",
-      "#cec0c0",
-      "#d7cbcb",
-      "#e0d7d7",
-      "#e9e2e2"
+      "#2767C4",
+      "#6392FC",
+      "#3078F9",
+      "#2767C4",
+      "#6392FC",
+      "#3078F9"
     ]
   },
   {
-    fadeoutCenter: 1,
+    fadeoutCenter: 0.8913043478260869,
     fadeoutOutter: 1,
     colorsStarburst: [
-      0.29411764705882354,
-      0.2901960784313726,
-      0.27058823529411763,
-      0.1568627450980392,
-      0.1568627450980392,
-      0.13333333333333333,
-      0.44313725490196076,
-      0.44313725490196076,
-      0.41568627450980394
+      1,
+      0.792156862745098,
+      0.9098039215686274,
+      1,
+      0.6235294117647059,
+      0.8392156862745098,
+      0.8862745098039215,
+      0.5490196078431373,
+      0.7450980392156863
     ],
     colorsText: [
-      "#f1f0e9",
-      "#e3ebde",
-      "#cde8da",
-      "#b4e4e0",
-      "#a1deec",
-      "#9dd4f8"
+      "#2767C4",
+      "#6392FC",
+      "#3078F9",
+      "#2767C4",
+      "#6392FC",
+      "#3078F9"
     ]
   }
 ];
@@ -42174,7 +41916,6 @@ class AnimatedLetters {
   }
   animate() {
     const promises = [];
-    console.log("here");
     let resolver;
     const mainPromise = new Promise((res) => resolver = res);
     promises.push(mainPromise);
@@ -42221,6 +41962,7 @@ class AnimatedLetters {
     }
   }
   setLettersColors(currentPalette) {
+    currentPalette = currentPalette.filter((c, i, a) => !!c && a.indexOf(c) === i);
     this.letters.forEach((l) => {
       l.setColor(currentPalette[Math.floor(Math.random() * currentPalette.length)].replace("#", "0x"));
     });
@@ -42352,10 +42094,14 @@ const style = new TextStyle({
   letterSpacing: 2,
   align: "center"
 });
-const combinationsRipples = [...niceCombinationsRipples];
-const combinationsStarburst = [...niceCombinationsStarburst];
-shuffleArray(combinationsRipples);
-shuffleArray(combinationsStarburst);
+const combinationsRipplesDefault = [...niceCombinationsRipples];
+const combinationsStarburstDefault = [...niceCombinationsStarburst];
+const combinationsRipplesLaura = [...lauraCombinationsRipples];
+const combinationsStarburstLaura = [...lauraCombinationsStarburst];
+let combinationsRipples = combinationsRipplesDefault;
+let combinationsStarburst = combinationsStarburstDefault;
+let indexCombinationsRipples = -1;
+let indexCombinationsStarburst = -1;
 const style2 = new TextStyle({
   fill: "#ffffff",
   fontFamily: "Montserrat",
@@ -42366,6 +42112,9 @@ const style2 = new TextStyle({
   align: "center"
 });
 function rgb2hex(r, g, b) {
+  r = Math.floor(r);
+  g = Math.floor(g);
+  b = Math.floor(b);
   return "0x" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).replace("0x", "#");
 }
 function hex2rgb(hex) {
@@ -42375,11 +42124,129 @@ function hex2rgb(hex) {
   var b = bigint & 255;
   return [r, g, b];
 }
+const colorsRipplesArray = [];
+const colorsStarburstArray = [];
+let colorsLettersArray;
 class CartoonText {
   constructor(pane) {
     this.view = new Container$1();
     this.planeRipples = new RipplesPlane();
     this.planeStarburst = new StarburstPlane();
+    {
+      const animateRipples = () => {
+        indexCombinationsRipples++;
+        indexCombinationsRipples %= combinationsRipples.length;
+        const { colorsRipples, colorsText } = combinationsRipples[indexCombinationsRipples];
+        this.changeBackgroundRipples(colorsRipples.slice(0, 3), colorsRipples.slice(-3));
+        this.setLettersColors(colorsText);
+        this.refreshColors();
+      };
+      const animateStarburst = () => {
+        indexCombinationsStarburst++;
+        indexCombinationsStarburst %= combinationsStarburst.length;
+        const { fadeoutCenter, fadeoutOutter, colorsStarburst, colorsText } = combinationsStarburst[indexCombinationsStarburst];
+        this.planeStarburst.fadeoutCenter = fadeoutCenter;
+        this.planeStarburst.fadeoutOutter = fadeoutOutter;
+        this.changeBackgroundStarburst(colorsStarburst.slice(0, 3), colorsStarburst.slice(3, 6), colorsStarburst.slice(-3));
+        this.setLettersColors(colorsText);
+        this.refreshColors();
+      };
+      this.useLaura = false;
+      pane.addInput(this, "useLaura", {
+        label: "use Laura's colours"
+      }).on("change", () => {
+        combinationsRipples = this.useLaura ? combinationsRipplesLaura : combinationsRipplesDefault;
+        combinationsStarburst = this.useLaura ? combinationsStarburstLaura : combinationsStarburstDefault;
+        indexCombinationsRipples = -1;
+        indexCombinationsStarburst = -1;
+        if (this.plane === this.planeStarburst) {
+          animateStarburst();
+        } else {
+          animateRipples();
+        }
+      });
+      this.tabsBackground = pane.addTab({
+        pages: [{ title: "Ripples" }, { title: "Starburst" }]
+      });
+      const tabRipples = this.tabsBackground.pages[0];
+      const btnAnimateRipples = tabRipples.addButton({
+        title: "Select / Next Ripples"
+      });
+      btnAnimateRipples.on("click", animateRipples);
+      const folderRipples = tabRipples.addFolder({
+        title: "RipplesColors"
+      });
+      const { color1, color2 } = this.getColorRipples();
+      this.paramsColorsRipples = {
+        color1: rgb2hex(color1[0] * 255, color1[1] * 255, color1[2] * 255),
+        color2: rgb2hex(color2[0] * 255, color2[1] * 255, color2[2] * 255)
+      };
+      this.planeRipples.setColors(hex2rgb(this.paramsColorsRipples.color1.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3), hex2rgb(this.paramsColorsRipples.color2.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3));
+      colorsRipplesArray.push(folderRipples.addInput(this.paramsColorsRipples, "color1").on("change", () => {
+        this.planeRipples.setColors(hex2rgb(this.paramsColorsRipples.color1.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3));
+        this.setPlane(this.planeRipples);
+      }));
+      colorsRipplesArray.push(folderRipples.addInput(this.paramsColorsRipples, "color2").on("change", () => {
+        this.planeRipples.setColors(null, hex2rgb(this.paramsColorsRipples.color2.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3));
+        this.setPlane(this.planeRipples);
+      }));
+      const btnRandomiseBGRipples = folderRipples.addButton({
+        title: "Randomise Ripples"
+      });
+      btnRandomiseBGRipples.on("click", () => {
+        const { color1: color12, color2: color22 } = this.getColorRipples(true);
+        this.refreshColorsRipplesInput(color12, color22);
+      });
+      const tabStarburst = this.tabsBackground.pages[1];
+      const btnAnimateStarburst = tabStarburst.addButton({
+        title: "Select / Next StarBurst"
+      });
+      btnAnimateStarburst.on("click", () => {
+        animateStarburst();
+        this.refreshColors();
+      });
+      tabStarburst.addInput(this.planeStarburst, "fadeoutCenter", {
+        min: 0,
+        max: 1
+      });
+      tabStarburst.addInput(this.planeStarburst, "fadeoutOutter", {
+        min: 0,
+        max: 1
+      });
+      const folderStarburst = tabStarburst.addFolder({
+        title: "StarburstColors"
+      });
+      const {
+        color0: col0,
+        color1: col1,
+        color2: col2
+      } = this.getColorStarburst();
+      this.paramsColorsStarburst = {
+        background: rgb2hex(col0[0] * 255, col0[1] * 255, col0[2] * 255),
+        color1: rgb2hex(col1[0] * 255, col1[1] * 255, col1[2] * 255),
+        color2: rgb2hex(col2[0] * 255, col2[1] * 255, col2[2] * 255)
+      };
+      this.planeStarburst.setColors(hex2rgb(this.paramsColorsStarburst.background.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3), hex2rgb(this.paramsColorsStarburst.color1.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3), hex2rgb(this.paramsColorsStarburst.color2.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3));
+      colorsStarburstArray.push(folderStarburst.addInput(this.paramsColorsStarburst, "background").on("change", () => {
+        this.planeStarburst.setColors(hex2rgb(this.paramsColorsStarburst.background.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3));
+        this.setPlane(this.planeStarburst);
+      }));
+      colorsStarburstArray.push(folderStarburst.addInput(this.paramsColorsStarburst, "color1").on("change", () => {
+        this.planeStarburst.setColors(null, hex2rgb(this.paramsColorsStarburst.color1.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3));
+        this.setPlane(this.planeStarburst);
+      }));
+      colorsStarburstArray.push(folderStarburst.addInput(this.paramsColorsStarburst, "color2").on("change", () => {
+        this.planeStarburst.setColors(null, null, hex2rgb(this.paramsColorsStarburst.color2.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3));
+        this.setPlane(this.planeStarburst);
+      }));
+      const btnRandomiseBGStarburst = folderStarburst.addButton({
+        title: "Randomise Starburst"
+      });
+      btnRandomiseBGStarburst.on("click", () => {
+        const { color0, color1: color12, color2: color22 } = this.getColorStarburst(true);
+        this.refreshColorsStarburstInput(color0, color12, color22);
+      });
+    }
     this.animatedLettersTitle = new AnimatedLetters("Happy birthday Tom", style);
     this.view.addChild(this.animatedLettersTitle.view);
     this.animatedLettersDescription = new AnimatedLetters("What a wonderful Kindeo it is, lucky you", style2, {
@@ -42387,84 +42254,10 @@ class CartoonText {
       scaleOffsetY: 0
     });
     this.view.addChild(this.animatedLettersDescription.view);
-    const folderRipples = pane.addFolder({
-      title: "RipplesColors"
-    });
-    const { color1, color2 } = this.getColorRipples();
-    this.paramsColorsRipples = {
-      color1: rgb2hex(color1[0] * 255, color1[1] * 255, color1[2] * 255),
-      color2: rgb2hex(color2[0] * 255, color2[1] * 255, color2[2] * 255)
-    };
-    this.planeRipples.setColors(hex2rgb(this.paramsColorsRipples.color1.replace("#", "0x")).map((c) => c / 255), hex2rgb(this.paramsColorsRipples.color2.replace("#", "0x")).map((c) => c / 255));
-    const colorsRipplesArray = [];
-    colorsRipplesArray.push(folderRipples.addInput(this.paramsColorsRipples, "color1").on("change", () => {
-      this.planeRipples.setColors(hex2rgb(this.paramsColorsRipples.color1.replace("#", "0x")).map((c) => c / 255));
-      this.setPlane(this.planeRipples);
-    }));
-    colorsRipplesArray.push(folderRipples.addInput(this.paramsColorsRipples, "color2").on("change", () => {
-      this.planeRipples.setColors(null, hex2rgb(this.paramsColorsRipples.color2.replace("#", "0x")).map((c) => c / 255));
-      this.setPlane(this.planeRipples);
-    }));
-    const btnRandomiseBGRipples = folderRipples.addButton({
-      title: "Randomise Ripples"
-    });
-    btnRandomiseBGRipples.on("click", () => {
-      const { color1: color12, color2: color22 } = this.getColorRipples(true);
-      this.paramsColorsRipples.color1 = rgb2hex(color12[0] * 255, color12[1] * 255, color12[2] * 255);
-      this.paramsColorsRipples.color2 = rgb2hex(color22[0] * 255, color22[1] * 255, color22[2] * 255);
-      colorsRipplesArray.forEach((inp) => inp.refresh());
-    });
-    const btnSaveRipples = folderRipples.addButton({
-      title: "Export Ripples Colors"
-    });
-    btnSaveRipples.on("click", () => {
-      console.log("----- copied to clipboard export ripples");
-      console.log(JSON.stringify(Object.values(this.paramsColorsRipples).map((hex) => hex2rgb(hex.replace("#", "0x")).map((c) => c / 255))));
-    });
-    const {
-      color0: col0,
-      color1: col1,
-      color2: col2
-    } = this.getColorStarburst();
-    this.paramsColorsStarburst = {
-      background: rgb2hex(col0[0] * 255, col0[1] * 255, col0[2] * 255),
-      color1: rgb2hex(col1[0] * 255, col1[1] * 255, col1[2] * 255),
-      color2: rgb2hex(col2[0] * 255, col2[1] * 255, col2[2] * 255)
-    };
-    this.planeStarburst.setColors(hex2rgb(this.paramsColorsStarburst.background.replace("#", "0x")).map((c) => c / 255), hex2rgb(this.paramsColorsStarburst.color1.replace("#", "0x")).map((c) => c / 255), hex2rgb(this.paramsColorsStarburst.color2.replace("#", "0x")).map((c) => c / 255));
-    const folderStarburst = pane.addFolder({
-      title: "StarburstColors"
-    });
-    const colorsStarburstArray = [];
-    colorsStarburstArray.push(folderStarburst.addInput(this.paramsColorsStarburst, "background").on("change", () => {
-      this.planeStarburst.setColors(hex2rgb(this.paramsColorsStarburst.background.replace("#", "0x")).map((c) => c / 255));
+    {
       this.setPlane(this.planeStarburst);
-    }));
-    colorsStarburstArray.push(folderStarburst.addInput(this.paramsColorsStarburst, "color1").on("change", () => {
-      this.planeStarburst.setColors(null, hex2rgb(this.paramsColorsStarburst.color1.replace("#", "0x")).map((c) => c / 255));
-      this.setPlane(this.planeStarburst);
-    }));
-    colorsStarburstArray.push(folderStarburst.addInput(this.paramsColorsStarburst, "color2").on("change", () => {
-      this.planeStarburst.setColors(null, null, hex2rgb(this.paramsColorsStarburst.color2.replace("#", "0x")).map((c) => c / 255));
-      this.setPlane(this.planeStarburst);
-    }));
-    const btnRandomiseBGStarburst = folderStarburst.addButton({
-      title: "Randomise Starburst"
-    });
-    btnRandomiseBGStarburst.on("click", () => {
-      const { color0, color1: color12, color2: color22 } = this.getColorStarburst(true);
-      this.paramsColorsStarburst.background = rgb2hex(color0[0] * 255, color0[1] * 255, color0[2] * 255);
-      this.paramsColorsStarburst.color1 = rgb2hex(color12[0] * 255, color12[1] * 255, color12[2] * 255);
-      this.paramsColorsStarburst.color2 = rgb2hex(color22[0] * 255, color22[1] * 255, color22[2] * 255);
-      colorsStarburstArray.forEach((inp) => inp.refresh());
-    });
-    const btnSaveStarburst = folderStarburst.addButton({
-      title: "Export Starburst Colors"
-    });
-    btnSaveStarburst.on("click", () => {
-      console.log("----- copied to clipboard export starburst");
-      console.log(JSON.stringify(Object.values(this.paramsColorsStarburst).map((hex) => hex2rgb(hex.replace("#", "0x")).map((c) => c / 255))));
-    });
+      this.setLettersColors();
+    }
     const colors = this.getColorLetters();
     this.paramsColorsLetters = {
       color1: colors[0],
@@ -42474,12 +42267,13 @@ class CartoonText {
       color5: colors[4],
       color6: colors[5]
     };
+    pane.addSeparator();
     const folderLettersColors = pane.addFolder({
       title: "Letters colors"
     });
     this.setLettersColors(colors);
     this.startAnimation();
-    const colorsLettersArray = Object.keys(this.paramsColorsLetters).map((key) => {
+    colorsLettersArray = Object.keys(this.paramsColorsLetters).map((key) => {
       return folderLettersColors.addInput(this.paramsColorsLetters, key).on("change", () => {
         this.setLettersColors(Object.values({
           ...this.paramsColorsLetters,
@@ -42492,13 +42286,7 @@ class CartoonText {
     });
     btnRandomiseBGLetters.on("click", () => {
       const colors2 = this.getColorLetters(true);
-      this.paramsColorsLetters.color1 = colors2[0];
-      this.paramsColorsLetters.color2 = colors2[1];
-      this.paramsColorsLetters.color3 = colors2[2];
-      this.paramsColorsLetters.color4 = colors2[3];
-      this.paramsColorsLetters.color5 = colors2[4];
-      this.paramsColorsLetters.color6 = colors2[5];
-      colorsLettersArray.forEach((inp) => inp.refresh());
+      this.refreshColorsLettersInput(colors2);
     });
     const btnAnimateText = folderLettersColors.addButton({
       title: "Animate Letters"
@@ -42506,15 +42294,62 @@ class CartoonText {
     btnAnimateText.on("click", () => {
       this.startAnimation();
     });
-    const btnSaveText = folderLettersColors.addButton({
-      title: "Export Letters Colors"
+    pane.addSeparator();
+    const btnSave = pane.addButton({
+      title: "Save"
     });
-    btnSaveText.on("click", () => {
-      console.log("----- copied to clipboard export letters");
-      console.log(JSON.stringify(Object.values(this.paramsColorsLetters)));
-      navigator.clipboard.writeText(JSON.stringify(Object.values(this.paramsColorsLetters)));
+    btnSave.on("click", () => {
+      const obj = {};
+      if (this.plane === this.planeRipples) {
+        obj.colorsRipples = Object.values(this.paramsColorsRipples).map((hex) => hex2rgb(hex.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3)).flat();
+      } else {
+        obj.fadeoutCenter = Math.floor(this.planeStarburst.fadeoutCenter * 100) / 100;
+        obj.fadeoutOutter = Math.floor(this.planeStarburst.fadeoutOutter * 100) / 100;
+        obj.colorsStarburst = Object.values(this.paramsColorsStarburst).map((hex) => hex2rgb(hex.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3)).flat();
+      }
+      obj.colorsText = Object.values(this.paramsColorsLetters);
+      const str = JSON.stringify(obj);
+      navigator.clipboard.writeText(str);
+      console.log(str);
     });
     this.setPlane(this.planeRipples);
+  }
+  refreshColors() {
+    if (this.plane === this.planeRipples) {
+      this.refreshColorsRipplesInput(...this.planeRipples.getColors());
+    } else {
+      this.refreshColorsStarburstInput(...this.planeStarburst.getColors());
+    }
+    this.refreshColorsLettersInput(this.currentLettersColors);
+  }
+  refreshColorsLettersInput(colors) {
+    if (colors) {
+      this.paramsColorsLetters.color1 = colors[0];
+      this.paramsColorsLetters.color2 = colors[1];
+      this.paramsColorsLetters.color3 = colors[2];
+      this.paramsColorsLetters.color4 = colors[3];
+      this.paramsColorsLetters.color5 = colors[4];
+      this.paramsColorsLetters.color6 = colors[5];
+    }
+    colorsLettersArray.forEach((inp) => inp.refresh());
+  }
+  refreshColorsRipplesInput(color1, color2) {
+    if (color1 && color2) {
+      this.paramsColorsRipples.color1 = rgb2hex(color1[0] * 255, color1[1] * 255, color1[2] * 255);
+      this.paramsColorsRipples.color2 = rgb2hex(color2[0] * 255, color2[1] * 255, color2[2] * 255);
+    }
+    setTimeout(() => {
+      colorsRipplesArray.forEach((inp) => inp.refresh());
+    }, 100);
+  }
+  refreshColorsStarburstInput(color0, color1, color2) {
+    if (color0 && color1 && color2) {
+      console.log(color0);
+      this.paramsColorsStarburst.background = rgb2hex(color0[0] * 255, color0[1] * 255, color0[2] * 255);
+      this.paramsColorsStarburst.color1 = rgb2hex(color1[0] * 255, color1[1] * 255, color1[2] * 255);
+      this.paramsColorsStarburst.color2 = rgb2hex(color2[0] * 255, color2[1] * 255, color2[2] * 255);
+    }
+    colorsStarburstArray.forEach((inp) => inp.refresh());
   }
   reset() {
   }
@@ -42570,6 +42405,7 @@ class CartoonText {
       indexColorText %= colourTextsColours.length;
       currentPalette = colourTextsColours[indexColorText];
     }
+    this.currentLettersColors = currentPalette;
     this.animatedLettersTitle.setLettersColors(currentPalette);
     this.animatedLettersDescription.setLettersColors(currentPalette);
   }
