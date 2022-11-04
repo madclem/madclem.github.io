@@ -52,7 +52,7 @@ function allSettled(arr) {
   });
 }
 var setTimeoutFunc = setTimeout;
-function isArray$3(x) {
+function isArray$5(x) {
   return Boolean(x && typeof x.length !== "undefined");
 }
 function noop() {
@@ -176,7 +176,7 @@ Promise$1.prototype.then = function(onFulfilled, onRejected) {
 Promise$1.prototype["finally"] = finallyConstructor;
 Promise$1.all = function(arr) {
   return new Promise$1(function(resolve2, reject2) {
-    if (!isArray$3(arr)) {
+    if (!isArray$5(arr)) {
       return reject2(new TypeError("Promise.all accepts an array"));
     }
     var args = Array.prototype.slice.call(arr);
@@ -223,7 +223,7 @@ Promise$1.reject = function(value) {
 };
 Promise$1.race = function(arr) {
   return new Promise$1(function(resolve2, reject2) {
-    if (!isArray$3(arr)) {
+    if (!isArray$5(arr)) {
       return reject2(new TypeError("Promise.race accepts an array"));
     }
     for (var i = 0, len = arr.length; i < len; i++) {
@@ -1412,7 +1412,7 @@ earcut.flatten = function(data) {
   return result;
 };
 var earcut$1 = earcut$2.exports;
-var punycode$1 = { exports: {} };
+var punycode$2 = { exports: {} };
 /*! https://mths.be/punycode v1.3.2 by @mathias */
 (function(module, exports) {
   (function(root) {
@@ -1637,7 +1637,7 @@ var punycode$1 = { exports: {} };
       root.punycode = punycode2;
     }
   })(commonjsGlobal);
-})(punycode$1, punycode$1.exports);
+})(punycode$2, punycode$2.exports);
 var util$1 = {
   isString: function(arg) {
     return typeof arg === "string";
@@ -1652,7 +1652,7 @@ var util$1 = {
     return arg == null;
   }
 };
-var querystring$1 = {};
+var querystring$2 = {};
 function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
@@ -1728,14 +1728,14 @@ var encode = function(obj, sep, eq, name) {
     return "";
   return encodeURIComponent(stringifyPrimitive(name)) + eq + encodeURIComponent(stringifyPrimitive(obj));
 };
-querystring$1.decode = querystring$1.parse = decode;
-querystring$1.encode = querystring$1.stringify = encode;
-var punycode = punycode$1.exports;
+querystring$2.decode = querystring$2.parse = decode;
+querystring$2.encode = querystring$2.stringify = encode;
+var punycode$1 = punycode$2.exports;
 var util = util$1;
 var parse = urlParse;
 var resolve = urlResolve;
 var format = urlFormat;
-function Url() {
+function Url$1() {
   this.protocol = null;
   this.slashes = null;
   this.auth = null;
@@ -1749,7 +1749,7 @@ function Url() {
   this.path = null;
   this.href = null;
 }
-var protocolPattern = /^([a-z0-9.+-]+:)/i, portPattern = /:[0-9]*$/, simplePathPattern = /^(\/\/?(?!\/)[^\?\s]*)(\?[^\s]*)?$/, delims = ["<", ">", '"', "`", " ", "\r", "\n", "	"], unwise = ["{", "}", "|", "\\", "^", "`"].concat(delims), autoEscape = ["'"].concat(unwise), nonHostChars = ["%", "/", "?", ";", "#"].concat(autoEscape), hostEndingChars = ["/", "?", "#"], hostnameMaxLen = 255, hostnamePartPattern = /^[+a-z0-9A-Z_-]{0,63}$/, hostnamePartStart = /^([+a-z0-9A-Z_-]{0,63})(.*)$/, unsafeProtocol = {
+var protocolPattern = /^([a-z0-9.+-]+:)/i, portPattern = /:[0-9]*$/, simplePathPattern = /^(\/\/?(?!\/)[^\?\s]*)(\?[^\s]*)?$/, delims = ["<", ">", '"', "`", " ", "\r", "\n", "	"], unwise = ["{", "}", "|", "\\", "^", "`"].concat(delims), autoEscape$1 = ["'"].concat(unwise), nonHostChars = ["%", "/", "?", ";", "#"].concat(autoEscape$1), hostEndingChars = ["/", "?", "#"], hostnameMaxLen = 255, hostnamePartPattern = /^[+a-z0-9A-Z_-]{0,63}$/, hostnamePartStart = /^([+a-z0-9A-Z_-]{0,63})(.*)$/, unsafeProtocol = {
   "javascript": true,
   "javascript:": true
 }, hostlessProtocol = {
@@ -1766,15 +1766,15 @@ var protocolPattern = /^([a-z0-9.+-]+:)/i, portPattern = /:[0-9]*$/, simplePathP
   "ftp:": true,
   "gopher:": true,
   "file:": true
-}, querystring = querystring$1;
+}, querystring$1 = querystring$2;
 function urlParse(url2, parseQueryString, slashesDenoteHost) {
-  if (url2 && util.isObject(url2) && url2 instanceof Url)
+  if (url2 && util.isObject(url2) && url2 instanceof Url$1)
     return url2;
-  var u = new Url();
+  var u = new Url$1();
   u.parse(url2, parseQueryString, slashesDenoteHost);
   return u;
 }
-Url.prototype.parse = function(url2, parseQueryString, slashesDenoteHost) {
+Url$1.prototype.parse = function(url2, parseQueryString, slashesDenoteHost) {
   if (!util.isString(url2)) {
     throw new TypeError("Parameter 'url' must be a string, not " + typeof url2);
   }
@@ -1792,7 +1792,7 @@ Url.prototype.parse = function(url2, parseQueryString, slashesDenoteHost) {
       if (simplePath[2]) {
         this.search = simplePath[2];
         if (parseQueryString) {
-          this.query = querystring.parse(this.search.substr(1));
+          this.query = querystring$1.parse(this.search.substr(1));
         } else {
           this.query = this.search.substr(1);
         }
@@ -1886,7 +1886,7 @@ Url.prototype.parse = function(url2, parseQueryString, slashesDenoteHost) {
       this.hostname = this.hostname.toLowerCase();
     }
     if (!ipv6Hostname) {
-      this.hostname = punycode.toASCII(this.hostname);
+      this.hostname = punycode$1.toASCII(this.hostname);
     }
     var p = this.port ? ":" + this.port : "";
     var h = this.hostname || "";
@@ -1900,8 +1900,8 @@ Url.prototype.parse = function(url2, parseQueryString, slashesDenoteHost) {
     }
   }
   if (!unsafeProtocol[lowerProto]) {
-    for (var i = 0, l = autoEscape.length; i < l; i++) {
-      var ae = autoEscape[i];
+    for (var i = 0, l = autoEscape$1.length; i < l; i++) {
+      var ae = autoEscape$1[i];
       if (rest.indexOf(ae) === -1)
         continue;
       var esc = encodeURIComponent(ae);
@@ -1921,7 +1921,7 @@ Url.prototype.parse = function(url2, parseQueryString, slashesDenoteHost) {
     this.search = rest.substr(qm);
     this.query = rest.substr(qm + 1);
     if (parseQueryString) {
-      this.query = querystring.parse(this.query);
+      this.query = querystring$1.parse(this.query);
     }
     rest = rest.slice(0, qm);
   } else if (parseQueryString) {
@@ -1944,11 +1944,11 @@ Url.prototype.parse = function(url2, parseQueryString, slashesDenoteHost) {
 function urlFormat(obj) {
   if (util.isString(obj))
     obj = urlParse(obj);
-  if (!(obj instanceof Url))
-    return Url.prototype.format.call(obj);
+  if (!(obj instanceof Url$1))
+    return Url$1.prototype.format.call(obj);
   return obj.format();
 }
-Url.prototype.format = function() {
+Url$1.prototype.format = function() {
   var auth = this.auth || "";
   if (auth) {
     auth = encodeURIComponent(auth);
@@ -1965,7 +1965,7 @@ Url.prototype.format = function() {
     }
   }
   if (this.query && util.isObject(this.query) && Object.keys(this.query).length) {
-    query = querystring.stringify(this.query);
+    query = querystring$1.stringify(this.query);
   }
   var search = this.search || query && "?" + query || "";
   if (protocol && protocol.substr(-1) !== ":")
@@ -1990,16 +1990,16 @@ Url.prototype.format = function() {
 function urlResolve(source, relative) {
   return urlParse(source, false, true).resolve(relative);
 }
-Url.prototype.resolve = function(relative) {
+Url$1.prototype.resolve = function(relative) {
   return this.resolveObject(urlParse(relative, false, true)).format();
 };
-Url.prototype.resolveObject = function(relative) {
+Url$1.prototype.resolveObject = function(relative) {
   if (util.isString(relative)) {
-    var rel = new Url();
+    var rel = new Url$1();
     rel.parse(relative, false, true);
     relative = rel;
   }
-  var result = new Url();
+  var result = new Url$1();
   var tkeys = Object.keys(this);
   for (var tk = 0; tk < tkeys.length; tk++) {
     var tkey = tkeys[tk];
@@ -2182,7 +2182,7 @@ Url.prototype.resolveObject = function(relative) {
   result.href = result.format();
   return result;
 };
-Url.prototype.parseHost = function() {
+Url$1.prototype.parseHost = function() {
   var host = this.host;
   var port = portPattern.exec(host);
   if (port) {
@@ -27413,16 +27413,16 @@ var ThrowTypeError = $gOPD$2 ? function() {
   }
 }() : throwTypeError;
 var hasSymbols$4 = hasSymbols$5();
-var getProto = Object.getPrototypeOf || function(x) {
+var getProto$1 = Object.getPrototypeOf || function(x) {
   return x.__proto__;
 };
 var needsEval = {};
-var TypedArray = typeof Uint8Array === "undefined" ? undefined$1 : getProto(Uint8Array);
+var TypedArray = typeof Uint8Array === "undefined" ? undefined$1 : getProto$1(Uint8Array);
 var INTRINSICS = {
   "%AggregateError%": typeof AggregateError === "undefined" ? undefined$1 : AggregateError,
   "%Array%": Array,
   "%ArrayBuffer%": typeof ArrayBuffer === "undefined" ? undefined$1 : ArrayBuffer,
-  "%ArrayIteratorPrototype%": hasSymbols$4 ? getProto([][Symbol.iterator]()) : undefined$1,
+  "%ArrayIteratorPrototype%": hasSymbols$4 ? getProto$1([][Symbol.iterator]()) : undefined$1,
   "%AsyncFromSyncIteratorPrototype%": undefined$1,
   "%AsyncFunction%": needsEval,
   "%AsyncGenerator%": needsEval,
@@ -27450,10 +27450,10 @@ var INTRINSICS = {
   "%Int32Array%": typeof Int32Array === "undefined" ? undefined$1 : Int32Array,
   "%isFinite%": isFinite,
   "%isNaN%": isNaN,
-  "%IteratorPrototype%": hasSymbols$4 ? getProto(getProto([][Symbol.iterator]())) : undefined$1,
+  "%IteratorPrototype%": hasSymbols$4 ? getProto$1(getProto$1([][Symbol.iterator]())) : undefined$1,
   "%JSON%": typeof JSON === "object" ? JSON : undefined$1,
   "%Map%": typeof Map === "undefined" ? undefined$1 : Map,
-  "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols$4 ? undefined$1 : getProto((/* @__PURE__ */ new Map())[Symbol.iterator]()),
+  "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols$4 ? undefined$1 : getProto$1((/* @__PURE__ */ new Map())[Symbol.iterator]()),
   "%Math%": Math,
   "%Number%": Number,
   "%Object%": Object,
@@ -27466,10 +27466,10 @@ var INTRINSICS = {
   "%Reflect%": typeof Reflect === "undefined" ? undefined$1 : Reflect,
   "%RegExp%": RegExp,
   "%Set%": typeof Set === "undefined" ? undefined$1 : Set,
-  "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols$4 ? undefined$1 : getProto((/* @__PURE__ */ new Set())[Symbol.iterator]()),
+  "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols$4 ? undefined$1 : getProto$1((/* @__PURE__ */ new Set())[Symbol.iterator]()),
   "%SharedArrayBuffer%": typeof SharedArrayBuffer === "undefined" ? undefined$1 : SharedArrayBuffer,
   "%String%": String,
-  "%StringIteratorPrototype%": hasSymbols$4 ? getProto(""[Symbol.iterator]()) : undefined$1,
+  "%StringIteratorPrototype%": hasSymbols$4 ? getProto$1(""[Symbol.iterator]()) : undefined$1,
   "%Symbol%": hasSymbols$4 ? Symbol : undefined$1,
   "%SyntaxError%": $SyntaxError$2,
   "%ThrowTypeError%": ThrowTypeError,
@@ -27500,7 +27500,7 @@ var doEval = function doEval2(name) {
   } else if (name === "%AsyncIteratorPrototype%") {
     var gen = doEval2("%AsyncGenerator%");
     if (gen) {
-      value = getProto(gen.prototype);
+      value = getProto$1(gen.prototype);
     }
   }
   INTRINSICS[name] = value;
@@ -27787,12 +27787,12 @@ if (!Object.keys) {
     }
   };
   keysShim$1 = function keys3(object) {
-    var isObject = object !== null && typeof object === "object";
+    var isObject2 = object !== null && typeof object === "object";
     var isFunction2 = toStr$7.call(object) === "[object Function]";
     var isArguments5 = isArgs$1(object);
-    var isString3 = isObject && toStr$7.call(object) === "[object String]";
+    var isString3 = isObject2 && toStr$7.call(object) === "[object String]";
     var theKeys = [];
-    if (!isObject && !isFunction2 && !isArguments5) {
+    if (!isObject2 && !isFunction2 && !isArguments5) {
       throw new TypeError("Object.keys called on a non-object");
     }
     var skipProto = hasProtoEnumBug && isFunction2;
@@ -28095,7 +28095,7 @@ if (hasSymbols$5() || shams$1()) {
     }
   };
 } else {
-  var isArray$2 = isarray;
+  var isArray$4 = isarray;
   var isString$2 = isString$3;
   var GetIntrinsic$p = getIntrinsic;
   var $Map = GetIntrinsic$p("%Map%", true);
@@ -28137,7 +28137,7 @@ if (hasSymbols$5() || shams$1()) {
     };
   };
   var getNonCollectionIterator = function getNonCollectionIterator2(iterable, noPrimordialCollections) {
-    if (isArray$2(iterable) || isArguments4(iterable)) {
+    if (isArray$4(iterable) || isArguments4(iterable)) {
       return getArrayIterator(iterable);
     }
     if (isString$2(iterable)) {
@@ -28445,7 +28445,7 @@ var objectInspect = function inspect_(obj, options, depth, seen) {
     depth = 0;
   }
   if (depth >= maxDepth && maxDepth > 0 && typeof obj === "object") {
-    return isArray$1(obj) ? "[Array]" : "[Object]";
+    return isArray$3(obj) ? "[Array]" : "[Object]";
   }
   var indent = getIndent(opts, depth);
   if (typeof seen === "undefined") {
@@ -28491,7 +28491,7 @@ var objectInspect = function inspect_(obj, options, depth, seen) {
     s += "</" + $toLowerCase.call(String(obj.nodeName)) + ">";
     return s;
   }
-  if (isArray$1(obj)) {
+  if (isArray$3(obj)) {
     if (obj.length === 0) {
       return "[]";
     }
@@ -28577,7 +28577,7 @@ function wrapQuotes(s, defaultStyle2, opts) {
 function quote(s) {
   return $replace$1.call(String(s), /"/g, "&quot;");
 }
-function isArray$1(obj) {
+function isArray$3(obj) {
   return toStr$4(obj) === "[object Array]" && (!toStringTag || !(typeof obj === "object" && toStringTag in obj));
 }
 function isDate$1(obj) {
@@ -28803,7 +28803,7 @@ function indentedJoin(xs, indent) {
   return lineJoiner + $join.call(xs, "," + lineJoiner) + "\n" + indent.prev;
 }
 function arrObjKeys(obj, inspect2) {
-  var isArr = isArray$1(obj);
+  var isArr = isArray$3(obj);
   var xs = [];
   if (isArr) {
     xs.length = obj.length;
@@ -28898,7 +28898,7 @@ var hasPropertyDescriptors2 = hasPropertyDescriptors_1;
 var GetIntrinsic$h = getIntrinsic;
 var $defineProperty = hasPropertyDescriptors2() && GetIntrinsic$h("%Object.defineProperty%", true);
 var hasArrayLengthDefineBug2 = hasPropertyDescriptors2.hasArrayLengthDefineBug();
-var isArray = hasArrayLengthDefineBug2 && IsArray$4;
+var isArray$2 = hasArrayLengthDefineBug2 && IsArray$4;
 var callBound$7 = callBound$a;
 var $isEnumerable$1 = callBound$7("Object.prototype.propertyIsEnumerable");
 var DefineOwnProperty$2 = function DefineOwnProperty(IsDataDescriptor3, SameValue3, FromPropertyDescriptor3, O, P, desc) {
@@ -28916,7 +28916,7 @@ var DefineOwnProperty$2 = function DefineOwnProperty(IsDataDescriptor3, SameValu
     O[P] = V;
     return SameValue3(O[P], V);
   }
-  if (hasArrayLengthDefineBug2 && P === "length" && "[[Value]]" in desc && isArray(O) && O.length !== desc["[[Value]]"]) {
+  if (hasArrayLengthDefineBug2 && P === "length" && "[[Value]]" in desc && isArray$2(O) && O.length !== desc["[[Value]]"]) {
     O.length = desc["[[Value]]"];
     return O.length === desc["[[Value]]"];
   }
@@ -30435,7 +30435,7 @@ var tweakpane = { exports: {} };
         return [...tmp, result.value];
       }, []);
     }
-    function isObject(value) {
+    function isObject2(value) {
       if (value === null) {
         return false;
       }
@@ -30475,7 +30475,7 @@ var tweakpane = { exports: {} };
         constant: (value) => createParamsParserBuilder((v) => v === value ? value : void 0)(optional),
         raw: createParamsParserBuilder((v) => v)(optional),
         object: (keyToParserMap) => createParamsParserBuilder((v) => {
-          if (!isObject(v)) {
+          if (!isObject2(v)) {
             return void 0;
           }
           return parseObject(v, keyToParserMap);
@@ -42041,6 +42041,1167 @@ class Letter {
     this.view.rotation = this.originalRot + Math.cos(tickR) * Math.sin(tickR) * (Math.PI / 180) * 5;
   }
 }
+function Url() {
+  this._protocol = null;
+  this._href = "";
+  this._port = -1;
+  this._query = null;
+  this.auth = null;
+  this.slashes = null;
+  this.host = null;
+  this.hostname = null;
+  this.hash = null;
+  this.search = null;
+  this.pathname = null;
+  this._prependSlash = false;
+}
+var querystring = querystring$2;
+Url.queryString = querystring;
+Url.prototype.parse = function Url$parse(str, parseQueryString, hostDenotesSlash, disableAutoEscapeChars) {
+  if (typeof str !== "string") {
+    throw new TypeError("Parameter 'url' must be a string, not " + typeof str);
+  }
+  var start = 0;
+  var end = str.length - 1;
+  while (str.charCodeAt(start) <= 32)
+    start++;
+  while (str.charCodeAt(end) <= 32)
+    end--;
+  start = this._parseProtocol(str, start, end);
+  if (this._protocol !== "javascript") {
+    start = this._parseHost(str, start, end, hostDenotesSlash);
+    var proto = this._protocol;
+    if (!this.hostname && (this.slashes || proto && !slashProtocols[proto])) {
+      this.hostname = this.host = "";
+    }
+  }
+  if (start <= end) {
+    var ch = str.charCodeAt(start);
+    if (ch === 47 || ch === 92) {
+      this._parsePath(str, start, end, disableAutoEscapeChars);
+    } else if (ch === 63) {
+      this._parseQuery(str, start, end, disableAutoEscapeChars);
+    } else if (ch === 35) {
+      this._parseHash(str, start, end, disableAutoEscapeChars);
+    } else if (this._protocol !== "javascript") {
+      this._parsePath(str, start, end, disableAutoEscapeChars);
+    } else {
+      this.pathname = str.slice(start, end + 1);
+    }
+  }
+  if (!this.pathname && this.hostname && this._slashProtocols[this._protocol]) {
+    this.pathname = "/";
+  }
+  if (parseQueryString) {
+    var search = this.search;
+    if (search == null) {
+      search = this.search = "";
+    }
+    if (search.charCodeAt(0) === 63) {
+      search = search.slice(1);
+    }
+    this.query = Url.queryString.parse(search);
+  }
+};
+Url.prototype.resolve = function Url$resolve(relative) {
+  return this.resolveObject(Url.parse(relative, false, true)).format();
+};
+Url.prototype.format = function Url$format() {
+  var auth = this.auth || "";
+  if (auth) {
+    auth = encodeURIComponent(auth);
+    auth = auth.replace(/%3A/i, ":");
+    auth += "@";
+  }
+  var protocol = this.protocol || "";
+  var pathname = this.pathname || "";
+  var hash = this.hash || "";
+  var search = this.search || "";
+  var query = "";
+  var hostname = this.hostname || "";
+  var port = this.port || "";
+  var host = false;
+  var scheme = "";
+  var q = this.query;
+  if (q && typeof q === "object") {
+    query = Url.queryString.stringify(q);
+  }
+  if (!search) {
+    search = query ? "?" + query : "";
+  }
+  if (protocol && protocol.charCodeAt(protocol.length - 1) !== 58)
+    protocol += ":";
+  if (this.host) {
+    host = auth + this.host;
+  } else if (hostname) {
+    var ip6 = hostname.indexOf(":") > -1;
+    if (ip6)
+      hostname = "[" + hostname + "]";
+    host = auth + hostname + (port ? ":" + port : "");
+  }
+  var slashes = this.slashes || (!protocol || slashProtocols[protocol]) && host !== false;
+  if (protocol)
+    scheme = protocol + (slashes ? "//" : "");
+  else if (slashes)
+    scheme = "//";
+  if (slashes && pathname && pathname.charCodeAt(0) !== 47) {
+    pathname = "/" + pathname;
+  }
+  if (search && search.charCodeAt(0) !== 63)
+    search = "?" + search;
+  if (hash && hash.charCodeAt(0) !== 35)
+    hash = "#" + hash;
+  pathname = escapePathName(pathname);
+  search = escapeSearch(search);
+  return scheme + (host === false ? "" : host) + pathname + search + hash;
+};
+Url.prototype.resolveObject = function Url$resolveObject(relative) {
+  if (typeof relative === "string")
+    relative = Url.parse(relative, false, true);
+  var result = this._clone();
+  result.hash = relative.hash;
+  if (!relative.href) {
+    result._href = "";
+    return result;
+  }
+  if (relative.slashes && !relative._protocol) {
+    relative._copyPropsTo(result, true);
+    if (slashProtocols[result._protocol] && result.hostname && !result.pathname) {
+      result.pathname = "/";
+    }
+    result._href = "";
+    return result;
+  }
+  if (relative._protocol && relative._protocol !== result._protocol) {
+    if (!slashProtocols[relative._protocol]) {
+      relative._copyPropsTo(result, false);
+      result._href = "";
+      return result;
+    }
+    result._protocol = relative._protocol;
+    if (!relative.host && relative._protocol !== "javascript") {
+      var relPath = (relative.pathname || "").split("/");
+      while (relPath.length && !(relative.host = relPath.shift()))
+        ;
+      if (!relative.host)
+        relative.host = "";
+      if (!relative.hostname)
+        relative.hostname = "";
+      if (relPath[0] !== "")
+        relPath.unshift("");
+      if (relPath.length < 2)
+        relPath.unshift("");
+      result.pathname = relPath.join("/");
+    } else {
+      result.pathname = relative.pathname;
+    }
+    result.search = relative.search;
+    result.host = relative.host || "";
+    result.auth = relative.auth;
+    result.hostname = relative.hostname || relative.host;
+    result._port = relative._port;
+    result.slashes = result.slashes || relative.slashes;
+    result._href = "";
+    return result;
+  }
+  var isSourceAbs = result.pathname && result.pathname.charCodeAt(0) === 47;
+  var isRelAbs = relative.host || relative.pathname && relative.pathname.charCodeAt(0) === 47;
+  var mustEndAbs = isRelAbs || isSourceAbs || result.host && relative.pathname;
+  var removeAllDots = mustEndAbs;
+  var srcPath = result.pathname && result.pathname.split("/") || [];
+  var relPath = relative.pathname && relative.pathname.split("/") || [];
+  var psychotic = result._protocol && !slashProtocols[result._protocol];
+  if (psychotic) {
+    result.hostname = "";
+    result._port = -1;
+    if (result.host) {
+      if (srcPath[0] === "")
+        srcPath[0] = result.host;
+      else
+        srcPath.unshift(result.host);
+    }
+    result.host = "";
+    if (relative._protocol) {
+      relative.hostname = "";
+      relative._port = -1;
+      if (relative.host) {
+        if (relPath[0] === "")
+          relPath[0] = relative.host;
+        else
+          relPath.unshift(relative.host);
+      }
+      relative.host = "";
+    }
+    mustEndAbs = mustEndAbs && (relPath[0] === "" || srcPath[0] === "");
+  }
+  if (isRelAbs) {
+    result.host = relative.host ? relative.host : result.host;
+    result.hostname = relative.hostname ? relative.hostname : result.hostname;
+    result.search = relative.search;
+    srcPath = relPath;
+  } else if (relPath.length) {
+    if (!srcPath)
+      srcPath = [];
+    srcPath.pop();
+    srcPath = srcPath.concat(relPath);
+    result.search = relative.search;
+  } else if (relative.search) {
+    if (psychotic) {
+      result.hostname = result.host = srcPath.shift();
+      var authInHost = result.host && result.host.indexOf("@") > 0 ? result.host.split("@") : false;
+      if (authInHost) {
+        result.auth = authInHost.shift();
+        result.host = result.hostname = authInHost.shift();
+      }
+    }
+    result.search = relative.search;
+    result._href = "";
+    return result;
+  }
+  if (!srcPath.length) {
+    result.pathname = null;
+    result._href = "";
+    return result;
+  }
+  var last = srcPath.slice(-1)[0];
+  var hasTrailingSlash = (result.host || relative.host) && (last === "." || last === "..") || last === "";
+  var up = 0;
+  for (var i = srcPath.length; i >= 0; i--) {
+    last = srcPath[i];
+    if (last === ".") {
+      srcPath.splice(i, 1);
+    } else if (last === "..") {
+      srcPath.splice(i, 1);
+      up++;
+    } else if (up) {
+      srcPath.splice(i, 1);
+      up--;
+    }
+  }
+  if (!mustEndAbs && !removeAllDots) {
+    for (; up--; up) {
+      srcPath.unshift("..");
+    }
+  }
+  if (mustEndAbs && srcPath[0] !== "" && (!srcPath[0] || srcPath[0].charCodeAt(0) !== 47)) {
+    srcPath.unshift("");
+  }
+  if (hasTrailingSlash && srcPath.join("/").substr(-1) !== "/") {
+    srcPath.push("");
+  }
+  var isAbsolute = srcPath[0] === "" || srcPath[0] && srcPath[0].charCodeAt(0) === 47;
+  if (psychotic) {
+    result.hostname = result.host = isAbsolute ? "" : srcPath.length ? srcPath.shift() : "";
+    var authInHost = result.host && result.host.indexOf("@") > 0 ? result.host.split("@") : false;
+    if (authInHost) {
+      result.auth = authInHost.shift();
+      result.host = result.hostname = authInHost.shift();
+    }
+  }
+  mustEndAbs = mustEndAbs || result.host && srcPath.length;
+  if (mustEndAbs && !isAbsolute) {
+    srcPath.unshift("");
+  }
+  result.pathname = srcPath.length === 0 ? null : srcPath.join("/");
+  result.auth = relative.auth || result.auth;
+  result.slashes = result.slashes || relative.slashes;
+  result._href = "";
+  return result;
+};
+var punycode = punycode$2.exports;
+Url.prototype._hostIdna = function Url$_hostIdna(hostname) {
+  return punycode.toASCII(hostname);
+};
+var escapePathName = Url.prototype._escapePathName = function Url$_escapePathName(pathname) {
+  if (!containsCharacter2(pathname, 35, 63)) {
+    return pathname;
+  }
+  return _escapePath(pathname);
+};
+var escapeSearch = Url.prototype._escapeSearch = function Url$_escapeSearch(search) {
+  if (!containsCharacter2(search, 35, -1))
+    return search;
+  return _escapeSearch(search);
+};
+Url.prototype._parseProtocol = function Url$_parseProtocol(str, start, end) {
+  var doLowerCase = false;
+  var protocolCharacters = this._protocolCharacters;
+  for (var i = start; i <= end; ++i) {
+    var ch = str.charCodeAt(i);
+    if (ch === 58) {
+      var protocol = str.slice(start, i);
+      if (doLowerCase)
+        protocol = protocol.toLowerCase();
+      this._protocol = protocol;
+      return i + 1;
+    } else if (protocolCharacters[ch] === 1) {
+      if (ch < 97)
+        doLowerCase = true;
+    } else {
+      return start;
+    }
+  }
+  return start;
+};
+Url.prototype._parseAuth = function Url$_parseAuth(str, start, end, decode2) {
+  var auth = str.slice(start, end + 1);
+  if (decode2) {
+    auth = decodeURIComponent(auth);
+  }
+  this.auth = auth;
+};
+Url.prototype._parsePort = function Url$_parsePort(str, start, end) {
+  var port = 0;
+  var hadChars = false;
+  var validPort = true;
+  for (var i = start; i <= end; ++i) {
+    var ch = str.charCodeAt(i);
+    if (48 <= ch && ch <= 57) {
+      port = 10 * port + (ch - 48);
+      hadChars = true;
+    } else {
+      validPort = false;
+      if (ch === 92 || ch === 47) {
+        validPort = true;
+      }
+      break;
+    }
+  }
+  if (port === 0 && !hadChars || !validPort) {
+    if (!validPort) {
+      this._port = -2;
+    }
+    return 0;
+  }
+  this._port = port;
+  return i - start;
+};
+Url.prototype._parseHost = function Url$_parseHost(str, start, end, slashesDenoteHost) {
+  var hostEndingCharacters = this._hostEndingCharacters;
+  var first = str.charCodeAt(start);
+  var second = str.charCodeAt(start + 1);
+  if ((first === 47 || first === 92) && (second === 47 || second === 92)) {
+    this.slashes = true;
+    if (start === 0) {
+      if (end < 2)
+        return start;
+      var hasAuth = containsCharacter(str, 64, 2, hostEndingCharacters);
+      if (!hasAuth && !slashesDenoteHost) {
+        this.slashes = null;
+        return start;
+      }
+    }
+    start += 2;
+  } else if (!this._protocol || slashProtocols[this._protocol]) {
+    return start;
+  }
+  var doLowerCase = false;
+  var idna = false;
+  var hostNameStart = start;
+  var hostNameEnd = end;
+  var portLength = 0;
+  var charsAfterDot = 0;
+  var authNeedsDecoding = false;
+  var j = -1;
+  for (var i = start; i <= end; ++i) {
+    var ch = str.charCodeAt(i);
+    if (ch === 64) {
+      j = i;
+    } else if (ch === 37) {
+      authNeedsDecoding = true;
+    } else if (hostEndingCharacters[ch] === 1) {
+      break;
+    }
+  }
+  if (j > -1) {
+    this._parseAuth(str, start, j - 1, authNeedsDecoding);
+    start = hostNameStart = j + 1;
+  }
+  if (str.charCodeAt(start) === 91) {
+    for (var i = start + 1; i <= end; ++i) {
+      var ch = str.charCodeAt(i);
+      if (ch === 93) {
+        if (str.charCodeAt(i + 1) === 58) {
+          portLength = this._parsePort(str, i + 2, end) + 1;
+        }
+        var hostname = str.slice(start + 1, i).toLowerCase();
+        this.hostname = hostname;
+        this.host = this._port > 0 ? "[" + hostname + "]:" + this._port : "[" + hostname + "]";
+        this.pathname = "/";
+        return i + portLength + 1;
+      }
+    }
+    return start;
+  }
+  for (var i = start; i <= end; ++i) {
+    if (charsAfterDot > 62) {
+      this.hostname = this.host = str.slice(start, i);
+      return i;
+    }
+    var ch = str.charCodeAt(i);
+    if (ch === 58) {
+      portLength = this._parsePort(str, i + 1, end) + 1;
+      hostNameEnd = i - 1;
+      break;
+    } else if (ch < 97) {
+      if (ch === 46) {
+        charsAfterDot = -1;
+      } else if (65 <= ch && ch <= 90) {
+        doLowerCase = true;
+      } else if (!(ch === 45 || ch === 95 || ch === 43 || 48 <= ch && ch <= 57)) {
+        if (hostEndingCharacters[ch] === 0 && this._noPrependSlashHostEnders[ch] === 0) {
+          this._prependSlash = true;
+        }
+        hostNameEnd = i - 1;
+        break;
+      }
+    } else if (ch >= 123) {
+      if (ch <= 126) {
+        if (this._noPrependSlashHostEnders[ch] === 0) {
+          this._prependSlash = true;
+        }
+        hostNameEnd = i - 1;
+        break;
+      }
+      idna = true;
+    }
+    charsAfterDot++;
+  }
+  if (hostNameEnd + 1 !== start && hostNameEnd - hostNameStart <= 256) {
+    var hostname = str.slice(hostNameStart, hostNameEnd + 1);
+    if (doLowerCase)
+      hostname = hostname.toLowerCase();
+    if (idna)
+      hostname = this._hostIdna(hostname);
+    this.hostname = hostname;
+    this.host = this._port > 0 ? hostname + ":" + this._port : hostname;
+  }
+  return hostNameEnd + 1 + portLength;
+};
+Url.prototype._copyPropsTo = function Url$_copyPropsTo(input, noProtocol) {
+  if (!noProtocol) {
+    input._protocol = this._protocol;
+  }
+  input._href = this._href;
+  input._port = this._port;
+  input._prependSlash = this._prependSlash;
+  input.auth = this.auth;
+  input.slashes = this.slashes;
+  input.host = this.host;
+  input.hostname = this.hostname;
+  input.hash = this.hash;
+  input.search = this.search;
+  input.pathname = this.pathname;
+};
+Url.prototype._clone = function Url$_clone() {
+  var ret = new Url();
+  ret._protocol = this._protocol;
+  ret._href = this._href;
+  ret._port = this._port;
+  ret._prependSlash = this._prependSlash;
+  ret.auth = this.auth;
+  ret.slashes = this.slashes;
+  ret.host = this.host;
+  ret.hostname = this.hostname;
+  ret.hash = this.hash;
+  ret.search = this.search;
+  ret.pathname = this.pathname;
+  return ret;
+};
+Url.prototype._getComponentEscaped = function Url$_getComponentEscaped(str, start, end, isAfterQuery) {
+  var cur = start;
+  var i = start;
+  var ret = "";
+  var autoEscapeMap2 = isAfterQuery ? this._afterQueryAutoEscapeMap : this._autoEscapeMap;
+  for (; i <= end; ++i) {
+    var ch = str.charCodeAt(i);
+    var escaped = autoEscapeMap2[ch];
+    if (escaped !== "" && escaped !== void 0) {
+      if (cur < i)
+        ret += str.slice(cur, i);
+      ret += escaped;
+      cur = i + 1;
+    }
+  }
+  if (cur < i + 1)
+    ret += str.slice(cur, i);
+  return ret;
+};
+Url.prototype._parsePath = function Url$_parsePath(str, start, end, disableAutoEscapeChars) {
+  var pathStart = start;
+  var pathEnd = end;
+  var escape2 = false;
+  var autoEscapeCharacters = this._autoEscapeCharacters;
+  var prePath = this._port === -2 ? "/:" : "";
+  for (var i = start; i <= end; ++i) {
+    var ch = str.charCodeAt(i);
+    if (ch === 35) {
+      this._parseHash(str, i, end, disableAutoEscapeChars);
+      pathEnd = i - 1;
+      break;
+    } else if (ch === 63) {
+      this._parseQuery(str, i, end, disableAutoEscapeChars);
+      pathEnd = i - 1;
+      break;
+    } else if (!disableAutoEscapeChars && !escape2 && autoEscapeCharacters[ch] === 1) {
+      escape2 = true;
+    }
+  }
+  if (pathStart > pathEnd) {
+    this.pathname = prePath === "" ? "/" : prePath;
+    return;
+  }
+  var path;
+  if (escape2) {
+    path = this._getComponentEscaped(str, pathStart, pathEnd, false);
+  } else {
+    path = str.slice(pathStart, pathEnd + 1);
+  }
+  this.pathname = prePath === "" ? this._prependSlash ? "/" + path : path : prePath + path;
+};
+Url.prototype._parseQuery = function Url$_parseQuery(str, start, end, disableAutoEscapeChars) {
+  var queryStart = start;
+  var queryEnd = end;
+  var escape2 = false;
+  var autoEscapeCharacters = this._autoEscapeCharacters;
+  for (var i = start; i <= end; ++i) {
+    var ch = str.charCodeAt(i);
+    if (ch === 35) {
+      this._parseHash(str, i, end, disableAutoEscapeChars);
+      queryEnd = i - 1;
+      break;
+    } else if (!disableAutoEscapeChars && !escape2 && autoEscapeCharacters[ch] === 1) {
+      escape2 = true;
+    }
+  }
+  if (queryStart > queryEnd) {
+    this.search = "";
+    return;
+  }
+  var query;
+  if (escape2) {
+    query = this._getComponentEscaped(str, queryStart, queryEnd, true);
+  } else {
+    query = str.slice(queryStart, queryEnd + 1);
+  }
+  this.search = query;
+};
+Url.prototype._parseHash = function Url$_parseHash(str, start, end, disableAutoEscapeChars) {
+  if (start > end) {
+    this.hash = "";
+    return;
+  }
+  this.hash = disableAutoEscapeChars ? str.slice(start, end + 1) : this._getComponentEscaped(str, start, end, true);
+};
+Object.defineProperty(Url.prototype, "port", {
+  get: function() {
+    if (this._port >= 0) {
+      return "" + this._port;
+    }
+    return null;
+  },
+  set: function(v) {
+    if (v == null) {
+      this._port = -1;
+    } else {
+      this._port = parseInt(v, 10);
+    }
+  }
+});
+Object.defineProperty(Url.prototype, "query", {
+  get: function() {
+    var query = this._query;
+    if (query != null) {
+      return query;
+    }
+    var search = this.search;
+    if (search) {
+      if (search.charCodeAt(0) === 63) {
+        search = search.slice(1);
+      }
+      if (search !== "") {
+        this._query = search;
+        return search;
+      }
+    }
+    return search;
+  },
+  set: function(v) {
+    this._query = v;
+  }
+});
+Object.defineProperty(Url.prototype, "path", {
+  get: function() {
+    var p = this.pathname || "";
+    var s = this.search || "";
+    if (p || s) {
+      return p + s;
+    }
+    return p == null && s ? "/" + s : null;
+  },
+  set: function() {
+  }
+});
+Object.defineProperty(Url.prototype, "protocol", {
+  get: function() {
+    var proto = this._protocol;
+    return proto ? proto + ":" : proto;
+  },
+  set: function(v) {
+    if (typeof v === "string") {
+      var end = v.length - 1;
+      if (v.charCodeAt(end) === 58) {
+        this._protocol = v.slice(0, end);
+      } else {
+        this._protocol = v;
+      }
+    } else if (v == null) {
+      this._protocol = null;
+    }
+  }
+});
+Object.defineProperty(Url.prototype, "href", {
+  get: function() {
+    var href = this._href;
+    if (!href) {
+      href = this._href = this.format();
+    }
+    return href;
+  },
+  set: function(v) {
+    this._href = v;
+  }
+});
+Url.parse = function Url$Parse(str, parseQueryString, hostDenotesSlash, disableAutoEscapeChars) {
+  if (str instanceof Url)
+    return str;
+  var ret = new Url();
+  ret.parse(str, !!parseQueryString, !!hostDenotesSlash, !!disableAutoEscapeChars);
+  return ret;
+};
+Url.format = function Url$Format(obj) {
+  if (typeof obj === "string") {
+    obj = Url.parse(obj);
+  }
+  if (!(obj instanceof Url)) {
+    return Url.prototype.format.call(obj);
+  }
+  return obj.format();
+};
+Url.resolve = function Url$Resolve(source, relative) {
+  return Url.parse(source, false, true).resolve(relative);
+};
+Url.resolveObject = function Url$ResolveObject(source, relative) {
+  if (!source)
+    return relative;
+  return Url.parse(source, false, true).resolveObject(relative);
+};
+function _escapePath(pathname) {
+  return pathname.replace(/[?#]/g, function(match) {
+    return encodeURIComponent(match);
+  });
+}
+function _escapeSearch(search) {
+  return search.replace(/#/g, function(match) {
+    return encodeURIComponent(match);
+  });
+}
+function containsCharacter(string, char1, fromIndex, stopCharacterTable) {
+  var len = string.length;
+  for (var i = fromIndex; i < len; ++i) {
+    var ch = string.charCodeAt(i);
+    if (ch === char1) {
+      return true;
+    } else if (stopCharacterTable[ch] === 1) {
+      return false;
+    }
+  }
+  return false;
+}
+function containsCharacter2(string, char1, char2) {
+  for (var i = 0, len = string.length; i < len; ++i) {
+    var ch = string.charCodeAt(i);
+    if (ch === char1 || ch === char2)
+      return true;
+  }
+  return false;
+}
+function makeAsciiTable(spec) {
+  var ret = new Uint8Array(128);
+  spec.forEach(function(item) {
+    if (typeof item === "number") {
+      ret[item] = 1;
+    } else {
+      var start = item[0];
+      var end = item[1];
+      for (var j = start; j <= end; ++j) {
+        ret[j] = 1;
+      }
+    }
+  });
+  return ret;
+}
+var autoEscape = [
+  "<",
+  ">",
+  '"',
+  "`",
+  " ",
+  "\r",
+  "\n",
+  "	",
+  "{",
+  "}",
+  "|",
+  "\\",
+  "^",
+  "`",
+  "'"
+];
+var autoEscapeMap = new Array(128);
+for (var i = 0, len = autoEscapeMap.length; i < len; ++i) {
+  autoEscapeMap[i] = "";
+}
+for (var i = 0, len = autoEscape.length; i < len; ++i) {
+  var c = autoEscape[i];
+  var esc = encodeURIComponent(c);
+  if (esc === c) {
+    esc = escape(c);
+  }
+  autoEscapeMap[c.charCodeAt(0)] = esc;
+}
+var afterQueryAutoEscapeMap = autoEscapeMap.slice();
+autoEscapeMap[92] = "/";
+var slashProtocols = Url.prototype._slashProtocols = {
+  http: true,
+  https: true,
+  gopher: true,
+  file: true,
+  ftp: true,
+  "http:": true,
+  "https:": true,
+  "gopher:": true,
+  "file:": true,
+  "ftp:": true
+};
+Url.prototype._protocolCharacters = makeAsciiTable([
+  [97, 122],
+  [65, 90],
+  46,
+  43,
+  45
+]);
+Url.prototype._hostEndingCharacters = makeAsciiTable([
+  35,
+  63,
+  47,
+  92
+]);
+Url.prototype._autoEscapeCharacters = makeAsciiTable(autoEscape.map(function(v) {
+  return v.charCodeAt(0);
+}));
+Url.prototype._noPrependSlashHostEnders = makeAsciiTable([
+  "<",
+  ">",
+  "'",
+  "`",
+  " ",
+  "\r",
+  "\n",
+  "	",
+  "{",
+  "}",
+  "|",
+  "^",
+  "`",
+  '"',
+  "%",
+  ";"
+].map(function(v) {
+  return v.charCodeAt(0);
+}));
+Url.prototype._autoEscapeMap = autoEscapeMap;
+Url.prototype._afterQueryAutoEscapeMap = afterQueryAutoEscapeMap;
+var urlparser = Url;
+Url.replace = function Url$Replace() {
+  require.cache.url = {
+    exports: Url
+  };
+};
+var querystringserializer = QueryStringSerializer$1;
+var enc = encodeURIComponent;
+var ARRAY = [];
+var isArray$1 = Array.isArray;
+var getProto = Object.getPrototypeOf;
+var oProto = getProto({});
+function isObject(obj) {
+  if (isArray$1(obj)) {
+    return true;
+  }
+  if (obj === null || typeof obj !== "object") {
+    return false;
+  }
+  var proto = getProto(obj);
+  return proto === oProto || proto === null;
+}
+function QueryStringSerializer$1() {
+}
+QueryStringSerializer$1.prototype.serialize = function QueryStringSerializer$serialize(obj) {
+  if (obj === null || typeof obj !== "object") {
+    throw new TypeError("the obj to stringify must be an object");
+  }
+  var keys3 = Object.keys(obj);
+  var len = keys3.length;
+  var array = ARRAY;
+  var stack = [];
+  var ret = [];
+  var cur = obj;
+  var keyPrefix = "";
+  for (var i = 0; i < len; ++i) {
+    var key = keys3 === array ? i : keys3[i];
+    var value = cur[key];
+    if (isObject(value)) {
+      stack.push(keyPrefix, cur, keys3, len, i);
+      if (keyPrefix === "") {
+        keyPrefix = key;
+      } else {
+        keyPrefix = keyPrefix + "[" + enc(key) + "]";
+      }
+      if (isArray$1(value)) {
+        keys3 = array;
+        len = value.length;
+      } else {
+        keys3 = Object.keys(value);
+        len = keys3.length;
+      }
+      i = -1;
+      cur = value;
+    } else {
+      if (typeof value !== "string") {
+        value = "" + value;
+      }
+      var serializedKey = keyPrefix === "" ? enc(key) : keyPrefix + "[" + enc(key) + "]";
+      ret.push(serializedKey + "=" + enc(value));
+    }
+    if (i === len - 1 && stack.length > 0) {
+      i = stack.pop();
+      len = stack.pop();
+      keys3 = stack.pop();
+      cur = stack.pop();
+      keyPrefix = stack.pop();
+    }
+  }
+  return ret.join("&");
+};
+var QueryStringSerializer = querystringserializer;
+var querystringparser = QueryStringParser;
+var rplus = /\+/g;
+var rint = /^[0-9]+$/;
+var isArray = Array.isArray;
+var haveProp = {}.hasOwnProperty;
+function QueryStringParser() {
+  this.containsSparse = false;
+  this.cacheKey = "";
+  this.cacheVal = null;
+}
+QueryStringParser.maxLength = 32768;
+QueryStringParser.maxDepth = 4;
+QueryStringParser.maxKeys = 256;
+QueryStringParser.parse = function QueryStringParser$Parse(str) {
+  if (typeof str === "string") {
+    var maxLength = QueryStringParser.maxLength;
+    if (str.length > maxLength) {
+      throw new RangeError("str is too large (QueryStringParser.maxLength=" + maxLength + ")");
+    }
+    var parser = new QueryStringParser();
+    return parser.parseString(str, false);
+  } else if (str !== null && typeof str === "object") {
+    var parser = new QueryStringParser();
+    return parser.parseObject(str);
+  }
+  return {};
+};
+QueryStringParser.stringify = function QueryStringParser$Stringify(value) {
+  var serializer = new QueryStringSerializer();
+  return serializer.serialize(value);
+};
+QueryStringParser.prototype.decode = function QueryStringParser$decode(str, shouldDecode, containsPlus) {
+  if (shouldDecode === false)
+    return str;
+  if (containsPlus === true)
+    str = str.replace(rplus, " ");
+  try {
+    return decodeURIComponent(str);
+  } catch (e) {
+    return str;
+  }
+};
+QueryStringParser.prototype.maybeArrayIndex = function QueryStringParser$maybeArrayIndex(str, arrayLength) {
+  var len = str.length;
+  if (len === 0) {
+    return arrayLength;
+  }
+  var ch = str.charCodeAt(0);
+  if (ch === 48) {
+    return len > 1 ? -1 : 0;
+  } else if (48 <= ch && ch <= 57) {
+    if (len === 1) {
+      return ch - 48;
+    } else if (rint.test(str)) {
+      var v = parseInt(str, 10);
+      if (0 < v && v <= 1073741822) {
+        return v;
+      }
+    }
+  }
+  return -1;
+};
+QueryStringParser.prototype.getSlot = function QueryStringParser$getSlot(dictionary, prevKey, curKey) {
+  var slot;
+  if (!haveProp.call(dictionary, prevKey)) {
+    var index = this.maybeArrayIndex(curKey, 0);
+    if (index > -1) {
+      slot = [];
+    } else {
+      slot = {};
+    }
+    dictionary[prevKey] = slot;
+  } else {
+    slot = dictionary[prevKey];
+  }
+  return slot;
+};
+QueryStringParser.prototype.placeNestedValue = function QueryStringParser$placeNestedValue(dictionary, key, value, i, prevKey, curKey) {
+  var slot = this.getSlot(dictionary, prevKey, curKey);
+  var index = -1;
+  if (isArray(slot)) {
+    index = this.maybeArrayIndex(curKey, slot.length);
+  }
+  var len = key.length;
+  var depth = 2;
+  var maxDepth = QueryStringParser.maxDepth;
+  var start = -1;
+  for (; i < len; ++i) {
+    var ch = key.charCodeAt(i);
+    if (ch === 91) {
+      start = i + 1;
+    } else if (ch === 93 && start > -1) {
+      prevKey = curKey;
+      curKey = start === i ? "" : key.substring(start, i);
+      start = -1;
+      depth++;
+      if (depth > maxDepth) {
+        throw new RangeError("Nesting depth of keys is too large (QueryStringParser.maxDepth=" + maxDepth + ")");
+      }
+      slot = this.getSlot(slot, prevKey, curKey);
+      index = isArray(slot) ? this.maybeArrayIndex(curKey, slot.length) : -1;
+    }
+  }
+  if (index > -1) {
+    if (value !== "") {
+      if (index === slot.length) {
+        slot.push(value);
+      } else {
+        this.containsSparse = true;
+        slot[index] = value;
+      }
+    }
+  } else {
+    this.insert(slot, curKey, value);
+  }
+};
+QueryStringParser.prototype.insert = function QueryStringParser$insert(dictionary, key, value) {
+  var ret = null;
+  if (haveProp.call(dictionary, key)) {
+    var prev = dictionary[key];
+    if (isArray(prev)) {
+      prev.push(value);
+      ret = prev;
+    } else {
+      ret = [prev, value];
+      dictionary[key] = ret;
+    }
+  } else {
+    dictionary[key] = value;
+  }
+  return ret;
+};
+QueryStringParser.prototype.push = function QueryStringParser$push(dictionary, key, value) {
+  var ret = null;
+  if (haveProp.call(dictionary, key)) {
+    var prev = dictionary[key];
+    prev.push(value);
+    ret = prev;
+  } else {
+    ret = [value];
+    dictionary[key] = ret;
+  }
+  return ret;
+};
+QueryStringParser.prototype.maybePlaceNestedValue = function QueryStringParser$maybePlaceNestedValue(dictionary, key, value) {
+  var len = key.length;
+  if (key.charCodeAt(len - 1) !== 93) {
+    this.placeValue(dictionary, key, value, false);
+    return;
+  }
+  var start = -1;
+  var i = 0;
+  var curKey;
+  var prevKey;
+  for (; i < len; ++i) {
+    var ch = key.charCodeAt(i);
+    if (ch === 91) {
+      start = i + 1;
+      prevKey = key.slice(0, i);
+    } else if (ch === 93) {
+      if (start < 0) {
+        this.placeValue(dictionary, key, value, false);
+        return;
+      }
+      curKey = start === i ? "" : key.slice(start, i);
+      i++;
+      break;
+    }
+  }
+  if (curKey === void 0) {
+    this.placeValue(dictionary, key, value, false);
+    return;
+  }
+  if (curKey === "" && value !== "" && i === len) {
+    if (key === this.cacheKey) {
+      this.cacheVal.push(value);
+    } else {
+      this.cacheKey = key;
+      this.cacheVal = this.push(dictionary, prevKey, value);
+    }
+  } else {
+    this.placeNestedValue(dictionary, key, value, i, prevKey, curKey);
+  }
+};
+QueryStringParser.prototype.placeValue = function QueryStringParser$placeValue(dictionary, key, value, possiblyNested) {
+  if (possiblyNested === true) {
+    this.maybePlaceNestedValue(dictionary, key, value);
+    return;
+  }
+  if (key === this.cacheKey) {
+    this.cacheVal.push(value);
+    return;
+  }
+  var cache = this.insert(dictionary, key, value);
+  if (cache !== null) {
+    this.cacheKey = key;
+    this.cacheVal = cache;
+  }
+};
+QueryStringParser.prototype.compact = function QueryStringParser$compact(obj) {
+  if (isArray(obj)) {
+    var ret = [];
+    var keys3 = Object.keys(obj);
+    for (var i = 0, len = keys3.length; i < len; ++i) {
+      ret.push(obj[keys3[i]]);
+    }
+    return ret;
+  } else if (typeof obj === "object") {
+    var keys3 = Object.keys(obj);
+    for (var i = 0, len = keys3.length; i < len; ++i) {
+      var key = keys3[i];
+      obj[key] = this.compact(obj[key]);
+    }
+  } else {
+    return obj;
+  }
+};
+QueryStringParser.prototype.parseObject = function QueryStringParser$parseObject(obj) {
+  var keys3 = Object.keys(obj);
+  var len = keys3.length;
+  if (len === 0) {
+    return {};
+  }
+  len--;
+  var ret = "";
+  var key;
+  for (var i = 0; i < len; ++i) {
+    key = keys3[i];
+    ret += key + "=" + obj[key] + "&";
+  }
+  key = keys3[i];
+  ret += key + "=" + obj[key];
+  return this.parseString(ret, true);
+};
+QueryStringParser.prototype.parseString = function QueryStringParser$parseString(str, noDecode) {
+  var maxKeys = QueryStringParser.maxKeys;
+  var keys3 = 0;
+  var decodeKey = false;
+  var decodeValue = false;
+  var possiblyNested = false;
+  var len = str.length;
+  var i = 0;
+  var dictionary = {};
+  var keyStart = 0;
+  var keyEnd = 0;
+  var valueStart = 0;
+  var valueEnd = 0;
+  var left = 0;
+  var lastIndex = len - 1;
+  var containsPlus = false;
+  for (; i < len; ++i) {
+    var ch = str.charCodeAt(i);
+    if (ch === 91) {
+      left++;
+    } else if (left > 0 && ch === 93) {
+      possiblyNested = true;
+      left--;
+    } else if (left === 0 && ch === 61) {
+      var j = i + 1;
+      keyEnd = i - 1;
+      valueEnd = valueStart = j;
+      var key = str.slice(keyStart, keyEnd + 1);
+      key = this.decode(key, decodeKey, containsPlus);
+      decodeKey = false;
+      for (; j < len; ++j) {
+        ch = str.charCodeAt(j);
+        if ((ch === 43 || ch === 37) && !noDecode) {
+          if (ch === 43)
+            containsPlus = true;
+          decodeValue = true;
+        }
+        if (ch === 38 || j === lastIndex) {
+          valueEnd = j;
+          i = j;
+          if (ch === 38) {
+            valueEnd--;
+          }
+          var value = str.slice(valueStart, valueEnd + 1);
+          value = this.decode(value, decodeValue, containsPlus);
+          this.placeValue(dictionary, key, value, possiblyNested);
+          containsPlus = decodeValue = false;
+          possiblyNested = false;
+          keyStart = j + 1;
+          keys3++;
+          if (keys3 > maxKeys) {
+            throw new RangeError("Amount of keys is too large (QueryStringParser.maxKeys=" + maxKeys + ")");
+          }
+          break;
+        }
+      }
+    } else if ((ch === 43 || ch === 37) && !noDecode) {
+      if (ch === 43)
+        containsPlus = true;
+      decodeKey = true;
+    }
+  }
+  if (keyStart !== len) {
+    var value = "";
+    var key = str.slice(keyStart, len);
+    key = this.decode(key, decodeKey, containsPlus);
+    this.placeValue(dictionary, key, value, possiblyNested);
+  }
+  if (this.containsSparse) {
+    this.compact(dictionary);
+  }
+  return dictionary;
+};
+urlparser.queryString = querystringparser;
 const rgb = (r, g, b) => {
   return [r / 255, g / 255, b / 255];
 };
@@ -42127,30 +43288,64 @@ function hex2rgb(hex) {
 const colorsRipplesArray = [];
 const colorsStarburstArray = [];
 let colorsLettersArray;
+let showCurrent;
+let currentConfig;
 class CartoonText {
   constructor(pane) {
     this.view = new Container$1();
     this.planeRipples = new RipplesPlane();
     this.planeStarburst = new StarburstPlane();
     {
-      const animateRipples = () => {
-        indexCombinationsRipples++;
-        indexCombinationsRipples %= combinationsRipples.length;
-        const { colorsRipples, colorsText } = combinationsRipples[indexCombinationsRipples];
-        this.changeBackgroundRipples(colorsRipples.slice(0, 3), colorsRipples.slice(-3));
-        this.setLettersColors(colorsText);
+      const animateRipples = (data) => {
+        if (!data) {
+          indexCombinationsRipples++;
+          indexCombinationsRipples %= combinationsRipples.length;
+          const { colorsRipples, colorsText } = combinationsRipples[indexCombinationsRipples];
+          this.changeBackgroundRipples(colorsRipples.slice(0, 3), colorsRipples.slice(-3));
+          this.setLettersColors(colorsText);
+        } else {
+          const { colorsRipples, colorsText } = data;
+          this.changeBackgroundRipples(colorsRipples.slice(0, 3), colorsRipples.slice(-3));
+          this.setLettersColors(colorsText);
+        }
         this.refreshColors();
       };
-      const animateStarburst = () => {
-        indexCombinationsStarburst++;
-        indexCombinationsStarburst %= combinationsStarburst.length;
-        const { fadeoutCenter, fadeoutOutter, colorsStarburst, colorsText } = combinationsStarburst[indexCombinationsStarburst];
-        this.planeStarburst.fadeoutCenter = fadeoutCenter;
-        this.planeStarburst.fadeoutOutter = fadeoutOutter;
-        this.changeBackgroundStarburst(colorsStarburst.slice(0, 3), colorsStarburst.slice(3, 6), colorsStarburst.slice(-3));
-        this.setLettersColors(colorsText);
+      const animateStarburst = (data) => {
+        if (!data) {
+          indexCombinationsStarburst++;
+          indexCombinationsStarburst %= combinationsStarburst.length;
+          const { fadeoutCenter, fadeoutOutter, colorsStarburst, colorsText } = combinationsStarburst[indexCombinationsStarburst];
+          this.planeStarburst.fadeoutCenter = fadeoutCenter;
+          this.planeStarburst.fadeoutOutter = fadeoutOutter;
+          this.changeBackgroundStarburst(colorsStarburst.slice(0, 3), colorsStarburst.slice(3, 6), colorsStarburst.slice(-3));
+          this.setLettersColors(colorsText);
+        } else {
+          const { fadeoutCenter, fadeoutOutter, colorsStarburst, colorsText } = data;
+          this.planeStarburst.fadeoutCenter = fadeoutCenter;
+          this.planeStarburst.fadeoutOutter = fadeoutOutter;
+          this.changeBackgroundStarburst(colorsStarburst.slice(0, 3), colorsStarburst.slice(3, 6), colorsStarburst.slice(-3));
+          this.setLettersColors(colorsText);
+        }
         this.refreshColors();
       };
+      const parsed = urlparser.parse(window.location.search, true);
+      if (parsed.query.config) {
+        currentConfig = JSON.parse(parsed.query.config);
+        const btnUseCurrent = pane.addButton({
+          title: "Show SHARED anim"
+        });
+        showCurrent = (config3) => {
+          console.log(config3);
+          if (!!config3.colorsRipples) {
+            animateRipples(config3);
+          } else {
+            animateStarburst(config3);
+          }
+        };
+        btnUseCurrent.on("click", () => {
+          showCurrent(currentConfig);
+        });
+      }
       this.useLaura = false;
       pane.addInput(this, "useLaura", {
         label: "use Laura's colours"
@@ -42254,10 +43449,6 @@ class CartoonText {
       scaleOffsetY: 0
     });
     this.view.addChild(this.animatedLettersDescription.view);
-    {
-      this.setPlane(this.planeStarburst);
-      this.setLettersColors();
-    }
     const colors = this.getColorLetters();
     this.paramsColorsLetters = {
       color1: colors[0],
@@ -42312,7 +43503,30 @@ class CartoonText {
       navigator.clipboard.writeText(str);
       console.log(str);
     });
-    this.setPlane(this.planeRipples);
+    pane.addSeparator();
+    const btnShare = pane.addButton({
+      title: "Share"
+    });
+    btnShare.on("click", () => {
+      const obj = {};
+      if (this.plane === this.planeRipples) {
+        obj.colorsRipples = Object.values(this.paramsColorsRipples).map((hex) => hex2rgb(hex.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3)).flat();
+      } else {
+        obj.fadeoutCenter = Math.floor(this.planeStarburst.fadeoutCenter * 100) / 100;
+        obj.fadeoutOutter = Math.floor(this.planeStarburst.fadeoutOutter * 100) / 100;
+        obj.colorsStarburst = Object.values(this.paramsColorsStarburst).map((hex) => hex2rgb(hex.replace("#", "0x")).map((c) => Math.floor(c / 255 * 1e3) / 1e3)).flat();
+      }
+      obj.colorsText = Object.values(this.paramsColorsLetters);
+      window.history.pushState("Kindeo Title Slide", "Title", window.location.origin + window.location.pathname + "?config=" + encodeURIComponent(JSON.stringify(obj)));
+    });
+    {
+      if (currentConfig) {
+        showCurrent(currentConfig);
+      } else {
+        this.setPlane(this.planeRipples);
+        this.setLettersColors();
+      }
+    }
   }
   refreshColors() {
     if (this.plane === this.planeRipples) {
