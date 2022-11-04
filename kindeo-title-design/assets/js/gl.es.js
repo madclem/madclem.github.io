@@ -42441,14 +42441,7 @@ class CartoonText {
   animate() {
   }
   startAnimation() {
-    this.animatedLettersDescription.hide();
     this.animatedLettersTitle.animate().then(() => {
-      gsapWithCSS.delayedCall(2, () => {
-        this.animatedLettersTitle.hide();
-        gsapWithCSS.delayedCall(1, () => {
-          this.animatedLettersDescription.animate();
-        });
-      });
     });
   }
   resize(w, h) {
