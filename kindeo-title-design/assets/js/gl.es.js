@@ -43367,7 +43367,9 @@ class CartoonText {
       const btnAnimateRipples = tabRipples.addButton({
         title: "Select / Next Ripples"
       });
-      btnAnimateRipples.on("click", animateRipples);
+      btnAnimateRipples.on("click", () => {
+        animateRipples();
+      });
       const folderRipples = tabRipples.addFolder({
         title: "RipplesColors"
       });
