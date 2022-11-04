@@ -34084,7 +34084,6 @@ class Chantilly extends Graphics {
       const a = startAngle + (endAngle - startAngle) / (this.nbBalls - 1) * i;
       const x = Math.cos(a) * radius;
       const y = Math.sin(a) * radius;
-      console.log(x, y);
       this.drawCircle(x, y, width);
     }
   }
@@ -34352,10 +34351,9 @@ class Candle extends Container$1 {
     this.flame.anchor.x = 0.5;
     this.flame.anchor.y = 1;
     this.flame.position.y = this.flame.height;
-    this.flame.mask = new Sprite(Texture.WHITE);
-    this.flame.mask.anchor.set(0.5, 1);
-    this.flame.mask.width = this.flame.width * 1;
-    this.flame.mask.height = this.flame.height;
+    this.flame.mask = new Graphics();
+    this.flame.mask.beginFill(16777215);
+    this.flame.mask.drawRect(-this.flame.width / 2, -this.flame.height, this.flame.width, this.flame.height);
     this.flame.addChild(this.flame.mask);
     this.top = new Sprite(Texture.WHITE);
     this.top.position.y = this.flame.height - 5;
