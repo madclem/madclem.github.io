@@ -6,11 +6,11 @@ var WEBGL_CONFIG = {
   NAME_BUILD: "WebGLAnimation",
   SOUND: false,
   START_BUTTON: false,
-  TITLE: "Cakes!!!",
+  TITLE: "Title slide - with photo",
   INSTRUCTIONS: "",
   DESCRIPTION: "",
   COLOR: "black",
   BACKGROUND_COLOR:
-    "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(236,204,153,1) 43%, rgba(41,148,137,1) 100%)",
+    "radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%)",
   CREDITS: [],
 };
