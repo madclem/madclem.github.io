@@ -30434,7 +30434,7 @@ var _config = {
   return value < min ? min : value > max ? max : value;
 }, getUnit = function getUnit2(value, v) {
   return !_isString(value) || !(v = _unitExp.exec(value)) ? "" : v[1];
-}, clamp = function clamp2(min, max, value) {
+}, clamp$1 = function clamp(min, max, value) {
   return _conditionalReturn(value, function(v) {
     return _clamp(min, max, v);
   });
@@ -32827,7 +32827,7 @@ var _gsap = {
     snap,
     normalize,
     getUnit,
-    clamp,
+    clamp: clamp$1,
     splitColor,
     toArray,
     selector,
@@ -42520,6 +42520,7 @@ QueryStringParser.prototype.parseString = function QueryStringParser$parseString
   return dictionary;
 };
 const map3 = (val, inputMin, inputMax, outputMin, outputMax) => (outputMax - outputMin) * ((val - inputMin) / (inputMax - inputMin)) + outputMin;
+const clamp2 = (min, max, val) => Math.min(max, Math.max(min, val));
 const parsed$1 = urlparser.parse(window.location.search, true);
 let currentConfig = JSON.parse(parsed$1.query.config || "{}");
 const obj = {
@@ -42579,6 +42580,7 @@ class TextComposition {
     });
     this.containerText = new Container$1();
     const mainText = new Text(obj.mainText.toUpperCase(), style);
+    this.mainText = mainText;
     this.containerText.addChild(mainText);
     const otherTexture = new Text(obj.secondaryText, {
       fill: obj.colorText,
@@ -42596,6 +42598,7 @@ class TextComposition {
     this.texts.push(otherTexture, mainText);
     otherTexture.x = mainText.width - otherTexture.width;
     otherTexture.position.y = mainText.height;
+    this.otherTexture = otherTexture;
     this.containerText.addChild(otherTexture);
     this.containerText.cacheAsBitmap = true;
     const renderTexture = RenderTexture.create({
@@ -42605,9 +42608,6 @@ class TextComposition {
     this.renderTexture = renderTexture;
     const secondary = new Sprite(renderTexture);
     this.secondary = secondary;
-    renderer.render(this.containerText, {
-      renderTexture
-    });
     folder.addInput(obj, "colorText").on("change", () => {
       this.rerender(() => {
         this.texts.forEach((t) => {
@@ -42623,7 +42623,7 @@ class TextComposition {
     });
     folder.addInput(obj, "mainText").on("change", () => {
       this.rerender(() => {
-        mainText.text = obj.mainText;
+        mainText.text = obj.mainText.toUpperCase();
         otherTexture.x = mainText.width - otherTexture.width;
         otherTexture.position.y = mainText.height;
       });
@@ -42665,18 +42665,21 @@ class TextComposition {
     this.getColorsSides();
   }
   rerender(cb = () => {
-  }) {
+  }, resize = true) {
     this.containerText.position.x = 0;
     this.containerText.position.y = 0;
     this.secondary.scale.set(1);
     this.containerText.cacheAsBitmap = false;
     cb();
-    this.containerText.scale.set(1);
     renderer.render(this.containerText, {
       renderTexture: this.renderTexture
     });
     this.containerText.cacheAsBitmap = true;
-    this.resize(this.w, this.h);
+    if (resize) {
+      this.resize(this.w, this.h);
+    } else {
+      this.animate();
+    }
   }
   getColorsSides() {
     this.photo2 = new Sprite(this.photo.texture);
@@ -42793,6 +42796,18 @@ class TextComposition {
     this.h = h;
     this.bg.width = w;
     this.bg.height = h;
+    const minimumMainFontSize = clamp2(40, 70, map3(this.mainText.text.length, 20, 40, 70, 40));
+    const rationFontSizeLineHeight = 11 / 12;
+    this.mainText.style.fontSize = clamp2(minimumMainFontSize * scaleText, 110 * scaleText, map3(this.w, 350, 1100, minimumMainFontSize * scaleText, 110 * scaleText));
+    this.mainText.style.lineHeight = this.mainText.style.fontSize * rationFontSizeLineHeight;
+    this.otherTexture.style.fontSize = Math.max(25 * scaleText, this.mainText.style.fontSize * (30 / 120));
+    this.otherTexture.style.lineHeight = this.otherTexture.style.fontSize;
+    this.mainText.style.wordWrapWidth = Math.min(650, this.w * 0.95);
+    this.otherTexture.style.wordWrapWidth = this.mainText.style.wordWrapWidth * 0.75;
+    this.mainText.updateText();
+    this.otherTexture.updateText();
+    this.otherTexture.x = this.mainText.width - this.otherTexture.width;
+    this.otherTexture.position.y = this.mainText.height;
     this.containerText.y = h / 2;
     this.containerText.x = w / 2;
     this.retro.resize(w, h);
@@ -42801,7 +42816,8 @@ class TextComposition {
     this.maskSprite.position.x = this.containerPhoto.position.x;
     this.maskSprite.position.y = h / 2;
     this.containerText.scale.set(1);
-    this.containerText.scale.set(Math.min(1, Math.max(this.w / 2, Math.min(this.w * 0.9, 480)) / this.containerText.width));
+    this.containerText.scale.set(Math.min(1, this.w * 0.98 / this.containerText.width));
+    console.log(this.containerText.scale.x);
     this.secondary.scale.set(this.containerText.scale.x);
     this.resizePhoto();
     const xFinalText = 60 * this.containerText.scale.x + this.containerText.width;
@@ -42819,7 +42835,7 @@ class TextComposition {
     this.containerDebug.scale.set(1);
     this.containerDebug.scale.set(this.maskSprite.height / this.containerDebug.height * 0.5);
     this.bgGradient.resize(w, h);
-    this.animate();
+    this.rerender(void 0, false);
   }
   update() {
     this.retro.update();
