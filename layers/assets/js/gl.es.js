@@ -42241,7 +42241,7 @@ uniform float uTime;
 uniform vec3 colorsFrontLayer[2];
 uniform vec3 colorsMidLayer[2];
 uniform vec3 colorsBackLayer[2];
-uniform vec3 colorsBaseLayers[2];
+uniform vec3 colorsBaseLayer[2];
 varying vec2 vTextureCoord;
 
 #define DIVERGENCE 1.
@@ -42393,7 +42393,7 @@ void main() {
         p2);
     vec3 colorBase = mix(
         // getColor( 34,71,150), getColor(1, 28, 64), 
-        getColor(colorsBaseLayers[0]), getColor(colorsBaseLayers[1]),
+        getColor(colorsBaseLayer[0]), getColor(colorsBaseLayer[1]),
         p3);
     // vec3 colorBase = mix(
     //     getColor( 0, 255, 0), 
@@ -42530,7 +42530,7 @@ class Layers {
       colorsFrontLayer: [],
       colorsMidLayer: [],
       colorsBackLayer: [],
-      colorsBase: []
+      colorsBaseLayer: []
     });
     const shadowsFolder = folderBG.addFolder({
       title: "shadows"
