@@ -52161,7 +52161,7 @@ class Scene extends AbstractScene {
       this.spheres[2].position.y = this.spheres[0].width / 3;
     }
   }
-  onShow() {
+  animate() {
     this.animating = true;
     const r = this.r * 1.2;
     gsapWithCSS.delayedCall(1.2, this.xmasTree.animate.bind(this.xmasTree));
@@ -52189,6 +52189,9 @@ class Scene extends AbstractScene {
       },
       ease: "sin.out"
     });
+  }
+  onShow() {
+    setTimeout(this.animate.bind(this), 2e3);
   }
 }
 var assets = {
