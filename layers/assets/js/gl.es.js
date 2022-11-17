@@ -42241,7 +42241,7 @@ uniform float uTime;
 uniform vec3 colorsFrontLayer[2];
 uniform vec3 colorsMidLayer[2];
 uniform vec3 colorsBackLayer[2];
-uniform vec3 colorsBaseLayer[2];
+uniform vec3 colorsBaseLayers[2];
 varying vec2 vTextureCoord;
 
 #define DIVERGENCE 1.
@@ -42393,7 +42393,7 @@ void main() {
         p2);
     vec3 colorBase = mix(
         // getColor( 34,71,150), getColor(1, 28, 64), 
-        getColor(colorsBaseLayer[0]), getColor(colorsBaseLayer[1]),
+        getColor(colorsBaseLayers[0]), getColor(colorsBaseLayers[1]),
         p3);
     // vec3 colorBase = mix(
     //     getColor( 0, 255, 0), 
@@ -51960,10 +51960,8 @@ class Tree extends Container$1 {
     star.position.y = -this.height + star.height / 3 * 2;
     this.lightsContainer.filters = [new filters.BlurFilter(2, 1)];
     this.lightsContainer.padding = 20;
+    this.lightsContainer.alpha = 0;
     this.ready = false;
-    setTimeout(() => {
-      this.animate();
-    }, 0);
   }
   animate() {
     this.trees.forEach((t, i) => {
@@ -51977,6 +51975,10 @@ class Tree extends Container$1 {
         onComplete: () => {
           if (i === 3) {
             this.ready = true;
+            gsapWithCSS.to(this.lightsContainer, {
+              alpha: 1,
+              duration: 0.4
+            });
           }
         }
       });
@@ -52160,7 +52162,9 @@ class Scene extends AbstractScene {
     }
   }
   onShow() {
+    this.animating = true;
     const r = this.r * 1.2;
+    gsapWithCSS.delayedCall(1.2, this.xmasTree.animate.bind(this.xmasTree));
     gsapWithCSS.to(this.spheres[0].position, {
       delay: 1,
       y: -r,
@@ -52180,6 +52184,9 @@ class Scene extends AbstractScene {
       x: r,
       y: r / 3,
       duration: 1.2 * 1.8,
+      onComplete: () => {
+        this.view.removeChild(this.spheresContainer);
+      },
       ease: "sin.out"
     });
   }
