@@ -3896,17 +3896,17 @@ var groupD8 = {
   MAIN_DIAGONAL: 10,
   MIRROR_HORIZONTAL: 12,
   REVERSE_DIAGONAL: 14,
-  uX: function(ind) {
-    return ux[ind];
+  uX: function(ind3) {
+    return ux[ind3];
   },
-  uY: function(ind) {
-    return uy[ind];
+  uY: function(ind3) {
+    return uy[ind3];
   },
-  vX: function(ind) {
-    return vx[ind];
+  vX: function(ind3) {
+    return vx[ind3];
   },
-  vY: function(ind) {
-    return vy[ind];
+  vY: function(ind3) {
+    return vy[ind3];
   },
   inv: function(rotation) {
     if (rotation & 8) {
@@ -5174,24 +5174,24 @@ var Container$1 = function(_super) {
     }
   };
   Container2.prototype.renderAdvanced = function(renderer2) {
-    var filters = this.filters;
+    var filters2 = this.filters;
     var mask = this._mask;
-    if (filters) {
+    if (filters2) {
       if (!this._enabledFilters) {
         this._enabledFilters = [];
       }
       this._enabledFilters.length = 0;
-      for (var i = 0; i < filters.length; i++) {
-        if (filters[i].enabled) {
-          this._enabledFilters.push(filters[i]);
+      for (var i = 0; i < filters2.length; i++) {
+        if (filters2[i].enabled) {
+          this._enabledFilters.push(filters2[i]);
         }
       }
     }
-    var flush = filters && this._enabledFilters && this._enabledFilters.length || mask && (!mask.isMaskData || mask.enabled && (mask.autoDetect || mask.type !== MASK_TYPES$3.NONE));
+    var flush = filters2 && this._enabledFilters && this._enabledFilters.length || mask && (!mask.isMaskData || mask.enabled && (mask.autoDetect || mask.type !== MASK_TYPES$3.NONE));
     if (flush) {
       renderer2.batch.flush();
     }
-    if (filters && this._enabledFilters && this._enabledFilters.length) {
+    if (filters2 && this._enabledFilters && this._enabledFilters.length) {
       renderer2.filter.push(this, this._enabledFilters);
     }
     if (mask) {
@@ -5211,7 +5211,7 @@ var Container$1 = function(_super) {
     if (mask) {
       renderer2.mask.pop(this);
     }
-    if (filters && this._enabledFilters && this._enabledFilters.length) {
+    if (filters2 && this._enabledFilters && this._enabledFilters.length) {
       renderer2.filter.pop();
     }
   };
@@ -9374,19 +9374,19 @@ var FilterSystem = function() {
     this.forceClear = false;
     this.useMaxPadding = false;
   }
-  FilterSystem2.prototype.push = function(target, filters) {
+  FilterSystem2.prototype.push = function(target, filters2) {
     var _a2, _b2;
     var renderer2 = this.renderer;
     var filterStack = this.defaultFilterStack;
     var state = this.statePool.pop() || new FilterState();
     var renderTextureSystem = this.renderer.renderTexture;
-    var resolution = filters[0].resolution;
-    var multisample = filters[0].multisample;
-    var padding = filters[0].padding;
-    var autoFit = filters[0].autoFit;
-    var legacy = (_a2 = filters[0].legacy) !== null && _a2 !== void 0 ? _a2 : true;
-    for (var i = 1; i < filters.length; i++) {
-      var filter = filters[i];
+    var resolution = filters2[0].resolution;
+    var multisample = filters2[0].multisample;
+    var padding = filters2[0].padding;
+    var autoFit = filters2[0].autoFit;
+    var legacy = (_a2 = filters2[0].legacy) !== null && _a2 !== void 0 ? _a2 : true;
+    for (var i = 1; i < filters2.length; i++) {
+      var filter = filters2[i];
       resolution = Math.min(resolution, filter.resolution);
       multisample = Math.min(multisample, filter.multisample);
       padding = this.useMaxPadding ? Math.max(padding, filter.padding) : padding + filter.padding;
@@ -9419,7 +9419,7 @@ var FilterSystem = function() {
     }
     this.roundFrame(state.sourceFrame, renderTextureSystem.current ? renderTextureSystem.current.resolution : renderer2.resolution, renderTextureSystem.sourceFrame, renderTextureSystem.destinationFrame, renderer2.projection.transform);
     state.renderTexture = this.getOptimalFilterTexture(state.sourceFrame.width, state.sourceFrame.height, resolution, multisample);
-    state.filters = filters;
+    state.filters = filters2;
     state.destinationFrame.width = state.renderTexture.width;
     state.destinationFrame.height = state.renderTexture.height;
     var destinationFrame = this.tempRect;
@@ -9438,7 +9438,7 @@ var FilterSystem = function() {
   FilterSystem2.prototype.pop = function() {
     var filterStack = this.defaultFilterStack;
     var state = filterStack.pop();
-    var filters = state.filters;
+    var filters2 = state.filters;
     this.activeState = state;
     var globalUniforms = this.globalUniforms.uniforms;
     globalUniforms.outputFrame = state.sourceFrame;
@@ -9469,25 +9469,25 @@ var FilterSystem = function() {
     this.globalUniforms.update();
     var lastState = filterStack[filterStack.length - 1];
     this.renderer.framebuffer.blit();
-    if (filters.length === 1) {
-      filters[0].apply(this, state.renderTexture, lastState.renderTexture, CLEAR_MODES$4.BLEND, state);
+    if (filters2.length === 1) {
+      filters2[0].apply(this, state.renderTexture, lastState.renderTexture, CLEAR_MODES$4.BLEND, state);
       this.returnFilterTexture(state.renderTexture);
     } else {
       var flip = state.renderTexture;
       var flop = this.getOptimalFilterTexture(flip.width, flip.height, state.resolution);
       flop.filterFrame = flip.filterFrame;
       var i = 0;
-      for (i = 0; i < filters.length - 1; ++i) {
+      for (i = 0; i < filters2.length - 1; ++i) {
         if (i === 1 && state.multisample > 1) {
           flop = this.getOptimalFilterTexture(flip.width, flip.height, state.resolution);
           flop.filterFrame = flip.filterFrame;
         }
-        filters[i].apply(this, flip, flop, CLEAR_MODES$4.CLEAR, state);
+        filters2[i].apply(this, flip, flop, CLEAR_MODES$4.CLEAR, state);
         var t = flip;
         flip = flop;
         flop = t;
       }
-      filters[i].apply(this, flip, lastState.renderTexture, CLEAR_MODES$4.BLEND, state);
+      filters2[i].apply(this, flip, lastState.renderTexture, CLEAR_MODES$4.BLEND, state);
       if (i > 1 && state.multisample > 1) {
         this.returnFilterTexture(state.renderTexture);
       }
@@ -15164,24 +15164,24 @@ var Container = function(_super) {
     }
   };
   Container2.prototype.renderAdvanced = function(renderer2) {
-    var filters = this.filters;
+    var filters2 = this.filters;
     var mask = this._mask;
-    if (filters) {
+    if (filters2) {
       if (!this._enabledFilters) {
         this._enabledFilters = [];
       }
       this._enabledFilters.length = 0;
-      for (var i = 0; i < filters.length; i++) {
-        if (filters[i].enabled) {
-          this._enabledFilters.push(filters[i]);
+      for (var i = 0; i < filters2.length; i++) {
+        if (filters2[i].enabled) {
+          this._enabledFilters.push(filters2[i]);
         }
       }
     }
-    var flush = filters && this._enabledFilters && this._enabledFilters.length || mask && (!mask.isMaskData || mask.enabled && (mask.autoDetect || mask.type !== MASK_TYPES$2.NONE));
+    var flush = filters2 && this._enabledFilters && this._enabledFilters.length || mask && (!mask.isMaskData || mask.enabled && (mask.autoDetect || mask.type !== MASK_TYPES$2.NONE));
     if (flush) {
       renderer2.batch.flush();
     }
-    if (filters && this._enabledFilters && this._enabledFilters.length) {
+    if (filters2 && this._enabledFilters && this._enabledFilters.length) {
       renderer2.filter.push(this, this._enabledFilters);
     }
     if (mask) {
@@ -15201,7 +15201,7 @@ var Container = function(_super) {
     if (mask) {
       renderer2.mask.pop(this);
     }
-    if (filters && this._enabledFilters && this._enabledFilters.length) {
+    if (filters2 && this._enabledFilters && this._enabledFilters.length) {
       renderer2.filter.pop();
     }
   };
@@ -18175,10 +18175,10 @@ var buildCircle = {
     var rx;
     var ry;
     if (graphicsData.type === SHAPES.CIRC) {
-      var circle = graphicsData.shape;
-      x = circle.x;
-      y = circle.y;
-      rx = ry = circle.radius;
+      var circle2 = graphicsData.shape;
+      x = circle2.x;
+      y = circle2.y;
+      rx = ry = circle2.radius;
       dx = dy = 0;
     } else if (graphicsData.type === SHAPES.ELIP) {
       var ellipse = graphicsData.shape;
@@ -18282,9 +18282,9 @@ var buildCircle = {
     var x;
     var y;
     if (graphicsData.type !== SHAPES.RREC) {
-      var circle = graphicsData.shape;
-      x = circle.x;
-      y = circle.y;
+      var circle2 = graphicsData.shape;
+      x = circle2.x;
+      y = circle2.y;
     } else {
       var roundedRect = graphicsData.shape;
       x = roundedRect.x + roundedRect.width / 2;
@@ -19188,7 +19188,7 @@ var GraphicsGeometry = function(_super) {
       DRAW_CALL_POOL.push(this.drawCalls[i]);
     }
     this.drawCalls.length = 0;
-    var colors = this.colors;
+    var colors2 = this.colors;
     var textureIds = this.textureIds;
     var currentGroup = DRAW_CALL_POOL.pop();
     if (!currentGroup) {
@@ -19248,7 +19248,7 @@ var GraphicsGeometry = function(_super) {
       currentGroup.size += data.size;
       index += data.size;
       textureId = nextTexture._batchLocation;
-      this.addColors(colors, style.color, style.alpha, data.attribSize, data.attribStart);
+      this.addColors(colors2, style.color, style.alpha, data.attribSize, data.attribStart);
       this.addTextureIds(textureIds, textureId, data.attribSize, data.attribStart);
     }
     BaseTexture._globalBatch = TICK;
@@ -19257,7 +19257,7 @@ var GraphicsGeometry = function(_super) {
   GraphicsGeometry2.prototype.packAttributes = function() {
     var verts = this.points;
     var uvs = this.uvs;
-    var colors = this.colors;
+    var colors2 = this.colors;
     var textureIds = this.textureIds;
     var glPoints = new ArrayBuffer(verts.length * 3 * 4);
     var f32 = new Float32Array(glPoints);
@@ -19268,7 +19268,7 @@ var GraphicsGeometry = function(_super) {
       f32[p++] = verts[i * 2 + 1];
       f32[p++] = uvs[i * 2];
       f32[p++] = uvs[i * 2 + 1];
-      u32[p++] = colors[i];
+      u32[p++] = colors2[i];
       f32[p++] = textureIds[i];
     }
     this._buffer.update(glPoints);
@@ -19330,8 +19330,8 @@ var GraphicsGeometry = function(_super) {
         var rect = shape;
         sequenceBounds.addFramePad(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height, lineWidth, lineWidth);
       } else if (type === SHAPES.CIRC) {
-        var circle = shape;
-        sequenceBounds.addFramePad(circle.x, circle.y, circle.x, circle.y, circle.radius + lineWidth, circle.radius + lineWidth);
+        var circle2 = shape;
+        sequenceBounds.addFramePad(circle2.x, circle2.y, circle2.x, circle2.y, circle2.radius + lineWidth, circle2.radius + lineWidth);
       } else if (type === SHAPES.ELIP) {
         var ellipse = shape;
         sequenceBounds.addFramePad(ellipse.x, ellipse.y, ellipse.x, ellipse.y, ellipse.width + lineWidth, ellipse.height + lineWidth);
@@ -19353,15 +19353,15 @@ var GraphicsGeometry = function(_super) {
       points[i * 2 + 1] = matrix.b * x + matrix.d * y + matrix.ty;
     }
   };
-  GraphicsGeometry2.prototype.addColors = function(colors, color, alpha, size, offset) {
+  GraphicsGeometry2.prototype.addColors = function(colors2, color, alpha, size, offset) {
     if (offset === void 0) {
       offset = 0;
     }
     var rgb = (color >> 16) + (color & 65280) + ((color & 255) << 16);
     var rgba = premultiplyTint(rgb, alpha);
-    colors.length = Math.max(colors.length, offset + size);
+    colors2.length = Math.max(colors2.length, offset + size);
     for (var i = 0; i < size; i++) {
-      colors[offset + i] = rgba;
+      colors2[offset + i] = rgba;
     }
   };
   GraphicsGeometry2.prototype.addTextureIds = function(textureIds, id, size, offset) {
@@ -22576,13 +22576,13 @@ var Mesh = function(_super) {
     for (var i = 0; i + 2 < len; i += step) {
       var ind0 = indices2[i] * 2;
       var ind1 = indices2[i + 1] * 2;
-      var ind2 = indices2[i + 2] * 2;
+      var ind22 = indices2[i + 2] * 2;
       points[0] = vertices[ind0];
       points[1] = vertices[ind0 + 1];
       points[2] = vertices[ind1];
       points[3] = vertices[ind1 + 1];
-      points[4] = vertices[ind2];
-      points[5] = vertices[ind2 + 1];
+      points[4] = vertices[ind22];
+      points[5] = vertices[ind22 + 1];
       if (tempPolygon.contains(tempPoint.x, tempPoint.y)) {
         return true;
       }
@@ -23902,9 +23902,9 @@ function __extends$7(d, b) {
   d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
 var fragment$4 = "varying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform float uAlpha;\n\nvoid main(void)\n{\n   gl_FragColor = texture2D(uSampler, vTextureCoord) * uAlpha;\n}\n";
-(function(_super) {
-  __extends$7(AlphaFilter, _super);
-  function AlphaFilter(alpha) {
+var AlphaFilter = function(_super) {
+  __extends$7(AlphaFilter2, _super);
+  function AlphaFilter2(alpha) {
     if (alpha === void 0) {
       alpha = 1;
     }
@@ -23912,7 +23912,7 @@ var fragment$4 = "varying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nun
     _this.alpha = alpha;
     return _this;
   }
-  Object.defineProperty(AlphaFilter.prototype, "alpha", {
+  Object.defineProperty(AlphaFilter2.prototype, "alpha", {
     get: function() {
       return this.uniforms.uAlpha;
     },
@@ -23922,8 +23922,8 @@ var fragment$4 = "varying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nun
     enumerable: false,
     configurable: true
   });
-  return AlphaFilter;
-})(Filter);
+  return AlphaFilter2;
+}(Filter);
 /*!
  * @pixi/filter-blur - v6.4.2
  * Compiled Thu, 02 Jun 2022 15:39:26 UTC
@@ -24303,9 +24303,9 @@ var BlurFilterPass = function(_super) {
   });
   return BlurFilterPass2;
 }(Filter);
-(function(_super) {
-  __extends$6(BlurFilter, _super);
-  function BlurFilter(strength, quality, resolution, kernelSize) {
+var BlurFilter = function(_super) {
+  __extends$6(BlurFilter2, _super);
+  function BlurFilter2(strength, quality, resolution, kernelSize) {
     if (strength === void 0) {
       strength = 8;
     }
@@ -24327,7 +24327,7 @@ var BlurFilterPass = function(_super) {
     _this.repeatEdgePixels = false;
     return _this;
   }
-  BlurFilter.prototype.apply = function(filterManager, input, output, clearMode) {
+  BlurFilter2.prototype.apply = function(filterManager, input, output, clearMode) {
     var xStrength = Math.abs(this.blurXFilter.strength);
     var yStrength = Math.abs(this.blurYFilter.strength);
     if (xStrength && yStrength) {
@@ -24341,14 +24341,14 @@ var BlurFilterPass = function(_super) {
       this.blurXFilter.apply(filterManager, input, output, clearMode);
     }
   };
-  BlurFilter.prototype.updatePadding = function() {
+  BlurFilter2.prototype.updatePadding = function() {
     if (this._repeatEdgePixels) {
       this.padding = 0;
     } else {
       this.padding = Math.max(Math.abs(this.blurXFilter.strength), Math.abs(this.blurYFilter.strength)) * 2;
     }
   };
-  Object.defineProperty(BlurFilter.prototype, "blur", {
+  Object.defineProperty(BlurFilter2.prototype, "blur", {
     get: function() {
       return this.blurXFilter.blur;
     },
@@ -24359,7 +24359,7 @@ var BlurFilterPass = function(_super) {
     enumerable: false,
     configurable: true
   });
-  Object.defineProperty(BlurFilter.prototype, "quality", {
+  Object.defineProperty(BlurFilter2.prototype, "quality", {
     get: function() {
       return this.blurXFilter.quality;
     },
@@ -24369,7 +24369,7 @@ var BlurFilterPass = function(_super) {
     enumerable: false,
     configurable: true
   });
-  Object.defineProperty(BlurFilter.prototype, "blurX", {
+  Object.defineProperty(BlurFilter2.prototype, "blurX", {
     get: function() {
       return this.blurXFilter.blur;
     },
@@ -24380,7 +24380,7 @@ var BlurFilterPass = function(_super) {
     enumerable: false,
     configurable: true
   });
-  Object.defineProperty(BlurFilter.prototype, "blurY", {
+  Object.defineProperty(BlurFilter2.prototype, "blurY", {
     get: function() {
       return this.blurYFilter.blur;
     },
@@ -24391,7 +24391,7 @@ var BlurFilterPass = function(_super) {
     enumerable: false,
     configurable: true
   });
-  Object.defineProperty(BlurFilter.prototype, "blendMode", {
+  Object.defineProperty(BlurFilter2.prototype, "blendMode", {
     get: function() {
       return this.blurYFilter.blendMode;
     },
@@ -24401,7 +24401,7 @@ var BlurFilterPass = function(_super) {
     enumerable: false,
     configurable: true
   });
-  Object.defineProperty(BlurFilter.prototype, "repeatEdgePixels", {
+  Object.defineProperty(BlurFilter2.prototype, "repeatEdgePixels", {
     get: function() {
       return this._repeatEdgePixels;
     },
@@ -24412,8 +24412,8 @@ var BlurFilterPass = function(_super) {
     enumerable: false,
     configurable: true
   });
-  return BlurFilter;
-})(Filter);
+  return BlurFilter2;
+}(Filter);
 /*!
  * @pixi/filter-color-matrix - v6.4.2
  * Compiled Thu, 02 Jun 2022 15:39:26 UTC
@@ -25134,9 +25134,9 @@ function __extends$4(d, b) {
 }
 var fragment$2 = "varying vec2 vFilterCoord;\nvarying vec2 vTextureCoord;\n\nuniform vec2 scale;\nuniform mat2 rotation;\nuniform sampler2D uSampler;\nuniform sampler2D mapSampler;\n\nuniform highp vec4 inputSize;\nuniform vec4 inputClamp;\n\nvoid main(void)\n{\n  vec4 map =  texture2D(mapSampler, vFilterCoord);\n\n  map -= 0.5;\n  map.xy = scale * inputSize.zw * (rotation * map.xy);\n\n  gl_FragColor = texture2D(uSampler, clamp(vec2(vTextureCoord.x + map.x, vTextureCoord.y + map.y), inputClamp.xy, inputClamp.zw));\n}\n";
 var vertex$1 = "attribute vec2 aVertexPosition;\n\nuniform mat3 projectionMatrix;\nuniform mat3 filterMatrix;\n\nvarying vec2 vTextureCoord;\nvarying vec2 vFilterCoord;\n\nuniform vec4 inputSize;\nuniform vec4 outputFrame;\n\nvec4 filterVertexPosition( void )\n{\n    vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;\n\n    return vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);\n}\n\nvec2 filterTextureCoord( void )\n{\n    return aVertexPosition * (outputFrame.zw * inputSize.zw);\n}\n\nvoid main(void)\n{\n	gl_Position = filterVertexPosition();\n	vTextureCoord = filterTextureCoord();\n	vFilterCoord = ( filterMatrix * vec3( vTextureCoord, 1.0)  ).xy;\n}\n";
-(function(_super) {
-  __extends$4(DisplacementFilter, _super);
-  function DisplacementFilter(sprite, scale) {
+var DisplacementFilter = function(_super) {
+  __extends$4(DisplacementFilter2, _super);
+  function DisplacementFilter2(sprite, scale) {
     var _this = this;
     var maskMatrix = new Matrix();
     sprite.renderable = false;
@@ -25154,7 +25154,7 @@ var vertex$1 = "attribute vec2 aVertexPosition;\n\nuniform mat3 projectionMatrix
     _this.scale = new Point(scale, scale);
     return _this;
   }
-  DisplacementFilter.prototype.apply = function(filterManager, input, output, clearMode) {
+  DisplacementFilter2.prototype.apply = function(filterManager, input, output, clearMode) {
     this.uniforms.filterMatrix = filterManager.calculateSpriteMatrix(this.maskMatrix, this.maskSprite);
     this.uniforms.scale.x = this.scale.x;
     this.uniforms.scale.y = this.scale.y;
@@ -25169,7 +25169,7 @@ var vertex$1 = "attribute vec2 aVertexPosition;\n\nuniform mat3 projectionMatrix
     }
     filterManager.applyFilter(this, input, output, clearMode);
   };
-  Object.defineProperty(DisplacementFilter.prototype, "map", {
+  Object.defineProperty(DisplacementFilter2.prototype, "map", {
     get: function() {
       return this.uniforms.mapSampler;
     },
@@ -25179,8 +25179,8 @@ var vertex$1 = "attribute vec2 aVertexPosition;\n\nuniform mat3 projectionMatrix
     enumerable: false,
     configurable: true
   });
-  return DisplacementFilter;
-})(Filter);
+  return DisplacementFilter2;
+}(Filter);
 /*!
  * @pixi/filter-fxaa - v6.4.2
  * Compiled Thu, 02 Jun 2022 15:39:26 UTC
@@ -25344,13 +25344,13 @@ void main() {
       gl_FragColor = color;
 }
 `;
-(function(_super) {
-  __extends$3(FXAAFilter, _super);
-  function FXAAFilter() {
+var FXAAFilter = function(_super) {
+  __extends$3(FXAAFilter2, _super);
+  function FXAAFilter2() {
     return _super.call(this, vertex, fragment$1) || this;
   }
-  return FXAAFilter;
-})(Filter);
+  return FXAAFilter2;
+}(Filter);
 /*!
  * @pixi/filter-noise - v6.4.2
  * Compiled Thu, 02 Jun 2022 15:39:26 UTC
@@ -25392,9 +25392,9 @@ function __extends$2(d, b) {
   d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
 var fragment = "precision highp float;\n\nvarying vec2 vTextureCoord;\nvarying vec4 vColor;\n\nuniform float uNoise;\nuniform float uSeed;\nuniform sampler2D uSampler;\n\nfloat rand(vec2 co)\n{\n    return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);\n}\n\nvoid main()\n{\n    vec4 color = texture2D(uSampler, vTextureCoord);\n    float randomValue = rand(gl_FragCoord.xy * uSeed);\n    float diff = (randomValue - 0.5) * uNoise;\n\n    // Un-premultiply alpha before applying the color matrix. See issue #3539.\n    if (color.a > 0.0) {\n        color.rgb /= color.a;\n    }\n\n    color.r += diff;\n    color.g += diff;\n    color.b += diff;\n\n    // Premultiply alpha again.\n    color.rgb *= color.a;\n\n    gl_FragColor = color;\n}\n";
-(function(_super) {
-  __extends$2(NoiseFilter, _super);
-  function NoiseFilter(noise, seed) {
+var NoiseFilter = function(_super) {
+  __extends$2(NoiseFilter2, _super);
+  function NoiseFilter2(noise, seed) {
     if (noise === void 0) {
       noise = 0.5;
     }
@@ -25409,7 +25409,7 @@ var fragment = "precision highp float;\n\nvarying vec2 vTextureCoord;\nvarying v
     _this.seed = seed;
     return _this;
   }
-  Object.defineProperty(NoiseFilter.prototype, "noise", {
+  Object.defineProperty(NoiseFilter2.prototype, "noise", {
     get: function() {
       return this.uniforms.uNoise;
     },
@@ -25419,7 +25419,7 @@ var fragment = "precision highp float;\n\nvarying vec2 vTextureCoord;\nvarying v
     enumerable: false,
     configurable: true
   });
-  Object.defineProperty(NoiseFilter.prototype, "seed", {
+  Object.defineProperty(NoiseFilter2.prototype, "seed", {
     get: function() {
       return this.uniforms.uSeed;
     },
@@ -25429,8 +25429,8 @@ var fragment = "precision highp float;\n\nvarying vec2 vTextureCoord;\nvarying v
     enumerable: false,
     configurable: true
   });
-  return NoiseFilter;
-})(Filter);
+  return NoiseFilter2;
+}(Filter);
 /*!
  * @pixi/mixin-cache-as-bitmap - v6.4.2
  * Compiled Thu, 02 Jun 2022 15:39:26 UTC
@@ -26673,6 +26673,15 @@ Loader.registerPlugin(KTXLoader);
 Loader.registerPlugin(SpritesheetLoader);
 Application.registerPlugin(TickerPlugin);
 Application.registerPlugin(AppLoaderPlugin);
+var filters = {
+  AlphaFilter,
+  BlurFilter,
+  BlurFilterPass,
+  ColorMatrixFilter,
+  DisplacementFilter,
+  FXAAFilter,
+  NoiseFilter
+};
 var Config = {
   test: 1
 };
@@ -30764,11 +30773,11 @@ var _config = {
   values.c = c;
   return values;
 }, _formatColors = function _formatColors2(s, toHSL, orderMatchData) {
-  var result = "", colors = (s + result).match(_colorExp), type = toHSL ? "hsla(" : "rgba(", i = 0, c, shell, d, l;
-  if (!colors) {
+  var result = "", colors2 = (s + result).match(_colorExp), type = toHSL ? "hsla(" : "rgba(", i = 0, c, shell, d, l;
+  if (!colors2) {
     return s;
   }
-  colors = colors.map(function(color) {
+  colors2 = colors2.map(function(color) {
     return (color = splitColor(color, toHSL, 1)) && type + (toHSL ? color[0] + "," + color[1] + "%," + color[2] + "%," + color[3] : color.join(",")) + ")";
   });
   if (orderMatchData) {
@@ -30778,7 +30787,7 @@ var _config = {
       shell = s.replace(_colorExp, "1").split(_numWithUnitExp);
       l = shell.length - 1;
       for (; i < l; i++) {
-        result += shell[i] + (~c.indexOf(i) ? colors.shift() || type + "0,0,0,0)" : (d.length ? d : colors.length ? colors : orderMatchData).shift());
+        result += shell[i] + (~c.indexOf(i) ? colors2.shift() || type + "0,0,0,0)" : (d.length ? d : colors2.length ? colors2 : orderMatchData).shift());
       }
     }
   }
@@ -30786,7 +30795,7 @@ var _config = {
     shell = s.split(_colorExp);
     l = shell.length - 1;
     for (; i < l; i++) {
-      result += shell[i] + colors[i];
+      result += shell[i] + colors2[i];
     }
   }
   return result + shell[l];
@@ -34239,8 +34248,8 @@ class Cake extends Container$1 {
     this.currentToppingMain = toppingsMainSelected[topping.name];
     if (!this.currentToppingMain) {
       toppingsMainSelected[topping.name] = new topping(this.toppingFolder);
-      this.currentToppingMain = toppingsMainSelected[topping.name];
     }
+    this.currentToppingMain = toppingsMainSelected[topping.name];
     this.currentToppingMain.reset(props);
     this.containerToppingMain.addChild(this.currentToppingMain);
     this.currentToppingMain.animate && this.currentToppingMain.animate();
@@ -34421,13 +34430,473 @@ class Candle extends Container$1 {
     }
   }
 }
-class MiniScene {
+const cakes = [
+  {
+    text: { color: "0xffffff" },
+    background: {
+      color: "0xFF502B",
+      properties: {
+        type: "Dots",
+        alphaMin: 0.2,
+        alphaGlobal: 0.6847826086956522,
+        scaleValue: 1.532608695652174,
+        alphaValue: 0.43478260869565216,
+        radius: 0.05304347826086957,
+        columnWidth: 30.543478260869563,
+        color: [1, 1, 1]
+      }
+    },
+    scene: {
+      type: "CakeScene",
+      cake: {
+        type: "classic",
+        color1: "0xefe7dc",
+        color2: "0xff502b",
+        color3: "0xff8773",
+        toppings: {
+          main: { type: "Chantilly", nbBalls: 5, color: "0xEFE7DC" },
+          secondary: [{ type: "Sugar", color: "0xffffff" }]
+        }
+      },
+      candle: { color: "0x0369f2" }
+    }
+  },
+  {
+    background: {
+      color: "0xff85d6",
+      properties: {
+        type: "Sprinkles",
+        alpha: 0.2391304347826087,
+        size: { x: 0.4852941176470589, y: 0.1796875 },
+        columnWidth: 68.69565217391305
+      }
+    },
+    scene: {
+      type: "CakeScene",
+      cake: {
+        type: "classic",
+        color1: "0xffebc2",
+        color2: "0xff85d6",
+        color3: "0xffcff1",
+        toppings: {
+          main: { type: "Cherry" },
+          secondary: [
+            { type: "Sprinkles", color1: "0x2332F7", color2: "0x52EA49" }
+          ]
+        }
+      },
+      candle: { color: "0xc5c5ff" }
+    }
+  },
+  {
+    background: {
+      color: "0x966446",
+      properties: {
+        type: "Leaves",
+        alpha: 0.2,
+        sizeDivider: 1.75,
+        columnWidth: 80
+      }
+    },
+    scene: {
+      type: "CakeScene",
+      cake: {
+        type: "layer",
+        color1: "0xb18052",
+        color2: "0x966446",
+        color3: "0x604639",
+        toppings: { main: { type: "Leaves" }, secondary: [] }
+      },
+      candle: { color: "0xffc973" }
+    }
+  },
+  {
+    text: { color: "0xffffff" },
+    background: {
+      color: "0x1c215f",
+      properties: {
+        type: "Dots",
+        alphaMin: 0.043478260869565216,
+        alphaGlobal: 0.6847826086956522,
+        scaleValue: 1.3369565217391304,
+        alphaValue: 0.2,
+        radius: 0.08532608695652173,
+        columnWidth: 30.543478260869563,
+        color: [0.43529411764705883, 0.6392156862745098, 1]
+      }
+    },
+    scene: {
+      type: "CakeScene",
+      cake: {
+        type: "classic",
+        color1: "0xf1e6d7",
+        color2: "0x4752d4",
+        color3: "0x92a6e7",
+        toppings: {
+          main: { type: "Cherry" },
+          secondary: [
+            { type: "Sprinkles", color1: "0xfcff00", color2: "0x07ff35" }
+          ]
+        }
+      },
+      candle: { color: "0xe667b1" }
+    }
+  },
+  {
+    text: { color: "0x555755" },
+    background: {
+      color: "0xfbf9f0",
+      properties: {
+        type: "Dots",
+        alphaMin: 0.06521739130434782,
+        alphaGlobal: 0.6847826086956522,
+        scaleValue: 1.3369565217391304,
+        alphaValue: 0.13043478260869565,
+        radius: 0.05304347826086957,
+        columnWidth: 20.76086956521739,
+        color: [0.23921568627450981, 0.24313725490196078, 0.24705882352941178]
+      }
+    },
+    scene: {
+      type: "CakeScene",
+      cake: {
+        type: "classic",
+        color1: "0xf1e6d7",
+        color2: "0xb87e47",
+        color3: "0xdbd7bb",
+        toppings: {
+          main: { type: "Leaves" },
+          secondary: [{ type: "Sugar", color: "0x5f5426" }]
+        }
+      },
+      candle: { color: "0x66aab3" }
+    }
+  },
+  {
+    text: { color: "0xffffff" },
+    background: {
+      color: "0x5e9966",
+      properties: {
+        type: "Sprinkles",
+        alpha: 0.18478260869565216,
+        size: { x: 0.11764705882352944, y: 0.3216911764705883 },
+        columnWidth: 65.76086956521739,
+        color: [0.7098039215686275, 0.996078431372549, 0.7019607843137254]
+      }
+    },
+    scene: {
+      type: "CakeScene",
+      cake: {
+        type: "classic",
+        color1: "0x73b87c",
+        color2: "0x4c7e53",
+        color3: "0xacdbab",
+        toppings: {
+          main: { type: "Chantilly", nbBalls: 6, color: "0xbeeac1" },
+          secondary: [{ type: "Sugar", color: "0xd8c678" }]
+        }
+      },
+      candle: { color: "0xe67f7b" }
+    }
+  },
+  {
+    text: { color: "0xffffff" },
+    background: {
+      color: "0x292929",
+      properties: {
+        type: "Dots",
+        alphaMin: 0.06521739130434782,
+        alphaGlobal: 0.6847826086956522,
+        scaleValue: 2.0869565217391304,
+        alphaValue: 0.2,
+        radius: 0.05304347826086957,
+        columnWidth: 20.76086956521739,
+        color: [0.7647058823529411, 0.7686274509803922, 0.7764705882352941]
+      }
+    },
+    scene: {
+      type: "CakeScene",
+      cake: {
+        type: "classic",
+        color1: "0xe4d5ad",
+        color2: "0x983c08",
+        color3: "0xc15d24",
+        toppings: {
+          main: { type: "Cherry" },
+          secondary: [{ type: "Sugar", color: "0xffd10e" }]
+        }
+      },
+      candle: { color: "0xcf5050" }
+    }
+  },
+  {
+    text: { color: "0xffffff" },
+    background: {
+      color: "0x3b3b3b",
+      properties: {
+        type: "Leaves",
+        alpha: 0.2,
+        sizeDivider: 1.9456521739130435,
+        columnWidth: 100,
+        color: [0.27450980392156865, 0.26666666666666666, 0.26666666666666666]
+      }
+    },
+    scene: {
+      type: "CakeScene",
+      cake: {
+        type: "classic",
+        color1: "0xe4d5ad",
+        color2: "0x3b3b3b",
+        color3: "0xc9cea7",
+        toppings: {
+          main: { type: "Cherry" },
+          secondary: [
+            { type: "Sprinkles", color1: "0xdaa6e4", color2: "0xffed07" }
+          ]
+        }
+      },
+      candle: { color: "0x4fcf76" }
+    }
+  }
+];
+const boats = [
+  {
+    text: { color: "0x393c54" },
+    background: {
+      color: "0xdef3f5",
+      properties: {
+        type: "Sprinkles",
+        alpha: 0.2,
+        size: { x: 0.19117647058823528, y: 0.20909926470588225 },
+        columnWidth: 59.891304347826086,
+        color: [0.5764705882352941, 0.6705882352941176, 0.8392156862745098]
+      }
+    },
+    scene: {
+      miniSceneColor: 12639484,
+      type: "BoatScene",
+      sea: {
+        boat: {
+          colors: {
+            base: "#e06a50",
+            paint: "#eace85",
+            post: "#6c4800",
+            sails: "#dcf0ff"
+          }
+        }
+      }
+    }
+  },
+  {
+    text: { color: "0x393c54" },
+    background: {
+      color: "0xf8f4c3",
+      properties: {
+        type: "Sprinkles",
+        alpha: 0.15217391304347827,
+        size: { x: 0.22058823529411775, y: 0.23851102941176472 },
+        columnWidth: 59.891304347826086,
+        color: [0.9490196078431372, 0.6980392156862745, 0.41568627450980394]
+      }
+    },
+    scene: {
+      miniSceneColor: 16761458,
+      type: "BoatScene",
+      sea: {
+        boat: {
+          colors: {
+            base: "#80a3b3",
+            paint: "#42496c",
+            post: "#6c4800",
+            sails: "#ffeed0"
+          }
+        }
+      }
+    }
+  },
+  {
+    text: { color: "0xd0d6fa" },
+    background: {
+      color: "0x27314c",
+      properties: {
+        type: "Dots",
+        alphaMin: 0.07608695652173914,
+        alphaGlobal: 0.358695652173913,
+        scaleValue: 0.5,
+        alphaValue: 0.591304347826087,
+        radius: 0.01,
+        columnWidth: 29.565217391304348,
+        color: [1, 1, 1]
+      }
+    },
+    scene: {
+      miniSceneColor: 2696797,
+      type: "BoatScene",
+      sea: {
+        boat: {
+          colors: {
+            base: "#5e7a8c",
+            paint: "#42496c",
+            post: "#434343",
+            sails: "#cdcbf2"
+          }
+        }
+      }
+    }
+  }
+];
+const layers = [
+  {
+    text: { color: "0xffffff" },
+    background: {
+      color: "0x011836",
+      properties: {
+        type: "Dots",
+        alphaMin: 0.2,
+        alphaGlobal: 0,
+        scaleValue: 1.532608695652174,
+        alphaValue: 0.43478260869565216,
+        radius: 0.05304347826086957,
+        columnWidth: 30.543478260869563,
+        color: [1, 1, 1]
+      }
+    },
+    scene: {
+      miniSceneColor: 16777215,
+      type: "LayersScene",
+      layers: {
+        colorsBaseLayer: [
+          { r: 17.91412353515625, g: 111.5456793501571, b: 114.650390625 },
+          { r: 1, g: 28, b: 64 }
+        ],
+        colorsBackLayer: [
+          { r: 1, g: 28, b: 64 },
+          { r: 27.987121582031246, g: 121.025390625, b: 37.500494137325816 }
+        ],
+        colorsMidLayer: [
+          {
+            r: 118.33749999999995,
+            g: 72.99999999999999,
+            b: 165.99999999999997
+          },
+          { r: 217, g: 139, b: 182 }
+        ],
+        colorsFrontLayer: [
+          { r: 140, g: 53, b: 69 },
+          { r: 1, g: 28, b: 64 }
+        ],
+        shadowOffset: 0.3,
+        shadowOpacity: 0.14999999999999997,
+        deformationFrequency: 3,
+        deformationAmplitude: 3.3000000000000003,
+        deformationSpeed: 3
+      },
+      scene: { type: "AstronautScene" }
+    }
+  },
+  {
+    text: { color: "0xffffff" },
+    background: {
+      color: "0xFF502B",
+      properties: {
+        type: "Dots",
+        alphaMin: 0.2,
+        alphaGlobal: 0.6847826086956522,
+        scaleValue: 1.532608695652174,
+        alphaValue: 0.43478260869565216,
+        radius: 0.05304347826086957,
+        columnWidth: 30.543478260869563,
+        color: [1, 1, 1]
+      }
+    },
+    scene: {
+      miniSceneColor: 16777215,
+      type: "LayersScene",
+      layers: {
+        colorsBaseLayer: [
+          { r: 34, g: 71, b: 150 },
+          { r: 1, g: 28, b: 64 }
+        ],
+        colorsBackLayer: [
+          { r: 1, g: 28, b: 64 },
+          { r: 1, g: 17, b: 38 }
+        ],
+        colorsMidLayer: [
+          { r: 25, g: 64, b: 115 },
+          { r: 1, g: 28, b: 64 }
+        ],
+        colorsFrontLayer: [
+          { r: 34, g: 71, b: 150 },
+          { r: 1, g: 28, b: 64 }
+        ]
+      },
+      scene: {
+        type: "ChristmasScene"
+      }
+    }
+  },
+  {
+    text: { color: "0x0b1248" },
+    background: {
+      color: "0xffffff",
+      properties: {
+        type: "Dots",
+        alphaMin: 0,
+        alphaGlobal: 0.3695652173913043,
+        scaleValue: 1.532608695652174,
+        alphaValue: 0.8,
+        radius: 0.01,
+        columnWidth: 28.58695652173913,
+        color: [0.36470588235294116, 0.5450980392156862, 0.9254901960784314]
+      }
+    },
+    scene: {
+      miniSceneColor: 16777215,
+      type: "LayersScene",
+      layers: {
+        colorsBaseLayer: [
+          { r: 34, g: 71, b: 150 },
+          { r: 1, g: 28, b: 64 }
+        ],
+        colorsBackLayer: [
+          { r: 1, g: 28, b: 64 },
+          { r: 1, g: 17, b: 38 }
+        ],
+        colorsMidLayer: [
+          { r: 25, g: 64, b: 115 },
+          { r: 1, g: 28, b: 64 }
+        ],
+        colorsFrontLayer: [
+          { r: 100.555, g: 46.152, b: 150 },
+          { r: 75.17021484375002, g: 109.03811383928569, b: 154.1953125 }
+        ],
+        shadowOffset: 0.1,
+        shadowOpacity: 0.35,
+        deformationFrequency: 1.5,
+        deformationAmplitude: 2,
+        deformationSpeed: 1,
+        effect: { type: "BorealEffect" }
+      },
+      scene: {
+        type: "ChristmasScene",
+        colors: { back: 14803958, middle: 15527679, front: 16777215 }
+      }
+    }
+  }
+];
+const defaultCake = cakes[0];
+class CakeScene {
   constructor(pane) {
+    this.name = "CakeScene";
     this.view = new Container$1();
     this.scaleAnimation = 1;
     this.age = "51";
     this.pane = pane;
-    pane.addBlade({
+    this.folder = this.pane.addFolder({
+      title: "Cake",
+      hidden: true
+    });
+    this.folder.addBlade({
       view: "text",
       label: "age",
       parse: (v) => v.slice(0, 2),
@@ -34437,19 +34906,12 @@ class MiniScene {
       this.manageCandles();
     });
     this.colorCandle = "#0369f2";
-    pane.addInput(this, "colorCandle", {
+    this.folder.addInput(this, "colorCandle", {
       label: "candle color"
     }).on("change", this.setCandlesTint.bind(this));
-    this.bgContainer = new Container$1();
-    this.bg = new Graphics();
-    this.bg.beginFill(16777215).drawCircle(0, 0, 600);
-    this.bgMask = new Graphics();
-    this.bgMask.beginFill(16777215).drawCircle(0, 0, 600);
-    this.bgContainer.addChild(this.bg, this.bgMask);
-    this.view.addChild(this.bgContainer);
     this.view.interactive = true;
     this.containerCake = new Container$1();
-    this.cake = new Cake(pane);
+    this.cake = new Cake(this.folder);
     this.containerCake.addChild(this.cake);
     this.view.addChild(this.containerCake);
     this.candles = [];
@@ -34476,15 +34938,17 @@ class MiniScene {
     this.singleCandle = new Candle(true);
     this.singleCandle.position.x = 210;
     this.singleCandle.position.y = -140;
-    this.cake.mask = this.bgMask;
     this.manageCandles();
     this.setCandlesTint();
   }
-  setScaleAnimation(v) {
-    this.scaleAnimation = v;
-  }
-  resetAnimation() {
-    this.bgContainer.scale.set(0);
+  getProps() {
+    return {
+      type: "Cake",
+      ...this.cake.getProps(),
+      candle: {
+        color: this.miniScene.colorCandle.replace("#", "0x")
+      }
+    };
   }
   setCandlesTint() {
     const c = this.colorCandle.replace("#", "0x");
@@ -34492,46 +34956,12 @@ class MiniScene {
     this.number2.tint = c;
     this.singleCandle.tint(c);
   }
-  scaleDown() {
-    gsapWithCSS.to([this.bgContainer.scale, this.containerCake.scale], {
-      x: 1,
-      y: 1,
-      duration: 1,
-      ease: "circ.out"
-    });
-    gsapWithCSS.to(this.view, {
-      y: 0,
-      duration: 1,
-      ease: "circ.out"
-    });
-  }
-  animate() {
-    this.bgContainer.scale.set(0);
-    this.containerCake.scale.set(this.scaleAnimation);
-    this.containerCake.position.y = 250;
-    this.containerCake.rotation = 0.2;
-    this.animated = false;
-    gsapWithCSS.to(this.bgContainer.scale, {
-      x: this.scaleAnimation,
-      y: this.scaleAnimation,
-      duration: 1.4,
-      ease: "elastic.out(1, 0.75)",
-      onComplete: () => {
-        this.animated = true;
-      }
-    });
-    gsapWithCSS.to(this.containerCake, {
-      y: 0,
-      rotation: 0,
-      duration: 1,
-      ease: "back.out(2)",
-      onComplete: () => {
-        this.animated = true;
-      }
-    });
-  }
-  reset({ cake, candle } = {}) {
-    this.colorCandle = candle.color.replace("0x", "#");
+  reset(data) {
+    const { cake, candle } = data.type ? data : defaultCake.scene;
+    this.folder.hidden = false;
+    if (candle) {
+      this.colorCandle = candle.color.replace("0x", "#");
+    }
     this.cake.reset(cake);
     this.tick = 0;
   }
@@ -34584,13 +35014,515 @@ class MiniScene {
   }
   resize(radius) {
     this.radius = radius;
-    this.bg.scale.set(1);
-    this.bg.scale.set(radius / this.bg.width);
-    this.bgMask.scale.set(this.bg.scale.x);
     this.cake.scale.set(1);
     this.cake.scale.set(Math.min(1, radius * 0.6 / this.cake.width));
     this.cake.position.x = -this.cake.width / 2;
     this.cake.position.y = -this.cake.height / 2 + 60;
+  }
+  hide() {
+    this.folder.hidden = true;
+  }
+}
+class MiniSignalBinding {
+  constructor(fn, once3 = false, thisArg) {
+    this._fn = fn;
+    this._once = once3;
+    this._thisArg = thisArg;
+    this._next = this._prev = this._owner = null;
+  }
+  detach() {
+    if (this._owner === null)
+      return false;
+    this._owner.detach(this);
+    return true;
+  }
+}
+function _addMiniSignalBinding(self2, node) {
+  if (!self2._head) {
+    self2._head = node;
+    self2._tail = node;
+  } else {
+    self2._tail._next = node;
+    node._prev = self2._tail;
+    self2._tail = node;
+  }
+  node._owner = self2;
+  return node;
+}
+class MiniSignal {
+  constructor() {
+    this._head = this._tail = void 0;
+  }
+  handlers(exists = false) {
+    let node = this._head;
+    if (exists)
+      return !!node;
+    const ee = [];
+    while (node) {
+      ee.push(node);
+      node = node._next;
+    }
+    return ee;
+  }
+  has(node) {
+    if (!(node instanceof MiniSignalBinding)) {
+      throw new Error("MiniSignal#has(): First arg must be a MiniSignalBinding object.");
+    }
+    return node._owner === this;
+  }
+  dispatch() {
+    let node = this._head;
+    if (!node)
+      return false;
+    while (node) {
+      if (node._once)
+        this.detach(node);
+      node._fn.apply(node._thisArg, arguments);
+      node = node._next;
+    }
+    return true;
+  }
+  add(fn, thisArg = null) {
+    if (typeof fn !== "function") {
+      throw new Error("MiniSignal#add(): First arg must be a Function.");
+    }
+    return _addMiniSignalBinding(this, new MiniSignalBinding(fn, false, thisArg));
+  }
+  once(fn, thisArg = null) {
+    if (typeof fn !== "function") {
+      throw new Error("MiniSignal#once(): First arg must be a Function.");
+    }
+    return _addMiniSignalBinding(this, new MiniSignalBinding(fn, true, thisArg));
+  }
+  detach(node) {
+    if (!(node instanceof MiniSignalBinding)) {
+      throw new Error("MiniSignal#detach(): First arg must be a MiniSignalBinding object.");
+    }
+    if (node._owner !== this)
+      return this;
+    if (node._prev)
+      node._prev._next = node._next;
+    if (node._next)
+      node._next._prev = node._prev;
+    if (node === this._head) {
+      this._head = node._next;
+      if (node._next === null) {
+        this._tail = null;
+      }
+    } else if (node === this._tail) {
+      this._tail = node._prev;
+      this._tail._next = null;
+    }
+    node._owner = null;
+    return this;
+  }
+  detachAll() {
+    let node = this._head;
+    if (!node)
+      return this;
+    this._head = this._tail = null;
+    while (node) {
+      node._owner = null;
+      node = node._next;
+    }
+    return this;
+  }
+}
+const poolHearts = new ObjectPool(() => new Heart$1());
+const poolExplosion = new ObjectPool(() => {
+  return new Sprite.from("circle");
+});
+class HeartScene {
+  constructor(pane) {
+    this.name = "HeartScene";
+    this.view = new Container$1();
+    this.pane = pane;
+    this.folder = this.pane.addFolder({
+      title: "Hearts",
+      hidden: true
+    });
+    this.tick = 0;
+    this.hearts = [];
+  }
+  getProps() {
+    return {
+      type: "HeartsScene"
+    };
+  }
+  reset() {
+    this.folder.hidden = false;
+  }
+  addHeart() {
+    const heart = poolHearts.get();
+    const radius = this.radius;
+    heart.startX = Math.random() * radius - radius / 2;
+    heart.position.x = heart.startX;
+    heart.position.y = this.radius / 2 + Math.random() * 40;
+    heart.speedTick = map3(Math.random(), 0, 1, 0.05, 0.08);
+    heart.tick = Math.random() * 100;
+    heart.angleCos = Math.random() * (Math.PI / 4) + Math.PI / 12;
+    heart.amplitude = Math.random() * 20 + 10;
+    heart.life = 100 + Math.random() * 120;
+    heart.speedY = Math.random() * 3 + 1.5;
+    this.view.addChild(heart);
+    this.hearts.push(heart);
+    heart.animate();
+  }
+  update() {
+    this.tick++;
+    if (this.tick % 12 === 0) {
+      this.addHeart();
+    }
+    for (let i = 0; i < this.hearts.length; i++) {
+      const heart = this.hearts[i];
+      heart.tick += heart.speedTick;
+      heart.update();
+      heart.life--;
+      if (heart.life < 0 && !heart.exploded) {
+        heart.explode();
+      } else {
+        heart.position.y -= heart.speedY;
+        heart.speedY *= 0.99;
+        const cos = Math.cos(heart.tick);
+        heart.position.x = heart.startX + cos * heart.amplitude;
+        heart.heart.rotation = cos * heart.angleCos;
+      }
+      if (heart.isDestroyed) {
+        poolHearts.return(heart);
+        this.hearts.splice(i, 1);
+        i--;
+        this.view.removeChild(heart);
+      }
+    }
+  }
+  resize(radius) {
+    this.radius = radius;
+  }
+  hide() {
+    this.folder.hidden = true;
+  }
+}
+const tintsHearts = [
+  "0xff4d4d",
+  "0xf2825a",
+  "0xff3374",
+  "0xff0051",
+  "0xd6005b"
+];
+const tintsParticles = [
+  "0xa80022",
+  "0xd60014",
+  "0xff0000",
+  "0xf7492e"
+];
+let ind = 0;
+let ind2 = 0;
+class Heart$1 extends Container$1 {
+  constructor() {
+    super();
+    this.heart = new Sprite.from("./assets/images/heart.png");
+    this.heart.anchor.set(0.5);
+    this.addChild(this.heart);
+    this.exploded = false;
+    this.isDestroyed = false;
+    this.particles = [];
+  }
+  animate() {
+    this.heart.tint = [tintsHearts[ind2]];
+    ind2++;
+    ind2 %= tintsHearts.length;
+    this.isDestroyed = false;
+    this.exploded = false;
+    this.heart.scale.set(1);
+    const initScale = 5 / this.heart.width;
+    const explosionScale = (Math.random() * 25 + 25) / this.heart.width;
+    this.heart.scale.set(initScale);
+    gsapWithCSS.to(this.heart.scale, {
+      x: explosionScale,
+      y: explosionScale,
+      ease: "elastic.out",
+      duration: 1
+    });
+  }
+  explode() {
+    this.heart.scale.set(0);
+    this.exploded = true;
+    const startAngle = Math.PI * 2 * Math.random();
+    for (let i = 0; i < 10; i++) {
+      const heartScale = Math.random() * 0.2 + 0.8;
+      const particle = poolExplosion.get();
+      particle.tint = tintsParticles[ind];
+      ind++;
+      ind %= tintsParticles.length;
+      particle.anchor.set(0.5);
+      particle.scale.set(1);
+      particle.scale.set(Math.min(1, (Math.random() * 10 + 5) / particle.width) * heartScale);
+      particle.x = Math.random() * this.heart.width - this.heart.width / 2;
+      particle.y = Math.random() * this.heart.height - this.heart.height / 2;
+      const angle = startAngle + Math.random() * (Math.PI / 2 - startAngle * 2) + i % 2 * Math.PI;
+      particle.speedX = Math.cos(angle) * (Math.random() * 5 + 2);
+      particle.speedY = Math.sin(angle) * (Math.random() * 5 + 2);
+      this.particles.push(particle);
+      this.addChild(particle);
+    }
+  }
+  update() {
+    for (let i = 0; i < this.particles.length; i++) {
+      const p = this.particles[i];
+      p.y += p.speedY;
+      p.x += p.speedX;
+      p.speedY += 0.1;
+      p.speedX *= 0.98;
+      p.scale.x *= 0.9;
+      p.scale.y = p.scale.x;
+      if (p.scale.x < 0.01) {
+        poolExplosion.return(p);
+        this.particles.splice(i, 1);
+        i--;
+        this.removeChild(p);
+      }
+    }
+    if (this.exploded && !this.particles.length) {
+      this.isDestroyed = true;
+    }
+  }
+}
+class Waves extends Container$1 {
+  constructor(color = Math.random() * 16777215, hasBottom) {
+    super();
+    this.radius = 1;
+    this.hasBottom = hasBottom;
+    this.color = color;
+    this.waveContainer = new Container$1();
+    this.addChild(this.waveContainer);
+    this.drawWaves();
+  }
+  drawWaves() {
+    this.waveContainer.removeChildren();
+    const textureWave = Texture.from("./assets/images/waves.png");
+    const ww = this.radius;
+    const nbWaves = Math.ceil(ww * 1.5 / textureWave.width);
+    for (let i = 0; i < nbWaves; i++) {
+      const wave = Sprite.from("./assets/images/waves.png");
+      wave.tint = this.color;
+      wave.position.x = i * (wave.width - 18);
+      this.waveContainer.addChild(wave);
+    }
+    if (this.hasBottom) {
+      let bottom = Sprite.from(Texture.WHITE);
+      bottom.originalWidth = bottom.width;
+      bottom.tint = this.color;
+      bottom.position.y = textureWave.height - 2;
+      bottom.scale.x = textureWave.width * nbWaves / bottom.originalWidth;
+      bottom.scale.y = 100 / bottom.originalWidth;
+      this.waveContainer.addChild(bottom);
+    }
+  }
+  resize(radius) {
+    this.radius = radius;
+    this.drawWaves();
+  }
+}
+class Boat extends Container$1 {
+  constructor(pane) {
+    super();
+    this.base = Sprite.from("./assets/images/boat-base.png");
+    this.base.anchor.set(0.5, 0);
+    this.paint = Sprite.from("./assets/images/boat-base-2.png");
+    this.paint.anchor.set(0.5, 0);
+    this.paint.x = -6;
+    this.paint.y = 15;
+    this.addChild(this.base);
+    this.base.addChild(this.paint);
+    this.post = new Sprite(Texture.WHITE);
+    this.post.anchor.y = 1;
+    this.post.anchor.x = 0.5;
+    this.post.width = 8;
+    this.post.height = 187;
+    this.post.position.x = -20;
+    this.base.addChild(this.post);
+    window.post = this.post;
+    this.sails = Sprite.from("./assets/images/boat-sails.png");
+    this.sails.anchor.set(0.5, 1);
+    this.sails.position.y = -10;
+    this.base.addChild(this.sails);
+    pane.addInput(this.base, "tint", {
+      view: "color",
+      label: "base"
+    });
+    pane.addInput(this.paint, "tint", {
+      view: "color",
+      label: "paint"
+    });
+    pane.addInput(this.post, "tint", {
+      view: "color",
+      label: "post"
+    });
+    pane.addInput(this.sails, "tint", {
+      view: "color",
+      label: "sails"
+    });
+  }
+  getProps() {
+    return {
+      colors: {
+        base: hex2string(this.base.tint),
+        paint: hex2string(this.paint.tint),
+        post: hex2string(this.post.tint),
+        sails: hex2string(this.sails.tint)
+      }
+    };
+  }
+  reset({ colors: colors2 } = {}) {
+    const { post, sails, base, paint } = colors2 || {};
+    this.post.tint = post ? string2hex(post) : 16777215;
+    this.sails.tint = sails ? string2hex(sails) : 16777215;
+    this.base.tint = base ? string2hex(base) : 16777215;
+    this.paint.tint = paint ? string2hex(paint) : 16777215;
+  }
+}
+class Sea extends Container$1 {
+  constructor(pane) {
+    super();
+    __publicField(this, "onSharkOnActiveArea", () => {
+      if (!this.finIsOn) {
+        this.finIsOn = true;
+        this.sharkFin.visible = true;
+        let index = Math.floor(Math.random() * 4);
+        this.waves[index].addChild(this.sharkFin);
+        let side2 = Math.random() > 0.5 ? 0 : 1;
+        if (!side2) {
+          this.sharkFin.position.x = this.originalWaveWidth - 300;
+          this.sharkFin.speed = -1;
+          this.sharkFin.scale.x = -this.sharkFin.targetScale;
+          gsapWithCSS.killTweensOf(this.sharkFin);
+          gsapWithCSS.set(this.sharkFin, { y: 0 });
+          gsapWithCSS.to(this.sharkFin, 12, {
+            x: 0
+          });
+        } else {
+          this.sharkFin.position.x = 300;
+          this.sharkFin.speed = 1;
+          this.sharkFin.scale.x = this.sharkFin.targetScale;
+          gsapWithCSS.killTweensOf(this.sharkFin);
+          gsapWithCSS.set(this.sharkFin, { y: 0 });
+          gsapWithCSS.to(this.sharkFin, 12, {
+            x: this.originalWaveWidth
+          });
+        }
+        gsapWithCSS.to(this.sharkFin, 1.7, {
+          y: this.sharkFin.height,
+          ease: window.Power4.easeIn,
+          delay: 0.1 + Math.random(),
+          onComplete: () => {
+            this.finIsOn = false;
+            this.shark.attack();
+          }
+        });
+      }
+    });
+    __publicField(this, "onSharkAOffctiveArea", () => {
+      gsapWithCSS.killTweensOf(this.sharkFin);
+      this.finIsOn = false;
+      this.shark.retire();
+    });
+    this.finIsOn = false;
+    const colors2 = [4045280, 3055054, 1410229, 4045280, 3055054];
+    this.amplitudeX = 20;
+    this.amplitudeY = 10;
+    this.containerWave = new Container$1();
+    this.addChild(this.containerWave);
+    this.waves = [];
+    const textureWave = Texture.from("./assets/images/waves.png");
+    this.realHeight = 0;
+    for (let i = 0; i < 3; i++) {
+      const wave = new Waves(colors2[i], i === 2);
+      wave.originalPos = i * textureWave.height / 3;
+      wave.position.y = wave.originalPos;
+      wave.tick = i * 20;
+      this.containerWave.addChild(wave);
+      this.waves.push(wave);
+      if (i === 2) {
+        this.realHeight = wave.height;
+      }
+    }
+    this.boat = new Boat(pane);
+    this.waves[1].addChild(this.boat);
+    this.originalWaveWidth = this.containerWave.width;
+    this.tick = 0;
+  }
+  reset({ boat } = {}) {
+    this.boat.reset(boat);
+  }
+  getProps() {
+    return {
+      boat: { ...this.boat.getProps() }
+    };
+  }
+  update() {
+    this.tick++;
+    const tickBoat = this.waves[1].tick;
+    const cos = Math.cos(tickBoat / 60);
+    this.boat.position.x = this.boat.originX + cos * 10;
+    this.boat.position.y = this.boat.originY + cos * 5;
+    this.boat.rotation = cos * 0.05;
+    for (let i = 0; i < this.waves.length; i++) {
+      const w2 = this.waves[i];
+      w2.tick++;
+      w2.position.y = w2.originalPos + Math.cos(this.tick / 40) * this.amplitudeY;
+      w2.position.x = Math.cos(w2.tick / 80) * this.amplitudeX;
+    }
+  }
+  resize(w2, h2) {
+    this.waves.forEach((wave) => {
+      wave.resize(w2);
+    });
+    this.boat.originX = this.boat.parent.width / 2;
+    this.boat.originY = -this.boat.base.height / 2;
+    this.boat.position.x = this.boat.originX;
+    this.boat.position.y = this.boat.originY;
+  }
+}
+new ObjectPool(() => new Heart());
+new ObjectPool(() => {
+  return new Sprite.from("circle");
+});
+class BoatScene {
+  constructor(pane) {
+    this.name = "BoatScene";
+    this.view = new Container$1();
+    this.pane = pane;
+    this.folder = this.pane.addFolder({
+      title: "Boat",
+      hidden: true
+    });
+    this.sea = new Sea(this.folder);
+    this.view.addChild(this.sea);
+    this.tick = 0;
+  }
+  getProps() {
+    return {
+      type: "BoatScene",
+      sea: {
+        ...this.sea.getProps()
+      }
+    };
+  }
+  reset(data = {}) {
+    this.folder.hidden = false;
+    this.sea.reset(data.sea);
+  }
+  update() {
+    this.sea.update();
+  }
+  resize(radius) {
+    this.radius = radius;
+    this.sea.resize(radius);
+    this.sea.position.x = -this.sea.width / 2;
+    this.sea.position.y = this.radius / 2 - this.sea.realHeight + this.sea.amplitudeY + 10;
+  }
+  hide() {
+    this.folder.hidden = true;
   }
 }
 var simplex3d = `
@@ -34686,6 +35618,1047 @@ float snoise(vec3 v)
                                 dot(p2,x2), dot(p3,x3) ) );
   }
   `;
+var frag$3 = `
+uniform float uFadeout;
+uniform float uNoiseAmplitude;
+uniform float uNoiseFrequency;
+uniform float uShadowStrength;
+uniform float uRatio;
+uniform float uSpeed;
+uniform float uTime;
+uniform vec3 colorsFrontLayer[2];
+uniform vec3 colorsMidLayer[2];
+uniform vec3 colorsBackLayer[2];
+uniform vec3 colorsBaseLayer[2];
+varying vec2 vTextureCoord;
+
+#define DIVERGENCE 1.
+#define SHAPE_SIMPLICITY 4.
+#define m4  mat4( 0.00, 0.80, 0.60, -0.4, -0.80,  0.36, -0.48, -0.5, -0.60, -0.48, 0.64, 0.2, 0.40, 0.30, 0.20,0.4)
+
+float twistedSineNoise(vec4 q)
+{
+    float a = 1.;
+    float sum = 0.;
+    for(int i = 0; i <4 ; i++){
+        q = m4 * q;
+        vec4 s = sin(q.ywxz / a) * a;
+        q += s;
+        sum += s.x;
+        a *= 0.7;
+    }
+    return sum;
+}
+
+float noiseMask(vec2 uv, int layer)
+{
+    vec4 p = vec4(uv * 3., float(layer) * DIVERGENCE, 10. * 0.5);
+    float f = twistedSineNoise(p * 0.6);
+    f += length(uv) * SHAPE_SIMPLICITY;
+    return step(SHAPE_SIMPLICITY, f + float(layer));
+}
+
+
+${simplex3d}
+#ifndef HALF_PI
+#define HALF_PI 1.5707963267948966
+#endif
+
+float sineOut(float t) {
+  return sin(t * HALF_PI);
+}
+
+float circle(vec2 _st, float _radius, float smooth){
+    vec2 pos = _st;
+    return smoothstep(1.0-_radius,1.0-_radius+_radius*smooth,1.-dot(pos,pos)*3.14);
+}
+
+float rand(vec2 co){
+    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+vec2 rotate(vec2 uv, float rotation, vec2 mid)
+{
+    return vec2(
+      cos(rotation) * (uv.x - mid.x) + sin(rotation) * (uv.y - mid.y) + mid.x,
+      cos(rotation) * (uv.y - mid.y) - sin(rotation) * (uv.x - mid.x) + mid.y
+    );
+}
+
+vec3 getColor(int r, int g, int b) {
+    return vec3(
+        float(r) / 255., float(g) / 255., float(b) / 255.
+    );
+}
+vec3 getColor(vec3 color) {
+    return vec3(color.r / 255., color.g / 255., color.b / 255.);
+}
+
+
+void main() {
+    
+    float scaleUPUv = 3.14 / 1.5;
+    vec2 uv = vTextureCoord;
+
+    uv *= 2.;
+    uv -= 1.;
+
+    
+    // uv.y /= uRatio;
+    uv.x *= uRatio;
+
+    float a = 20. * 3.14 / 180.;
+
+    
+
+    
+    float amplitude = uNoiseAmplitude;//1.5;
+    float frequency = uNoiseFrequency;//2.;
+    float noiseValue = snoise(vec3(uv * frequency, 2. + uTime * 0.00095 * uSpeed)) * amplitude;
+
+    
+    
+    // noiseValue = noiseMask((uv *2. - 1.) * 1.5, 0);
+    
+    
+    float fadeout = uFadeout;//0.1;
+    float radius = 1. + noiseValue * 0.2;
+    float p1 = smoothstep(0.4, 1., (dot(uv, uv) * 3.14) / ((1. + 0.2) * scaleUPUv));
+
+    float c = 1. - circle(uv, radius * scaleUPUv, 0.);
+    float cInside = circle(uv, radius * scaleUPUv, fadeout);
+
+    uv = rotate(uv, a, vec2(0.));
+
+    radius = 0.5 + noiseValue * 0.1;
+    float p2 = smoothstep(0.2, 1., (dot(uv, uv) * 3.14) / ((0.5 + 0.1) * scaleUPUv));
+    
+    float c2 = 1. - circle(uv * 1., radius * scaleUPUv, 0.);
+    float c2Inside = circle(uv * 1., radius * scaleUPUv, fadeout);
+
+    // a += 30. * 3.14 / 180.;
+    uv = rotate(uv, a, vec2(0.));
+
+    // float c2 = 1. - circle(uv * 1., 0.5 * (1. + noiseValue * 0.4), 0.);
+    // float c2Inside = circle(uv * 1., 0.5 * (1. + noiseValue * 0.4), fadeout);
+
+    // a += 30. * 3.14 / 180.;
+    uv = rotate(uv, a, vec2(0.));
+    
+    radius = 0.2 + noiseValue * 0.03;
+    // float p3 = smoothstep(0., 1., clamp(length(uv) / (0.2 + 0.03), 0., 1.));//clamp(length(uv) * 1. / (0.2 + 0.03), 0., 1.);
+    
+    float c3 = 1. - circle(uv, radius * scaleUPUv, 0.);
+    float c3Inside = circle(uv, radius * scaleUPUv, fadeout);
+    // cf -= c2;
+    // float p3 = smoothstep(0., 1., (dot(uv,uv) * 3.14) / (0.2 + 0.03));
+    // float p3 = smoothstep(0.3, 1., clamp(length(uv - uv * fadeout / 2.) / (0.2 + 0.03), 0., 1.));
+    float p3 = smoothstep(0.1, 1., (dot(uv, uv) * 3.14) / ((0.2 + 0.03) * scaleUPUv));
+
+    
+    float mask = circle(uv, 1.5 * scaleUPUv, 0.);
+    float p0 = smoothstep(0.4, 1., (dot(uv, uv) * 3.14) / (1.5 * scaleUPUv));
+    
+    // float c = step(0.1, circle(uv, 0.5 * (1. + noiseValue * 0.4), 0.));
+    // float cInside = circle(uv, 0.45 * (1. + noiseValue * 0.4));
+    // cInside = smoothstep(0.5, 0.9, c- cInside) / 10.;
+    // gl_FragColor = vec4(vec3(c - cInside), 1.);
+
+
+
+    // vec3 colorFront = mix(getColor( 34,71,150), getColor(1, 28, 64), p0);
+    vec3 colorFront = mix(getColor(colorsFrontLayer[0]), getColor(colorsFrontLayer[1]), p0);
+    vec3 colorMidLayer = 
+    mix(
+        // getColor( 25, 64, 115), getColor(1, 28, 64),
+        getColor(colorsMidLayer[0]), getColor(colorsMidLayer[1]),
+        p1
+        );
+    vec3 colorBackLayer = mix(
+        // getColor( 255, 0, 0), getColor(255, 255, 0),
+        // getColor(  1, 28, 64), getColor( 1, 17, 38), 
+        getColor(colorsBackLayer[0]), getColor(colorsBackLayer[1]),
+        p2);
+    vec3 colorBase = mix(
+        // getColor( 34,71,150), getColor(1, 28, 64), 
+        getColor(colorsBaseLayer[0]), getColor(colorsBaseLayer[1]),
+        p3);
+    // vec3 colorBase = mix(
+    //     getColor( 0, 255, 0), 
+    //     getColor(255, 0 , 0), 
+    //     p3
+    // );
+
+    float shadow = (1. - (c + cInside)) * 0.7 + (1. - (c2 + c2Inside)) * 0.8 + (1. - (c3 + c3Inside)) * 0.6;
+        
+    vec3 col = colorBase;
+    col = mix(col, colorBackLayer, c3);
+    col = mix(col, colorMidLayer, c2);
+    col = mix(col, colorFront, c);
+
+    col -= shadow * uShadowStrength;
+    
+    
+    
+    
+    
+    // gl_FragColor = vec4(vec3(noiseValue), 1.);
+    // gl_FragColor = vec4(vec3(c + cInside), 1.);
+    // gl_FragColor = vec4(vec3((c + cInside)), 1.);
+    gl_FragColor = vec4(
+    vec3(
+        // (mask) 
+        // (c + cInside) 
+        (mask 
+        -
+        (1. - (c3 + c3Inside) )
+        // (clamp(c3 + c3Inside, 0., 1.)
+        -
+        (1. - (c2 + c2Inside) )
+        -
+        (1. - (c + cInside) )) * mask
+        
+    ), 1.);
+
+            
+    float r = rand(uv);
+    col -= r*0.05 * (1. - shadow);
+    col = mix(col, vec3(1.), 1. - mask);
+    gl_FragColor = vec4(vec3(c), mask);
+    gl_FragColor = vec4(col * mask, mask);
+    // gl_FragColor = vec4(col, 1.);
+    // gl_FragColor = vec4(vec3(p3), 1.);
+    // gl_FragColor = vec4(vec3(r), 1.);
+    // gl_FragColor.rgb += vec3(1. - p3);
+
+}
+`;
+var vert$3 = `
+attribute vec2 aVertexPosition;
+attribute vec2 aTextureCoord;
+
+uniform mat3 projectionMatrix;
+uniform mat3 translationMatrix;
+uniform mat3 uTextureMatrix;
+
+varying vec2 vTextureCoord;
+
+void main(void)
+{
+  gl_Position=vec4((projectionMatrix*translationMatrix*vec3(aVertexPosition,1.)).xy,0.,1.);
+  
+  vTextureCoord=vec3(aTextureCoord,1.).xy;
+}
+`;
+class HueEffect {
+  constructor() {
+    this.name = "HueEffect";
+    this.filter = new filters.ColorMatrixFilter();
+    this.tick = 0;
+  }
+  start(layers2, props) {
+    this.tick = 0;
+    this.view = layers2.view;
+    if (this.view.filters) {
+      this.view.filters.push(this.filter);
+    } else {
+      this.view.filters = [this.filter];
+    }
+  }
+  stop() {
+    var _a2;
+    if (((_a2 = this.view.filters) == null ? void 0 : _a2.length) > 1) {
+      const ind3 = this.view.filters.findIndex(this.filter);
+      this.view.filters.splice(ind3, 1);
+    } else {
+      this.view.filters = null;
+    }
+  }
+  getProps() {
+    return {
+      type: this.name
+    };
+  }
+  update() {
+    this.tick++;
+    let t = this.tick % 360;
+    this.filter.hue(t);
+  }
+}
+const colorsBoreal = [
+  { r: 34, g: 150, b: 88 },
+  { r: 34, g: 150, b: 144 },
+  { r: 34, g: 90, b: 150 },
+  { r: 119, g: 34, b: 150 },
+  { r: 80, g: 102, b: 0 }
+];
+class BorealEffect {
+  constructor() {
+    this.name = "BorealEffect";
+    this.tick = 0;
+  }
+  start(layers2, props) {
+    this.stopped = false;
+    this.layers = layers2;
+    this.colorFrontLayer1 = layers2.colorFrontLayer1;
+    this.originalColorFrontLayer1 = { ...this.colorFrontLayer1 };
+    this.animateBoreal();
+  }
+  animateBoreal(ind3) {
+    ind3 = ind3 || 0;
+    const { r, g, b } = colorsBoreal[ind3];
+    const color = { ...this.colorFrontLayer1 };
+    gsapWithCSS.to(color, {
+      r,
+      g,
+      b,
+      onUpdate: () => {
+        if (!this.stopped) {
+          this.colorFrontLayer1.r = color.r;
+          this.colorFrontLayer1.g = color.g;
+          this.colorFrontLayer1.b = color.b;
+          this.layers.updateFrontColor();
+        }
+      },
+      ease: "linear",
+      duration: 2,
+      onComplete: () => {
+        if (!this.stopped) {
+          ind3++;
+          ind3 %= colorsBoreal.length;
+          this.animateBoreal(ind3);
+        }
+      }
+    });
+  }
+  stop() {
+    this.stopped = true;
+    this.colorFrontLayer1.r = this.originalColorFrontLayer1.r;
+    this.colorFrontLayer1.g = this.originalColorFrontLayer1.g;
+    this.colorFrontLayer1.b = this.originalColorFrontLayer1.b;
+    this.layers.updateFrontColor();
+  }
+  getProps() {
+    return {
+      type: this.name
+    };
+  }
+  update() {
+  }
+}
+const effects = ["", BorealEffect, HueEffect];
+const effectsMap = {
+  "BorealEffect": BorealEffect,
+  "HueEffect": HueEffect
+};
+const effectsSelected = {};
+class Layers {
+  constructor(pane) {
+    this.folder = pane;
+    this.view = new Container$1();
+    this.colorFrontLayer1 = { r: 34, g: 71, b: 150 };
+    this.colorFrontLayer2 = { r: 1, g: 28, b: 64 };
+    this.folder.addBlade({
+      view: "list",
+      label: "effects",
+      options: effects.map((t) => ({
+        text: (t == null ? void 0 : t.name) || t,
+        value: t
+      })),
+      value: ""
+    }).on("change", (v) => {
+      this.selectEffect(v.value);
+    });
+    const colors2 = this.folder.addFolder({
+      title: "colours"
+    });
+    colors2.addInput(this, "colorFrontLayer1", {
+      label: "front_1"
+    }).on("change", this.updateFrontColor.bind(this));
+    colors2.addInput(this, "colorFrontLayer2", {
+      label: "front_2"
+    }).on("change", this.updateFrontColor.bind(this));
+    this.colorMidLayer1 = { r: 25, g: 64, b: 115 };
+    this.colorMidLayer2 = { r: 1, g: 28, b: 64 };
+    colors2.addInput(this, "colorMidLayer1", {
+      label: "Mid_1"
+    }).on("change", this.updateMidColor.bind(this));
+    colors2.addInput(this, "colorMidLayer2", {
+      label: "Mid_2"
+    }).on("change", this.updateMidColor.bind(this));
+    this.colorBackLayer1 = { r: 1, g: 28, b: 64 };
+    this.colorBackLayer2 = { r: 1, g: 17, b: 38 };
+    colors2.addInput(this, "colorBackLayer1", {
+      label: "Back_1"
+    }).on("change", this.updateBackColor.bind(this));
+    colors2.addInput(this, "colorBackLayer2", {
+      label: "Back_2"
+    }).on("change", this.updateBackColor.bind(this));
+    this.colorBaseLayer1 = { r: 34, g: 71, b: 150 };
+    this.colorBaseLayer2 = { r: 1, g: 28, b: 64 };
+    colors2.addInput(this, "colorBaseLayer1", {
+      label: "Base_1"
+    }).on("change", this.updateBaseColor.bind(this));
+    colors2.addInput(this, "colorBaseLayer2", {
+      label: "Base_2"
+    }).on("change", this.updateBaseColor.bind(this));
+    this.tick = 0;
+    const geometry = new PlaneGeometry(1, 1, 2, 2);
+    const shader = Shader.from(vert$3, frag$3, {
+      uFadeout: 0.1,
+      uNoiseAmplitude: 2,
+      uNoiseFrequency: 1.5,
+      uShadowStrength: 0.35,
+      uSpeed: 1,
+      uTime: 0,
+      uRatio: 1,
+      colorsFrontLayer: [],
+      colorsMidLayer: [],
+      colorsBackLayer: [],
+      colorsBaseLayer: []
+    });
+    const shadowsFolder = this.folder.addFolder({
+      title: "shadows"
+    });
+    shadowsFolder.addInput(shader.uniforms, "uFadeout", {
+      label: "offset",
+      min: 0,
+      max: 0.5,
+      step: 0.01
+    });
+    shadowsFolder.addInput(shader.uniforms, "uShadowStrength", {
+      label: "opacity",
+      min: 0,
+      max: 1,
+      step: 0.1
+    });
+    const deformationsFolder = this.folder.addFolder({
+      title: "deformation"
+    });
+    deformationsFolder.addInput(shader.uniforms, "uNoiseFrequency", {
+      label: "frequency",
+      min: 0,
+      max: 3,
+      step: 0.1
+    });
+    deformationsFolder.addInput(shader.uniforms, "uNoiseAmplitude", {
+      label: "amplitude",
+      min: 0,
+      max: 4,
+      step: 0.1
+    });
+    deformationsFolder.addInput(shader.uniforms, "uSpeed", {
+      label: "speed",
+      min: 0,
+      max: 3,
+      step: 0.1
+    });
+    this.mesh = new Mesh(geometry, shader);
+    this.geometry = geometry;
+    this.shader = shader;
+    this.view.addChild(this.mesh);
+  }
+  selectEffect(effect, props = {}) {
+    if (this.currentEffect) {
+      this.currentEffect.stop();
+      this.currentEffect = null;
+    }
+    if (!effect)
+      return;
+    this.currentEffect = effectsSelected[effect.name];
+    if (!this.currentEffect) {
+      effectsSelected[effect.name] = new effect(this.folder);
+    }
+    this.currentEffect = effectsSelected[effect.name];
+    this.currentEffect.start(this, props);
+  }
+  updateColors() {
+    this.updateFrontColor();
+    this.updateMidColor();
+    this.updateBackColor();
+    this.updateBaseColor();
+  }
+  updateFrontColor() {
+    this.shader.uniforms.colorsFrontLayer = [
+      ...Object.values(this.colorFrontLayer1),
+      ...Object.values(this.colorFrontLayer2)
+    ];
+  }
+  updateMidColor() {
+    this.shader.uniforms.colorsMidLayer = [
+      ...Object.values(this.colorMidLayer1),
+      ...Object.values(this.colorMidLayer2)
+    ];
+  }
+  updateBackColor() {
+    this.shader.uniforms.colorsBackLayer = [
+      ...Object.values(this.colorBackLayer1),
+      ...Object.values(this.colorBackLayer2)
+    ];
+  }
+  updateBaseColor() {
+    this.shader.uniforms.colorsBaseLayer = [
+      ...Object.values(this.colorBaseLayer1),
+      ...Object.values(this.colorBaseLayer2)
+    ];
+  }
+  getProps() {
+    var _a2;
+    return {
+      colorsBaseLayer: [this.colorBaseLayer1, this.colorBaseLayer2],
+      colorsBackLayer: [this.colorBackLayer1, this.colorBackLayer2],
+      colorsMidLayer: [this.colorMidLayer1, this.colorMidLayer2],
+      colorsFrontLayer: [this.colorFrontLayer1, this.colorFrontLayer2],
+      shadowOffset: this.shader.uniforms.uFadeout,
+      shadowOpacity: this.shader.uniforms.uShadowStrength,
+      deformationFrequency: this.shader.uniforms.uNoiseFrequency,
+      deformationAmplitude: this.shader.uniforms.uNoiseAmplitude,
+      deformationSpeed: this.shader.uniforms.uSpeed,
+      effect: { ...(_a2 = this.currentEffect) == null ? void 0 : _a2.getProps() }
+    };
+  }
+  reset(data = {}) {
+    const {
+      colorsBaseLayer = [
+        { r: 34, g: 71, b: 150 },
+        { r: 1, g: 28, b: 64 }
+      ],
+      colorsBackLayer = [
+        { r: 1, g: 28, b: 64 },
+        { r: 1, g: 17, b: 38 }
+      ],
+      colorsMidLayer = [
+        { r: 25, g: 64, b: 115 },
+        { r: 1, g: 28, b: 64 }
+      ],
+      colorsFrontLayer = [
+        { r: 34, g: 71, b: 150 },
+        { r: 1, g: 28, b: 64 }
+      ],
+      shadowOffset = 0.1,
+      shadowOpacity = 0.35,
+      deformationFrequency = 1.5,
+      deformationAmplitude = 2,
+      deformationSpeed = 1,
+      effect
+    } = data;
+    this.shader.uniforms.uFadeout = shadowOffset;
+    this.shader.uniforms.uShadowStrength = shadowOpacity;
+    this.shader.uniforms.uNoiseFrequency = deformationFrequency;
+    this.shader.uniforms.uNoiseAmplitude = deformationAmplitude;
+    this.shader.uniforms.uSpeed = deformationSpeed;
+    this.colorFrontLayer1 = colorsFrontLayer[0];
+    this.colorFrontLayer2 = colorsFrontLayer[1];
+    this.colorMidLayer1 = colorsMidLayer[0];
+    this.colorMidLayer2 = colorsMidLayer[1];
+    this.colorBackLayer1 = colorsBackLayer[0];
+    this.colorBackLayer2 = colorsBackLayer[1];
+    this.colorBaseLayer1 = colorsBaseLayer[0];
+    this.colorBaseLayer2 = colorsBaseLayer[1];
+    this.updateColors();
+    this.selectEffect(effectsMap[effect == null ? void 0 : effect.type], effect);
+  }
+  resize(radius) {
+    this.w = radius;
+    this.h = radius;
+    this.geometry.width = radius;
+    this.geometry.height = radius;
+    this.shader.uniforms.uRatio = 1;
+    this.geometry.build();
+  }
+  update() {
+    this.tick++;
+    this.shader.uniforms.uTime = this.tick;
+    this.currentEffect && this.currentEffect.update();
+  }
+}
+const colors = ["0x0D925D", "0x009243", "0x1BA369", "0x14B572"];
+const colorsLight = [
+  "0xF2D22E",
+  "0xd77fe6",
+  "0x00e007",
+  "0xF2AE30",
+  "0xF28D77"
+];
+class Tree extends Container$1 {
+  constructor() {
+    super();
+    const lightsData = [
+      [
+        { x: -35, y: -150 },
+        { x: 70, y: -80 }
+      ],
+      [
+        { x: 29, y: -102 },
+        { x: -35, y: -91 },
+        { x: -10.3, y: -201.72 }
+      ],
+      [
+        { x: 6.61, y: -159.18 },
+        { x: 18.8, y: -77.84 }
+      ],
+      [{ x: -17.3, y: -95.18 }]
+    ];
+    this.trees = [];
+    this.lights = [];
+    this.lightsContainer = new Container$1();
+    let indLight = 0;
+    for (let i = 0; i < 4; i++) {
+      const tex = i < 2 ? "xmastree.png" : "half-xmastree.png";
+      const tree = Sprite.from("./assets/images/" + tex);
+      const ind3 = Math.min(i, 2);
+      tree.y = -ind3 * 5;
+      tree.tint = colors[i % colors.length];
+      tree.baseScale = 1;
+      tree.anchor.set(0.5, 1);
+      if (i === 2) {
+        tree.anchor.x = 0;
+      } else if (i === 3) {
+        tree.baseScale = -1;
+        tree.anchor.x = 0;
+      }
+      tree.scale.x = 0;
+      this.trees.push(tree);
+      const lights = lightsData[i];
+      this.addChild(tree);
+      for (let k = 0; k < lights.length; k++) {
+        const { x, y } = lights[k];
+        const light = new Light(colorsLight[indLight], 0.25 + i * 0.15);
+        light.position.x = x;
+        light.position.y = y;
+        this.lightsContainer.addChild(light);
+        this.lights.push(light);
+        indLight++;
+        indLight %= colorsLight.length;
+      }
+    }
+    this.addChild(this.lightsContainer);
+    const star = Sprite.from("./assets/images/star.png");
+    star.tint = 16770835;
+    star.scale.set(0.5);
+    star.anchor.set(0.5);
+    this.addChild(star);
+    star.position.y = -this.height + star.height / 3 * 2;
+    this.lightsContainer.alpha = 0;
+    this.ready = false;
+  }
+  animate() {
+    this.trees.forEach((t, i) => {
+      const ind3 = Math.min(i, 2);
+      t.y = -ind3 * 5;
+      gsapWithCSS.to(t.scale, {
+        x: (ind3 < 2 ? 1 - ind3 * 0.3 : 0.4) * t.baseScale,
+        ease: "back.out",
+        duration: 1,
+        delay: ind3 * 0.1,
+        onComplete: () => {
+          if (i === 3) {
+            this.ready = true;
+            gsapWithCSS.to(this.lightsContainer, {
+              alpha: 1,
+              duration: 0.4
+            });
+          }
+        }
+      });
+    });
+  }
+  update() {
+    if (this.ready) {
+      this.lights.forEach((l) => l.update());
+    }
+  }
+}
+class Light extends Graphics {
+  constructor(tint, baseScale) {
+    super();
+    this.baseScale = baseScale;
+    this.scale.x = this.scale.y = this.baseScale;
+    this.tick = Math.random() * 1e3;
+    this.speed = 30 + Math.random() * 10;
+    this.beginFill(16777215).drawCircle(0, 0, 10);
+    this.tint = tint;
+    this.alpha = 0;
+  }
+  update() {
+    this.tick++;
+    const a = Math.abs(Math.cos(this.tick / this.speed));
+    this.alpha = a;
+  }
+}
+class ChristmasScene extends Container$1 {
+  constructor(pane) {
+    super();
+    this.name = "ChristmasScene";
+    const snowFolder = pane.addFolder({
+      title: "Snow"
+    });
+    this.furthestSnowTint = 14803958;
+    snowFolder.addInput(this, "furthestSnowTint", {
+      view: "color",
+      label: "furth.hill color"
+    }).on("change", () => {
+      this.snowBack2.tint = this.furthestSnowTint;
+      this.tree2.tint = this.furthestSnowTint;
+    });
+    this.snowBack2 = Sprite.from("./assets/images/dune.png");
+    this.snowBack2.tint = this.furthestSnowTint;
+    this.snowBack2.anchor.set(0.5, 0);
+    this.addChild(this.snowBack2);
+    this.tree2 = Sprite.from("./assets/images/tree.png");
+    this.tree2.tint = this.furthestSnowTint;
+    this.tree2.anchor.set(0.5, 1);
+    this.addChild(this.tree2);
+    this.middleSnowTint = 15527679;
+    this.snowBack1 = Sprite.from("./assets/images/dune.png");
+    this.snowBack1.tint = this.middleSnowTint;
+    this.snowBack1.anchor.set(0.5, 0);
+    this.addChild(this.snowBack1);
+    snowFolder.addInput(this.snowBack1, "tint", {
+      view: "color",
+      label: "middle hill color"
+    });
+    this.xmasTree = new Tree();
+    this.addChild(this.xmasTree);
+    this.snow1 = Sprite.from("./assets/images/dune.png");
+    this.snow1.anchor.set(0.5, 0);
+    this.snow2 = Sprite.from("./assets/images/dune.png");
+    this.snow2.anchor.set(0.5, 0);
+    this.addChild(this.snow2, this.snow1);
+    this.gMask = new Graphics();
+    this.gMask.beginFill(16711680).drawCircle(0, 0, 100);
+    this.mask = this.gMask;
+    this.addChild(this.gMask);
+    this.tree = Sprite.from("./assets/images/tree.png");
+    this.tree.anchor.set(0.5, 1);
+    this.addChild(this.tree);
+    this.frontSnowTint = 16777215;
+    snowFolder.addInput(this, "frontSnowTint", {
+      view: "color",
+      label: "foreg.hill color"
+    }).on("change", () => {
+      this.snow1.tint = this.frontSnowTint;
+      this.snow2.tint = this.frontSnowTint;
+      this.tree.tint = this.frontSnowTint;
+    });
+  }
+  getProps() {
+    return {
+      type: this.name,
+      colors: {
+        back: this.furthestSnowTint,
+        middle: this.snowBack1.tint,
+        front: this.frontSnowTint
+      }
+    };
+  }
+  reset({ colors: colors2 } = {}) {
+    const { back, middle, front } = colors2 || {
+      back: 14803958,
+      middle: 15527679,
+      front: 16777215
+    };
+    this.furthestSnowTint = back;
+    this.middleSnowTint = middle;
+    this.frontSnowTint = front;
+    this.setColors();
+  }
+  setColors() {
+    this.snowBack2.tint = this.furthestSnowTint;
+    this.tree2.tint = this.furthestSnowTint;
+    this.snow1.tint = this.frontSnowTint;
+    this.snow2.tint = this.frontSnowTint;
+    this.tree.tint = this.frontSnowTint;
+    this.snowBack1.tint = this.middleSnowTint;
+  }
+  animate() {
+    this.xmasTree.animate();
+  }
+  update() {
+    this.xmasTree.update();
+  }
+  resize(radius) {
+    if (!radius)
+      return;
+    this.radius = radius;
+    const r = radius;
+    this.gMask.scale.set(1);
+    this.gMask.scale.set((r + 1) / this.gMask.width);
+    this.snow1.scale.set(1);
+    this.snow1.scale.set(r / this.snow1.width);
+    this.snow1.x = -r / 4;
+    this.snow1.y = r / 2 - this.snow1.height;
+    this.snow1.rotation = 0.1;
+    this.snow2.scale.set(this.snow1.scale.x * 1.25);
+    this.snow2.x = this.snow2.width / 4;
+    this.snow2.y = r / 2 - this.snow2.height / 1.25;
+    this.snow2.rotation = -0.2;
+    this.snowBack1.scale.set(this.snow1.scale.x);
+    this.snowBack1.rotation = -0.05;
+    this.snowBack1.x = -r / 4;
+    this.snowBack1.y = 10 * this.snowBack1.scale.x;
+    this.snowBack2.scale.set(this.snow1.scale.x * 0.75, this.snow1.scale.y);
+    this.snowBack2.rotation = 0.05;
+    this.snowBack2.x = r / 4;
+    this.tree.scale.set(this.snow1.scale.x * 0.5);
+    this.tree.position.x = this.snow1.x - this.tree.width / 2;
+    this.tree.position.y = this.snow1.y + this.tree.height * 0.2;
+    this.tree.rotation = -0.08;
+    this.tree2.scale.set(this.snow2.scale.x * 0.2);
+    this.tree2.rotation = 0.05;
+    this.tree2.x = this.snowBack2.x + 20 * this.snowBack2.scale.x;
+    this.tree2.y = this.snowBack2.y + 20 * this.snow2.scale.x;
+    this.xmasTree.y = r / 2 - this.snow1.height * 0.62;
+    this.xmasTree.scale.set(1);
+    this.xmasTree.scale.set(r * 0.5 / this.xmasTree.height);
+  }
+}
+class AstronautScene extends Container$1 {
+  constructor(pane) {
+    super();
+    this.tick = 0;
+    this.name = "AstronautScene";
+    this.astronaut = Sprite.from("./assets/images/astronaut.png");
+    this.astronaut.anchor.set(0.5);
+    this.astronaut.baseRotation = 0;
+    this.addChild(this.astronaut);
+  }
+  getProps() {
+    return {
+      type: this.name
+    };
+  }
+  reset({ colors: colors2 } = {}) {
+    this.astronaut.scale.set(0.2);
+  }
+  animate() {
+    gsapWithCSS.to(this.astronaut.scale, {
+      x: 1,
+      y: 1,
+      duration: 5,
+      ease: "sin.out"
+    });
+    gsapWithCSS.delayedCall(3, () => {
+      gsapWithCSS.to(this.astronaut, {
+        baseRotation: -Math.PI * 2,
+        duration: 2,
+        ease: "sin.out"
+      });
+    });
+  }
+  update() {
+    this.tick++;
+    this.astronaut.position.x = Math.sin(this.tick / 120) * 10;
+    this.astronaut.position.y = Math.cos(this.tick / 100) * 20;
+    Math.sin(this.tick / 100) * (this.astronaut.height / 8);
+    this.astronaut.rotation = Math.cos(this.tick / 100) * 0.2 + this.astronaut.baseRotation;
+  }
+  resize(radius) {
+    if (!radius)
+      return;
+    this.radius = radius;
+  }
+}
+const defaultScene = layers[0];
+const scenes$1 = [AstronautScene, ChristmasScene];
+const scenesMap$1 = {
+  "ChristmasScene": ChristmasScene,
+  "AstronautScene": AstronautScene
+};
+const scenesSelected$1 = {};
+class LayersScene {
+  constructor(pane) {
+    this.name = "LayersScene";
+    this.view = new Container$1();
+    this.pane = pane;
+    this.folder = this.pane.addFolder({
+      title: "Layers",
+      hidden: true
+    });
+    this.folder.addBlade({
+      view: "list",
+      label: "Mini scene",
+      options: scenes$1.map((t) => ({
+        text: (t == null ? void 0 : t.name) || t,
+        value: t
+      })),
+      value: "ChristmasScene"
+    }).on("change", (v) => {
+      this.selectScene(v.value);
+    });
+    this.layers = new Layers(this.folder);
+    this.view.addChild(this.layers.view);
+  }
+  selectScene(scene, props = {}) {
+    if (this.currentScene) {
+      this.view.removeChild(this.currentScene);
+    }
+    if (!scene)
+      return;
+    this.currentScene = scenesSelected$1[scene.name];
+    if (!this.currentScene) {
+      scenesSelected$1[scene.name] = new scene(this.folder);
+    }
+    this.currentScene = scenesSelected$1[scene.name];
+    this.currentScene.resize(this.r);
+    this.currentScene.reset(props);
+    this.view.addChild(this.currentScene);
+    this.currentScene.animate && this.currentScene.animate();
+  }
+  getProps() {
+    return {
+      type: "LayersScene",
+      layers: {
+        ...this.layers.getProps()
+      },
+      scene: {
+        ...this.currentScene.getProps()
+      }
+    };
+  }
+  reset(data = {}) {
+    this.folder.hidden = false;
+    this.layers.reset(data.layers);
+    const scene = data.scene || defaultScene.scene;
+    this.selectScene(scenesMap$1[scene.type], scene);
+  }
+  update() {
+    this.layers.update();
+    this.currentScene && this.currentScene.update();
+  }
+  resize(radius) {
+    const r = radius + 2;
+    this.r = r;
+    this.currentScene && this.currentScene.resize(this.r);
+    this.layers.resize(r);
+    this.layers.view.position.x = -r / 2;
+    this.layers.view.position.y = -r / 2;
+  }
+  hide() {
+    this.folder.hidden = true;
+  }
+}
+const scenes = [CakeScene, BoatScene, HeartScene, LayersScene];
+const scenesMap = {
+  "CakeScene": CakeScene,
+  "BoatScene": BoatScene,
+  "HeartsScene": HeartScene,
+  "LayersScene": LayersScene
+};
+const scenesSelected = {};
+class MiniScene {
+  constructor(pane) {
+    this.view = new Container$1();
+    this.scaleAnimation = 1;
+    this.onMiniSceneChange = new MiniSignal();
+    this.pane = pane;
+    this.bgContainer = new Container$1();
+    this.bg = new Graphics();
+    this.bg.beginFill(16777215).drawCircle(0, 0, 600);
+    this.bgMask = new Graphics();
+    this.bgMask.beginFill(16777215).drawCircle(0, 0, 600);
+    this.bgContainer.addChild(this.bg, this.bgMask);
+    this.view.addChild(this.bgContainer);
+    this.view.interactive = true;
+    this.currentScene = null;
+    this.containerScene = new Container$1();
+    this.view.addChild(this.containerScene);
+    pane.addInput(this.bg, "tint", {
+      view: "color"
+    });
+    this.containerScene.mask = this.bgMask;
+    this.pane.addBlade({
+      view: "list",
+      label: "scenes",
+      options: scenes.map((t) => ({
+        text: (t == null ? void 0 : t.name) || t,
+        value: t
+      })),
+      value: ""
+    }).on("change", (v) => {
+      this.selectScene(v.value);
+      this.onMiniSceneChange.dispatch(v.value);
+    });
+  }
+  selectScene(scene, props = {}) {
+    if (this.currentScene) {
+      this.currentScene.hide();
+      this.containerScene.removeChild(this.currentScene.view);
+    }
+    if (!scene)
+      return;
+    const bgColor = props.miniSceneColor;
+    this.bg.tint = bgColor || 16777215;
+    this.currentScene = scenesSelected[scene.name];
+    if (!this.currentScene) {
+      scenesSelected[scene.name] = new scene(this.pane);
+    }
+    this.currentScene = scenesSelected[scene.name];
+    this.currentScene.reset(props);
+    this.currentScene.resize(this.radius);
+    this.containerScene.addChild(this.currentScene.view);
+  }
+  setScaleAnimation(v) {
+    this.scaleAnimation = v;
+  }
+  resetAnimation() {
+    this.bgContainer.scale.set(0);
+  }
+  scaleDown() {
+    gsapWithCSS.to([this.bgContainer.scale, this.containerScene.scale], {
+      x: 1,
+      y: 1,
+      duration: 1,
+      ease: "circ.out"
+    });
+    gsapWithCSS.to(this.view, {
+      y: 0,
+      duration: 1,
+      ease: "circ.out"
+    });
+  }
+  animate() {
+    this.bgContainer.scale.set(0);
+    this.containerScene.scale.set(this.scaleAnimation);
+    this.containerScene.position.y = 250;
+    this.containerScene.rotation = 0.2;
+    this.animated = false;
+    gsapWithCSS.to(this.bgContainer.scale, {
+      x: this.scaleAnimation,
+      y: this.scaleAnimation,
+      duration: 1.4,
+      ease: "elastic.out(1, 0.75)",
+      onComplete: () => {
+        this.animated = true;
+      }
+    });
+    gsapWithCSS.to(this.containerScene, {
+      y: 0,
+      rotation: 0,
+      duration: 1,
+      ease: "back.out(2)",
+      onComplete: () => {
+        this.animated = true;
+      }
+    });
+  }
+  reset(data) {
+    this.data = data;
+    this.selectScene(scenesMap[data.type], data);
+  }
+  update() {
+    this.currentScene && this.currentScene.update();
+  }
+  resize(radius) {
+    this.radius = radius;
+    this.bg.scale.set(1);
+    this.bg.scale.set(radius / this.bg.width);
+    this.bgMask.scale.set(this.bg.scale.x);
+    if (this.currentScene) {
+      this.currentScene.resize(radius);
+    }
+  }
+}
 var frag$2 = `
 uniform float uRatio;
 uniform float uRadius;
@@ -34765,7 +36738,6 @@ function rgb2rgbBig([r, g, b]) {
   return [r * 255, g * 255, b * 255];
 }
 function hex2rgb(hex) {
-  console.log("\u{1F680} ~ file: colors.js ~ line 19 ~ hex2rgb ~ hex", hex);
   hex = hex.replace("#", "0x");
   var bigint = parseInt(hex, 16);
   var r = bigint >> 16 & 255;
@@ -34843,12 +36815,13 @@ class Background1 {
     };
   }
   reset(data = {}) {
-    this.shader.uniforms.uMinAlphaValue = data.alphaMin || this.shader.uniforms.uMinAlphaValue;
-    this.shader.uniforms.uAlphaGlobal = data.alphaGlobal || this.shader.uniforms.uAlphaGlobal;
-    this.shader.uniforms.uScaleValue = data.scaleValue || this.shader.uniforms.uScaleValue;
-    this.shader.uniforms.uAlphaValue = data.alphaValue || this.shader.uniforms.uAlphaValue;
-    this.radius = data.radius || this.radius;
-    this.columnWidth = data.columnWidth || this.columnWidth;
+    var _a2, _b2, _c2, _d, _e, _f;
+    this.shader.uniforms.uMinAlphaValue = (_a2 = data.alphaMin) != null ? _a2 : this.shader.uniforms.uMinAlphaValue;
+    this.shader.uniforms.uAlphaGlobal = (_b2 = data.alphaGlobal) != null ? _b2 : this.shader.uniforms.uAlphaGlobal;
+    this.shader.uniforms.uScaleValue = (_c2 = data.scaleValue) != null ? _c2 : this.shader.uniforms.uScaleValue;
+    this.shader.uniforms.uAlphaValue = (_d = data.alphaValue) != null ? _d : this.shader.uniforms.uAlphaValue;
+    this.radius = (_e = data.radius) != null ? _e : this.radius;
+    this.columnWidth = (_f = data.columnWidth) != null ? _f : this.columnWidth;
     this.color = rgb2hex(rgb2rgbBig(data.color || [1, 1, 1]));
     this.shader.uniforms.uColor = data.color || this.shader.uniforms.uColor;
     this.shader.uniforms.uRadius = this.radius;
@@ -42316,7 +44289,7 @@ class AnimatedText {
   createText(style) {
     this.clear();
     this.style = style || this.style;
-    this.title = "Happy Birthday Tommy!";
+    this.title = "Wow so much love!";
     let textMetrics = TextMetrics.measureText(this.title, style);
     this.view.pivot.set(textMetrics.width / 2, textMetrics.height / 2);
     this.letters = [];
@@ -42349,6 +44322,9 @@ class AnimatedText {
         if (line[index - 1]) {
           const charText = poolLetter.get();
           charText.reset(line[index - 1], g.x + g.scale.x / 2, index, style);
+          if (this._tint) {
+            charText.setColor(this._tint);
+          }
           this.letters.push(charText);
           lineContainer.addChild(charText.view);
           charText.view.letter = charText;
@@ -42423,211 +44399,6 @@ class Letter {
   update() {
   }
 }
-var themes = [
-  {
-    text: { color: "0xffffff" },
-    background: {
-      color: "0xFF502B",
-      properties: {
-        type: "Dots",
-        alphaMin: 0.2,
-        alphaGlobal: 0.6847826086956522,
-        scaleValue: 1.532608695652174,
-        alphaValue: 0.43478260869565216,
-        radius: 0.05304347826086957,
-        columnWidth: 30.543478260869563,
-        color: [1, 1, 1]
-      }
-    },
-    cake: {
-      type: "classic",
-      color1: "0xefe7dc",
-      color2: "0xff502b",
-      color3: "0xff8773",
-      toppings: {
-        main: { type: "Chantilly", nbBalls: 5, color: "0xEFE7DC" },
-        secondary: [{ type: "Sugar", color: "0xffffff" }]
-      }
-    },
-    candle: { color: "0x0369f2" }
-  },
-  {
-    background: {
-      color: "0xff85d6",
-      properties: {
-        type: "Sprinkles",
-        alpha: 0.2391304347826087,
-        size: { x: 0.4852941176470589, y: 0.1796875 },
-        columnWidth: 68.69565217391305
-      }
-    },
-    cake: {
-      type: "classic",
-      color1: "0xffebc2",
-      color2: "0xff85d6",
-      color3: "0xffcff1",
-      toppings: {
-        main: { type: "Cherry" },
-        secondary: [
-          { type: "Sprinkles", color1: "0x2332F7", color2: "0x52EA49" }
-        ]
-      }
-    },
-    candle: { color: "0xc5c5ff" }
-  },
-  {
-    background: {
-      color: "0x966446",
-      properties: {
-        type: "Leaves",
-        alpha: 0.2,
-        sizeDivider: 1.75,
-        columnWidth: 80
-      }
-    },
-    cake: {
-      type: "layer",
-      color1: "0xb18052",
-      color2: "0x966446",
-      color3: "0x604639",
-      toppings: { main: { type: "Leaves" }, secondary: [] }
-    },
-    candle: { color: "0xffc973" }
-  },
-  {
-    text: { color: "0xffffff" },
-    background: {
-      color: "0x1c215f",
-      properties: {
-        type: "Dots",
-        alphaMin: 0.043478260869565216,
-        alphaGlobal: 0.6847826086956522,
-        scaleValue: 1.3369565217391304,
-        alphaValue: 0.2,
-        radius: 0.08532608695652173,
-        columnWidth: 30.543478260869563,
-        color: [0.43529411764705883, 0.6392156862745098, 1]
-      }
-    },
-    cake: {
-      type: "classic",
-      color1: "0xf1e6d7",
-      color2: "0x4752d4",
-      color3: "0x92a6e7",
-      toppings: {
-        main: { type: "Cherry" },
-        secondary: [
-          { type: "Sprinkles", color1: "0xfcff00", color2: "0x07ff35" }
-        ]
-      }
-    },
-    candle: { color: "0xe667b1" }
-  },
-  {
-    text: { color: "0x555755" },
-    background: {
-      color: "0xfbf9f0",
-      properties: {
-        type: "Dots",
-        alphaMin: 0.06521739130434782,
-        alphaGlobal: 0.6847826086956522,
-        scaleValue: 1.3369565217391304,
-        alphaValue: 0.13043478260869565,
-        radius: 0.05304347826086957,
-        columnWidth: 20.76086956521739,
-        color: [0.23921568627450981, 0.24313725490196078, 0.24705882352941178]
-      }
-    },
-    cake: {
-      type: "classic",
-      color1: "0xf1e6d7",
-      color2: "0xb87e47",
-      color3: "0xdbd7bb",
-      toppings: {
-        main: { type: "Leaves" },
-        secondary: [{ type: "Sugar", color: "0x5f5426" }]
-      }
-    },
-    candle: { color: "0x66aab3" }
-  },
-  {
-    text: { color: "0xffffff" },
-    background: {
-      color: "0x5e9966",
-      properties: {
-        type: "Sprinkles",
-        alpha: 0.18478260869565216,
-        size: { x: 0.11764705882352944, y: 0.3216911764705883 },
-        columnWidth: 65.76086956521739,
-        color: [0.7098039215686275, 0.996078431372549, 0.7019607843137254]
-      }
-    },
-    cake: {
-      type: "classic",
-      color1: "0x73b87c",
-      color2: "0x4c7e53",
-      color3: "0xacdbab",
-      toppings: {
-        main: { type: "Chantilly", nbBalls: 6, color: "0xbeeac1" },
-        secondary: [{ type: "Sugar", color: "0xd8c678" }]
-      }
-    },
-    candle: { color: "0xe67f7b" }
-  },
-  {
-    text: { color: "0xffffff" },
-    background: {
-      color: "0x292929",
-      properties: {
-        type: "Dots",
-        alphaMin: 0.06521739130434782,
-        alphaGlobal: 0.6847826086956522,
-        scaleValue: 2.0869565217391304,
-        alphaValue: 0.2,
-        radius: 0.05304347826086957,
-        columnWidth: 20.76086956521739,
-        color: [0.7647058823529411, 0.7686274509803922, 0.7764705882352941]
-      }
-    },
-    cake: {
-      type: "classic",
-      color1: "0xe4d5ad",
-      color2: "0x983c08",
-      color3: "0xc15d24",
-      toppings: {
-        main: { type: "Cherry" },
-        secondary: [{ type: "Sugar", color: "0xffd10e" }]
-      }
-    },
-    candle: { color: "0xcf5050" }
-  },
-  {
-    text: { color: "0xffffff" },
-    background: {
-      color: "0x3b3b3b",
-      properties: {
-        type: "Leaves",
-        alpha: 0.2,
-        sizeDivider: 1.9456521739130435,
-        columnWidth: 100,
-        color: [0.27450980392156865, 0.26666666666666666, 0.26666666666666666]
-      }
-    },
-    cake: {
-      type: "classic",
-      color1: "0xe4d5ad",
-      color2: "0x3b3b3b",
-      color3: "0xc9cea7",
-      toppings: {
-        main: { type: "Cherry" },
-        secondary: [
-          { type: "Sprinkles", color1: "0xdaa6e4", color2: "0xffed07" }
-        ]
-      }
-    },
-    candle: { color: "0x4fcf76" }
-  }
-];
 function Url() {
   this._protocol = null;
   this._href = "";
@@ -43790,12 +45561,19 @@ QueryStringParser.prototype.parseString = function QueryStringParser$parseString
 };
 urlparser.queryString = querystringparser;
 const bgColors = ["0xFF502B", "0xFF85D6", "0x604639"];
+let currentThemes = cakes;
 let indTheme = -1;
 const anims = [Background1, Background2, Background3];
 const animsMap = {
   Dots: Background1,
   Sprinkles: Background2,
   Leaves: Background3
+};
+const miniScenesDataMap = {
+  "CakeScene": cakes,
+  "BoatScene": boats,
+  "HeartsScene": [],
+  "LayersScene": layers
 };
 const animations = {};
 const STATES = {
@@ -43838,9 +45616,10 @@ class Scene extends AbstractScene {
       this.animatedText.tint = this.textColorTint.replace("#", "0x");
     });
     const cakeFolder = this.pane.addFolder({
-      title: "Cake"
+      title: "Scene"
     });
     this.miniScene = new MiniScene(cakeFolder);
+    this.miniScene.onMiniSceneChange.add(this.changeData.bind(this));
     this.bgContainer = new Container$1();
     this.view.addChild(this.bgColor, this.bgContainer);
     anims.forEach((anim) => {
@@ -43872,8 +45651,13 @@ class Scene extends AbstractScene {
     pane.addSeparator();
     this.goTo(STATES.prepare);
   }
+  changeData(ClassMiniScene) {
+    indTheme = -1;
+    currentThemes = miniScenesDataMap[ClassMiniScene.name] || [];
+    this.next();
+  }
   export() {
-    const cake = this.miniScene.cake;
+    const currentScene = this.miniScene.currentScene;
     const obj = {
       text: {
         color: this.animatedText.tint
@@ -43884,11 +45668,9 @@ class Scene extends AbstractScene {
           ...this.currentAnimation.getProps()
         }
       },
-      cake: {
-        ...cake.getProps()
-      },
-      candle: {
-        color: this.miniScene.colorCandle.replace("#", "0x")
+      scene: {
+        miniSceneColor: this.miniScene.bg.tint,
+        ...currentScene.getProps()
       }
     };
     console.log(JSON.stringify(obj));
@@ -43898,11 +45680,15 @@ class Scene extends AbstractScene {
     this.miniScene.resetAnimation();
   }
   goTo(state) {
+    var _a2, _b2;
     this.currentState = state;
     switch (state) {
       case STATES.prepare:
         this.resetScene();
         this.animatedText.hide();
+        if (miniScenesDataMap[(_a2 = currentConfig == null ? void 0 : currentConfig.scene) == null ? void 0 : _a2.type]) {
+          currentThemes = miniScenesDataMap[(_b2 = currentConfig == null ? void 0 : currentConfig.scene) == null ? void 0 : _b2.type];
+        }
         this.next(currentConfig);
         gsapWithCSS.delayedCall(1, this.goTo.bind(this, STATES.animateScene));
         break;
@@ -43917,17 +45703,18 @@ class Scene extends AbstractScene {
     }
   }
   next(data) {
+    console.log("\u{1F680} ~ file: Scene.js ~ line 254 ~ Scene ~ next ~ currentThemes", currentThemes);
     if (!data) {
       indTheme++;
-      indTheme %= themes.length;
-      data = themes[indTheme];
+      indTheme %= currentThemes.length;
+      data = currentThemes[indTheme];
     } else {
       data = currentConfig;
     }
     const { background, text } = data;
     this.bgColor.tint = background.color;
     this.animatedText.tint = (text == null ? void 0 : text.color) || "0xffffff";
-    this.miniScene.reset(data);
+    this.miniScene.reset(data.scene);
     const bgProps = background.properties;
     this.selectAnimation(animsMap[bgProps.type], bgProps);
     this.originalPane.refresh();
@@ -44004,7 +45791,20 @@ var assets = {
     { src: "./assets/images/bg-pattern1.png" },
     { src: "./assets/images/flame.png" },
     { src: "./assets/images/cherry.png" },
-    { src: "./assets/images/leaf.png" }
+    { src: "./assets/images/leaf.png" },
+    { src: "./assets/images/hand-waving.png" },
+    { src: "./assets/images/heart.png" },
+    { src: "./assets/images/waves.png" },
+    { src: "./assets/images/boat.png" },
+    { src: "./assets/images/boat-base.png" },
+    { src: "./assets/images/boat-base-2.png" },
+    { src: "./assets/images/boat-sails.png" },
+    { src: "./assets/images/dune.png" },
+    { src: "./assets/images/tree.png" },
+    { src: "./assets/images/xmastree.png" },
+    { src: "./assets/images/half-xmastree.png" },
+    { src: "./assets/images/star.png" },
+    { src: "./assets/images/astronaut.png" }
   ],
   fonts: ["Poppins:600", "Poppins:700"]
 };
@@ -44370,6 +46170,8 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
   }
 }
 var Emitter = events.exports;
+const circle = new Graphics();
+circle.beginFill(16777215).drawCircle(0, 0, 50);
 let app = null;
 let renderer = null;
 class MainApp extends Emitter {
@@ -44422,6 +46224,7 @@ class MainApp extends Emitter {
     this.preloader.onLoaderComplete.then(() => {
       this._onAssetsLoaded();
     });
+    TextureCache["circle"] = renderer.generateTexture(circle, void 0, 2);
   }
   _onAssetsLoaded(o) {
     if (!this.isSupported)
