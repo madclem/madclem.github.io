@@ -34763,7 +34763,7 @@ const layers = [
     },
     scene: {
       miniSceneColor: 16777215,
-      type: "LayersScene",
+      type: "PaperCutScene",
       layers: {
         colorsBaseLayer: [
           { r: 17.91412353515625, g: 111.5456793501571, b: 114.650390625 },
@@ -34811,7 +34811,7 @@ const layers = [
     },
     scene: {
       miniSceneColor: 16777215,
-      type: "LayersScene",
+      type: "PaperCutScene",
       layers: {
         colorsBaseLayer: [
           { r: 34, g: 71, b: 150 },
@@ -34852,7 +34852,7 @@ const layers = [
     },
     scene: {
       miniSceneColor: 16777215,
-      type: "LayersScene",
+      type: "PaperCutScene",
       layers: {
         colorsBaseLayer: [
           { r: 34, g: 71, b: 150 },
@@ -34887,7 +34887,6 @@ const layers = [
 const defaultCake = cakes[0];
 class CakeScene {
   constructor(pane) {
-    this.name = "CakeScene";
     this.view = new Container$1();
     this.scaleAnimation = 1;
     this.age = "51";
@@ -35023,6 +35022,7 @@ class CakeScene {
     this.folder.hidden = true;
   }
 }
+__publicField(CakeScene, "name", "CakeScene");
 class MiniSignalBinding {
   constructor(fn, once3 = false, thisArg) {
     this._fn = fn;
@@ -35134,7 +35134,6 @@ const poolExplosion = new ObjectPool(() => {
 });
 class HeartScene {
   constructor(pane) {
-    this.name = "HeartScene";
     this.view = new Container$1();
     this.pane = pane;
     this.folder = this.pane.addFolder({
@@ -35202,6 +35201,7 @@ class HeartScene {
     this.folder.hidden = true;
   }
 }
+__publicField(HeartScene, "name", "HeartScene");
 const tintsHearts = [
   "0xff4d4d",
   "0xf2825a",
@@ -35489,7 +35489,6 @@ new ObjectPool(() => {
 });
 class BoatScene {
   constructor(pane) {
-    this.name = "BoatScene";
     this.view = new Container$1();
     this.pane = pane;
     this.folder = this.pane.addFolder({
@@ -35525,6 +35524,7 @@ class BoatScene {
     this.folder.hidden = true;
   }
 }
+__publicField(BoatScene, "name", "BoatScene");
 var simplex3d = `
 vec3 mod289(vec3 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -35852,7 +35852,6 @@ void main(void)
 `;
 class HueEffect {
   constructor() {
-    this.name = "HueEffect";
     this.filter = new filters.ColorMatrixFilter();
     this.tick = 0;
   }
@@ -35885,6 +35884,7 @@ class HueEffect {
     this.filter.hue(t);
   }
 }
+__publicField(HueEffect, "name", "HueEffect");
 const colorsBoreal = [
   { r: 34, g: 150, b: 88 },
   { r: 34, g: 150, b: 144 },
@@ -35894,7 +35894,6 @@ const colorsBoreal = [
 ];
 class BorealEffect {
   constructor() {
-    this.name = "BorealEffect";
     this.tick = 0;
   }
   start(layers2, props) {
@@ -35946,6 +35945,7 @@ class BorealEffect {
   update() {
   }
 }
+__publicField(BorealEffect, "name", "BorealEffect");
 const effects = ["", BorealEffect, HueEffect];
 const effectsMap = {
   "BorealEffect": BorealEffect,
@@ -36289,7 +36289,6 @@ class Light extends Graphics {
 class ChristmasScene extends Container$1 {
   constructor(pane) {
     super();
-    this.name = "ChristmasScene";
     const snowFolder = pane.addFolder({
       title: "Snow"
     });
@@ -36413,11 +36412,11 @@ class ChristmasScene extends Container$1 {
     this.xmasTree.scale.set(r * 0.5 / this.xmasTree.height);
   }
 }
+__publicField(ChristmasScene, "name", "ChristmasScene");
 class AstronautScene extends Container$1 {
   constructor(pane) {
     super();
     this.tick = 0;
-    this.name = "AstronautScene";
     this.astronaut = Sprite.from("./assets/images/astronaut.png");
     this.astronaut.anchor.set(0.5);
     this.astronaut.baseRotation = 0;
@@ -36459,6 +36458,7 @@ class AstronautScene extends Container$1 {
     this.radius = radius;
   }
 }
+__publicField(AstronautScene, "name", "AstronautScene");
 const defaultScene = layers[0];
 const scenes$1 = [AstronautScene, ChristmasScene];
 const scenesMap$1 = {
@@ -36466,9 +36466,8 @@ const scenesMap$1 = {
   "AstronautScene": AstronautScene
 };
 const scenesSelected$1 = {};
-class LayersScene {
+class PaperCutScene {
   constructor(pane) {
-    this.name = "LayersScene";
     this.view = new Container$1();
     this.pane = pane;
     this.folder = this.pane.addFolder({
@@ -36478,10 +36477,13 @@ class LayersScene {
     this.folder.addBlade({
       view: "list",
       label: "Mini scene",
-      options: scenes$1.map((t) => ({
-        text: (t == null ? void 0 : t.name) || t,
-        value: t
-      })),
+      options: scenes$1.map((t) => {
+        console.log("\u{1F680} ~ file: index.js ~ line 42 ~ PaperCutScene ~ options:scenes.map ~ t", t);
+        return {
+          text: (t == null ? void 0 : t.name) || t,
+          value: t
+        };
+      }),
       value: "ChristmasScene"
     }).on("change", (v) => {
       this.selectScene(v.value);
@@ -36507,7 +36509,7 @@ class LayersScene {
   }
   getProps() {
     return {
-      type: "LayersScene",
+      type: "PaperCutScene",
       layers: {
         ...this.layers.getProps()
       },
@@ -36538,12 +36540,13 @@ class LayersScene {
     this.folder.hidden = true;
   }
 }
-const scenes = [CakeScene, BoatScene, HeartScene, LayersScene];
+__publicField(PaperCutScene, "name", "PaperCutScene");
+const scenes = [CakeScene, BoatScene, HeartScene, PaperCutScene];
 const scenesMap = {
   "CakeScene": CakeScene,
   "BoatScene": BoatScene,
   "HeartsScene": HeartScene,
-  "LayersScene": LayersScene
+  "PaperCutScene": PaperCutScene
 };
 const scenesSelected = {};
 class MiniScene {
@@ -45573,7 +45576,7 @@ const miniScenesDataMap = {
   "CakeScene": cakes,
   "BoatScene": boats,
   "HeartsScene": [],
-  "LayersScene": layers
+  "PaperCutScene": layers
 };
 const animations = {};
 const STATES = {
