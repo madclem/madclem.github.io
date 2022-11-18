@@ -35850,7 +35850,7 @@ void main(void)
   vTextureCoord=vec3(aTextureCoord,1.).xy;
 }
 `;
-class HueEffect {
+const _HueEffect = class {
   constructor() {
     this.filter = new filters.ColorMatrixFilter();
     this.tick = 0;
@@ -35875,7 +35875,7 @@ class HueEffect {
   }
   getProps() {
     return {
-      type: this.name
+      type: _HueEffect.name
     };
   }
   update() {
@@ -35883,7 +35883,8 @@ class HueEffect {
     let t = this.tick % 360;
     this.filter.hue(t);
   }
-}
+};
+let HueEffect = _HueEffect;
 __publicField(HueEffect, "name", "HueEffect");
 const colorsBoreal = [
   { r: 34, g: 150, b: 88 },
@@ -35892,7 +35893,7 @@ const colorsBoreal = [
   { r: 119, g: 34, b: 150 },
   { r: 80, g: 102, b: 0 }
 ];
-class BorealEffect {
+const _BorealEffect = class {
   constructor() {
     this.tick = 0;
   }
@@ -35939,12 +35940,13 @@ class BorealEffect {
   }
   getProps() {
     return {
-      type: this.name
+      type: _BorealEffect.name
     };
   }
   update() {
   }
-}
+};
+let BorealEffect = _BorealEffect;
 __publicField(BorealEffect, "name", "BorealEffect");
 const effects = ["", BorealEffect, HueEffect];
 const effectsMap = {
@@ -36286,7 +36288,7 @@ class Light extends Graphics {
     this.alpha = a;
   }
 }
-class ChristmasScene extends Container$1 {
+const _ChristmasScene = class extends Container$1 {
   constructor(pane) {
     super();
     const snowFolder = pane.addFolder({
@@ -36343,7 +36345,7 @@ class ChristmasScene extends Container$1 {
   }
   getProps() {
     return {
-      type: this.name,
+      type: _ChristmasScene.name,
       colors: {
         back: this.furthestSnowTint,
         middle: this.snowBack1.tint,
@@ -36411,9 +36413,10 @@ class ChristmasScene extends Container$1 {
     this.xmasTree.scale.set(1);
     this.xmasTree.scale.set(r * 0.5 / this.xmasTree.height);
   }
-}
+};
+let ChristmasScene = _ChristmasScene;
 __publicField(ChristmasScene, "name", "ChristmasScene");
-class AstronautScene extends Container$1 {
+const _AstronautScene = class extends Container$1 {
   constructor(pane) {
     super();
     this.tick = 0;
@@ -36424,7 +36427,7 @@ class AstronautScene extends Container$1 {
   }
   getProps() {
     return {
-      type: this.name
+      type: _AstronautScene.name
     };
   }
   reset({ colors: colors2 } = {}) {
@@ -36457,7 +36460,8 @@ class AstronautScene extends Container$1 {
       return;
     this.radius = radius;
   }
-}
+};
+let AstronautScene = _AstronautScene;
 __publicField(AstronautScene, "name", "AstronautScene");
 const defaultScene = layers[0];
 const scenes$1 = [AstronautScene, ChristmasScene];
