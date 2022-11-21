@@ -37562,7 +37562,6 @@ class MiniScene {
       duration: 1,
       duration: isPaperCut ? 0.75 : 1,
       ease: isPaperCut ? "sin.out" : "back.out(2)",
-      ease: "sin.out",
       onComplete: () => {
         this.animated = true;
       }
