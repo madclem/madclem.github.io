@@ -42530,7 +42530,8 @@ const obj = {
   debug: false,
   alpha: currentConfig.alpha || 0.93,
   colorText: currentConfig.colorText || "#ffffff",
-  color: currentConfig.color || "0x000000"
+  color: currentConfig.color || "0x000000",
+  bgColor: currentConfig.bgColor || 15919576
 };
 const scaleText = 1;
 class TextComposition {
@@ -42540,14 +42541,6 @@ class TextComposition {
     this.colorTint = obj.color.replace("0x", "#");
     const folder = pane.addFolder({ title: "params", expanded: false });
     this.debug = obj.debug;
-    folder.addInput(this, "debug").on("change", () => {
-      this.containerDebug.visible = !!this.debug;
-    });
-    folder.addInput(this, "url").on("change", () => {
-      obj.url = this.url;
-      this.share();
-      window.location.reload();
-    });
     this.view = new Container$1();
     this.bg = new Sprite(Texture.WHITE);
     this.bg.tint = 15919576;
@@ -42608,10 +42601,31 @@ class TextComposition {
     this.renderTexture = renderTexture;
     const secondary = new Sprite(renderTexture);
     this.secondary = secondary;
+    folder.addInput(this.photo, "visible", {
+      label: "show photo"
+    }).on("change", () => {
+      this.bgGradient.view.visible = this.photo.visible;
+      this.animateReal();
+    });
+    folder.addInput(obj, "bgColor", {
+      view: "color"
+    }).on("change", () => {
+      this.bg.tint = obj.bgColor;
+    });
     folder.addInput(obj, "colorText").on("change", () => {
       this.rerender(() => {
         this.texts.forEach((t) => {
           t.style.fill = obj.colorText;
+        });
+      });
+    });
+    folder.addInput(this, "colorTint", {
+      label: "color trail"
+    }).on("change", () => {
+      obj.color = this.colorTint.replace("#", "0x");
+      this.rerender(() => {
+        this.texts.forEach((t) => {
+          t.style.stroke = this.colorTint;
         });
       });
     });
@@ -42634,13 +42648,14 @@ class TextComposition {
         otherTexture.x = mainText.width - otherTexture.width;
       });
     });
-    folder.addInput(this, "colorTint").on("change", () => {
-      obj.color = this.colorTint.replace("#", "0x");
-      this.rerender(() => {
-        this.texts.forEach((t) => {
-          t.style.stroke = this.colorTint;
-        });
-      });
+    folder.addSeparator();
+    folder.addInput(this, "debug").on("change", () => {
+      this.containerDebug.visible = !!this.debug;
+    });
+    folder.addInput(this, "url").on("change", () => {
+      obj.url = this.url;
+      this.share();
+      window.location.reload();
     });
     const clearButton = folder.addButton({
       title: "clear"
@@ -42654,6 +42669,10 @@ class TextComposition {
       title: "SHARE"
     });
     shareButton.on("click", this.share.bind(this));
+    const exportButton = pane.addButton({
+      title: "EXPORT"
+    });
+    exportButton.on("click", this.export.bind(this));
     this.retro = new RetroText({}, this.containerText, secondary);
     this.retro.alpha = obj.alpha;
     this.view.addChild(this.retro.view, this.containerText);
@@ -42735,6 +42754,15 @@ class TextComposition {
   }
   share() {
     window.history.pushState("Kindeo Title Slide", "Title", window.location.origin + window.location.pathname + "?config=" + encodeURIComponent(JSON.stringify(obj)));
+    console.log(JSON.stringify(obj));
+  }
+  export() {
+    console.log(JSON.stringify({
+      alpha: obj.alpha,
+      colorText: obj.colorText,
+      color: obj.color.replace("#", "0x"),
+      bgColor: obj.bgColor
+    }));
   }
   clear() {
     window.location.assign(window.location.href.replace(window.location.search, ""));
@@ -42817,7 +42845,6 @@ class TextComposition {
     this.maskSprite.position.y = h / 2;
     this.containerText.scale.set(1);
     this.containerText.scale.set(Math.min(1, this.w * 0.98 / this.containerText.width));
-    console.log(this.containerText.scale.x);
     this.secondary.scale.set(this.containerText.scale.x);
     this.resizePhoto();
     const xFinalText = 60 * this.containerText.scale.x + this.containerText.width;
@@ -42847,9 +42874,11 @@ class TextComposition {
     this.retro.setTo(-this.containerText.width, this.h);
     const diffRatio = this.containerText.width / this.w > 0.3;
     const offset = diffRatio ? 10 : 60;
+    const x = this.photo.visible ? offset * this.containerText.scale.x : this.w / 2 - this.containerText.width / 2;
+    const y = this.photo.visible ? this.h - this.containerText.height - offset : this.h / 2 - this.containerText.height / 2;
     gsapWithCSS.to(this.retro, {
-      x: offset * this.containerText.scale.x,
-      y: this.h - this.containerText.height - offset,
+      x,
+      y,
       duration: 1,
       ease: "sin.out",
       onComplete: () => {
