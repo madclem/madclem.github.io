@@ -42543,7 +42543,7 @@ class TextComposition {
     this.debug = obj.debug;
     this.view = new Container$1();
     this.bg = new Sprite(Texture.WHITE);
-    this.bg.tint = 15919576;
+    this.bg.tint = obj.bgColor;
     this.view.addChild(this.bg);
     this.photo = new Sprite.from(this.url || "./assets/images/clement-landscape.jpg");
     this.photo.anchor.set(0.5);
