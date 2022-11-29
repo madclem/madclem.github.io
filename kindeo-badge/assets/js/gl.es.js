@@ -35307,8 +35307,10 @@ class CakeScene {
   }
   getProps() {
     return {
-      type: "Cake",
-      ...this.cake.getProps(),
+      type: "CakeScene",
+      cake: {
+        ...this.cake.getProps()
+      },
       candle: {
         color: this.colorCandle.replace("#", "0x")
       }
