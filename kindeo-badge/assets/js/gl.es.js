@@ -35184,12 +35184,77 @@ const layers = [
     }
   }
 ];
+const hearts = [
+  {
+    text: { color: "0xffffff" },
+    background: {
+      color: "0xFF502B",
+      properties: {
+        type: "Dots",
+        alphaMin: 0.2,
+        alphaGlobal: 0.6847826086956522,
+        scaleValue: 1.532608695652174,
+        alphaValue: 0.43478260869565216,
+        radius: 0.05304347826086957,
+        columnWidth: 30.543478260869563,
+        color: [1, 1, 1]
+      }
+    },
+    scene: {
+      miniSceneColor: 16777215,
+      type: "HeartsScene",
+      colorsHearts: ["0xff4d4d", "0xf2825a", "0xff3374", "0xff0051"],
+      colorsParticles: ["0xa80022", "0xd60014", "0xff0000", "0xf7492e"]
+    }
+  },
+  {
+    text: { color: "0xf09d4f" },
+    background: {
+      color: "0xfffaf2",
+      properties: {
+        type: "Sprinkles",
+        alpha: 0.17391304347826086,
+        size: { x: 0.47058823529411775, y: 0.16498161764705888 },
+        columnWidth: 60.8695652173913,
+        color: [0.9490196078431372, 0.792156862745098, 0.44313725490196076]
+      }
+    },
+    scene: {
+      miniSceneColor: 16771536,
+      type: "HeartsScene",
+      colorsHearts: ["0xffaf00", "0xffc300", "0xe6a10a", "0xffc300"],
+      colorsParticles: ["0xe9c918", "0xaf9e3b", "0xdfbe04", "0xc3801a"]
+    }
+  },
+  {
+    text: { color: "0x2f5383" },
+    background: {
+      color: "0xe3efff",
+      properties: {
+        type: "Dots",
+        alphaMin: 0.5217391304347826,
+        alphaGlobal: 0.6086956521739131,
+        scaleValue: 3,
+        alphaValue: 0.6608695652173914,
+        radius: 0.01,
+        columnWidth: 16.847826086956523,
+        color: [0.4549019607843137, 0.611764705882353, 0.9372549019607843]
+      }
+    },
+    scene: {
+      miniSceneColor: 3101571,
+      type: "HeartsScene",
+      colorsHearts: ["0xc7ddec", "0x879dd6", "0x6d7eac", "0x97b8f2"],
+      colorsParticles: ["0xc2d3ff", "0xe5fc00", "0x99b9ff", "0x3500bc"]
+    }
+  }
+];
 const defaultCake = cakes[0];
 class CakeScene {
   constructor(pane) {
     this.view = new Container$1();
     this.scaleAnimation = 1;
-    this.age = "51";
+    this.age = "18";
     this.pane = pane;
     this.folder = this.pane.addFolder({
       title: "Cake",
@@ -35245,7 +35310,7 @@ class CakeScene {
       type: "Cake",
       ...this.cake.getProps(),
       candle: {
-        color: this.miniScene.colorCandle.replace("#", "0x")
+        color: this.colorCandle.replace("#", "0x")
       }
     };
   }
@@ -35428,11 +35493,25 @@ class MiniSignal {
     return this;
   }
 }
+const tintsHearts = [
+  "0xff4d4d",
+  "0xf2825a",
+  "0xff3374",
+  "0xff0051",
+  "0xd6005b"
+];
+const tintsParticles = [
+  "0xa80022",
+  "0xd60014",
+  "0xff0000",
+  "0xf7492e"
+];
+let colorsHeartsArray, colorsParticlesArray;
 const poolHearts = new ObjectPool(() => new Heart$1());
 const poolExplosion = new ObjectPool(() => {
   return new Sprite.from("circle");
 });
-class HeartScene {
+class HeartsScene {
   constructor(pane) {
     this.view = new Container$1();
     this.pane = pane;
@@ -35442,18 +35521,73 @@ class HeartScene {
     });
     this.tick = 0;
     this.hearts = [];
+    this.paramsColorsHearts = {
+      color1: tintsHearts[0],
+      color2: tintsHearts[1],
+      color3: tintsHearts[2],
+      color4: tintsHearts[3]
+    };
+    const folderHeartsColors = this.folder.addFolder({
+      title: "Hearts colors"
+    });
+    colorsHeartsArray = Object.keys(this.paramsColorsHearts).map((key) => {
+      return folderHeartsColors.addInput(this.paramsColorsHearts, key, {
+        view: "color"
+      }).on("change", () => {
+        this.paramsColorsHearts[key] = this.paramsColorsHearts[key].replace("#", "0x");
+        this.setHeartsColors();
+      });
+    });
+    this.paramsColorsParticles = {
+      color1: tintsParticles[0],
+      color2: tintsParticles[1],
+      color3: tintsParticles[2],
+      color4: tintsParticles[3]
+    };
+    const folderParticlesColors = this.folder.addFolder({
+      title: "Particles colors"
+    });
+    colorsParticlesArray = Object.keys(this.paramsColorsParticles).map((key) => {
+      return folderParticlesColors.addInput(this.paramsColorsParticles, key, {
+        view: "color"
+      }).on("change", () => {
+        this.paramsColorsParticles[key] = this.paramsColorsParticles[key].replace("#", "0x");
+        this.setParticlesColors();
+      });
+    });
+  }
+  setHeartsColors() {
+    this.hearts.forEach((h2) => h2.updateHeartsColors(Object.values(this.paramsColorsHearts)));
+  }
+  setParticlesColors() {
+    this.hearts.forEach((h2) => h2.updateParticlesColors(Object.values(this.paramsColorsParticles)));
   }
   getProps() {
     return {
-      type: "HeartsScene"
+      type: "HeartsScene",
+      colorsHearts: Object.values(this.paramsColorsHearts).filter((c, i, a) => !!c && a.indexOf(c) === i),
+      colorsParticles: Object.values(this.paramsColorsParticles).filter((c, i, a) => !!c && a.indexOf(c) === i)
     };
   }
-  reset() {
+  reset({ colorsHearts = tintsHearts, colorsParticles = tintsParticles } = {}) {
     this.folder.hidden = false;
+    let lastColorH;
+    Object.keys(this.paramsColorsHearts).forEach((key, ind3) => {
+      lastColorH = colorsHearts[ind3] || lastColorH;
+      this.paramsColorsHearts[key] = lastColorH;
+    });
+    colorsHeartsArray.forEach((inp) => inp.refresh());
+    let lastColorP;
+    Object.keys(this.paramsColorsParticles).forEach((key, ind3) => {
+      lastColorP = colorsParticles[ind3] || lastColorP;
+      this.paramsColorsParticles[key] = lastColorP;
+    });
+    colorsParticlesArray.forEach((inp) => inp.refresh());
   }
   addHeart() {
     const heart = poolHearts.get();
     const radius = this.radius;
+    heart.reset(Object.values(this.paramsColorsHearts), Object.values(this.paramsColorsParticles));
     heart.startX = Math.random() * radius - radius / 2;
     heart.position.x = heart.startX;
     heart.position.y = this.radius / 2 + Math.random() * 40;
@@ -35501,20 +35635,7 @@ class HeartScene {
     this.folder.hidden = true;
   }
 }
-__publicField(HeartScene, "name", "HeartScene");
-const tintsHearts = [
-  "0xff4d4d",
-  "0xf2825a",
-  "0xff3374",
-  "0xff0051",
-  "0xd6005b"
-];
-const tintsParticles = [
-  "0xa80022",
-  "0xd60014",
-  "0xff0000",
-  "0xf7492e"
-];
+__publicField(HeartsScene, "name", "HeartsScene");
 let ind = 0;
 let ind2 = 0;
 class Heart$1 extends Container$1 {
@@ -35525,12 +35646,24 @@ class Heart$1 extends Container$1 {
     this.addChild(this.heart);
     this.exploded = false;
     this.isDestroyed = false;
+    this.colorsHearts = [];
+    this.colorsParticles = [];
     this.particles = [];
   }
+  reset(colorsHearts, colorsParticles) {
+    this.colorsHearts = [...colorsHearts];
+    this.colorsParticles = [...colorsParticles];
+  }
+  updateHeartsColors(colorsHearts) {
+    this.colorsHearts = [...colorsHearts];
+  }
+  updateParticlesColors(colorsParticles) {
+    this.colorsParticles = [...colorsParticles];
+  }
   animate() {
-    this.heart.tint = [tintsHearts[ind2]];
+    this.heart.tint = [this.colorsHearts[ind2]];
     ind2++;
-    ind2 %= tintsHearts.length;
+    ind2 %= this.colorsHearts.length;
     this.isDestroyed = false;
     this.exploded = false;
     this.heart.scale.set(1);
@@ -35551,9 +35684,9 @@ class Heart$1 extends Container$1 {
     for (let i = 0; i < 10; i++) {
       const heartScale = Math.random() * 0.2 + 0.8;
       const particle = poolExplosion.get();
-      particle.tint = tintsParticles[ind];
+      particle.tint = this.colorsParticles[ind];
       ind++;
-      ind %= tintsParticles.length;
+      ind %= this.colorsParticles.length;
       particle.anchor.set(0.5);
       particle.scale.set(1);
       particle.scale.set(Math.min(1, (Math.random() * 10 + 5) / particle.width) * heartScale);
@@ -37461,11 +37594,11 @@ class PaperCutScene {
   }
 }
 __publicField(PaperCutScene, "name", "PaperCutScene");
-const scenes = [CakeScene, BoatScene, HeartScene, PaperCutScene];
+const scenes = [CakeScene, BoatScene, HeartsScene, PaperCutScene];
 const scenesMap = {
   "CakeScene": CakeScene,
   "BoatScene": BoatScene,
-  "HeartsScene": HeartScene,
+  "HeartsScene": HeartsScene,
   "PaperCutScene": PaperCutScene
 };
 const scenesSelected = {};
@@ -46480,7 +46613,7 @@ const animsMap = {
 const miniScenesDataMap = {
   "CakeScene": cakes,
   "BoatScene": boats,
-  "HeartsScene": [],
+  "HeartsScene": hearts,
   "PaperCutScene": layers
 };
 const animations = {};
@@ -46614,6 +46747,7 @@ class Scene extends AbstractScene {
     if (!data) {
       indTheme++;
       indTheme %= currentThemes.length;
+      console.log("\u{1F680} ~ file: Scene.js ~ line 259 ~ Scene ~ next ~ currentThemes", currentThemes);
       data = currentThemes[indTheme];
     } else {
       data = currentConfig;
