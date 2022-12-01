@@ -45099,7 +45099,7 @@ class Background2 {
   }
   getProps() {
     return {
-      type: "Sprinkles",
+      type: "Squares",
       alpha: this.shader.uniforms.uAlpha,
       size: this.shader.uniforms.uSize,
       columnWidth: this.columnWidth,
@@ -45272,7 +45272,7 @@ class Background3 {
   }
   getProps() {
     return {
-      type: "Leaves",
+      type: "Sprites",
       alpha: this.shader.uniforms.uAlpha,
       sizeDivider: this.shader.uniforms.uSizeDivider,
       columnWidth: this.columnWidth,
@@ -46610,7 +46610,9 @@ const anims = [Background1, Background2, Background3];
 const animsMap = {
   Dots: Background1,
   Sprinkles: Background2,
-  Leaves: Background3
+  Squares: Background2,
+  Leaves: Background3,
+  Sprites: Background3
 };
 const miniScenesDataMap = {
   "CakeScene": cakes,
@@ -46635,6 +46637,19 @@ class Scene extends AbstractScene {
     this.currentAnimation = null;
     const originalPane = new tweakpane.exports.Pane();
     this.originalPane = originalPane;
+    this.customConfig = "";
+    originalPane.addInput(this, "customConfig").on("change", () => {
+      let conf = this.customConfig.replace(/\s/g, "");
+      conf = conf.replaceAll(",}", "}");
+      conf = conf.replaceAll(",]", "]");
+      conf = conf.replaceAll(/\w+(?=:)/g, '"$&"');
+      if (conf[conf.length - 1] === ",") {
+        conf = conf.slice(0, -1);
+      }
+      console.log("conf", conf);
+      currentConfig = JSON.parse(conf);
+      this.next(currentConfig);
+    });
     const btnShare = originalPane.addButton({
       title: "Share"
     });
