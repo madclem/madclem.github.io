@@ -43207,10 +43207,16 @@ void main() {
 
     vec2 uv = rotate((vTextureCoord - 0.5) * 2., 3.14 / 12. + 3.14);
 
-    float uvX = uv.x + uPercentGlare;
-    float col = step(uvX, uGlareSize / 2.) - step(uvX, - uGlareSize / 2.);
+    // float glareSize = 0.1;
 
-    gl_FragColor = vec4(vec3(col), 1.);
+    float uvX = uv.x + uPercentGlare;
+    // float col = step(uvX, 0. + uGlareSize / 2.) - step(uvX, 0. - uGlareSize / 2.);
+
+    float col = smoothstep(0.  - uGlareSize / 2. - uGlareSize / 2.2, 0. - uGlareSize / 2., uvX);
+    col -= smoothstep(0. + uGlareSize / 2., 0. + uGlareSize / 2. + uGlareSize / 2.2, uvX);
+    
+
+    // gl_FragColor = vec4(vec3(col), 1.);
     gl_FragColor = vec4(color.rgb + col * uGlareAlpha * alpha, alpha);
     
 }
@@ -43375,7 +43381,7 @@ class CurveDeform {
     this.shader = Shader.from(vert, frag, {
       uTexture: this.renderTexture,
       uPercentGlare: -2,
-      uGlareAlpha: 0.3,
+      uGlareAlpha: 0.5,
       uGlareSize: 0.2
     });
     this.plane = new Mesh(this.geometry, this.shader);
@@ -43555,9 +43561,9 @@ class CurveDeform {
       return;
     const glareSize = 0.08 + Math.random() * 0.3;
     this.shader.uniforms.uGlareSize = glareSize;
-    this.shader.uniforms.uPercentGlare = -1 - glareSize / 2;
+    this.shader.uniforms.uPercentGlare = -1.5;
     gsapWithCSS.to(this.shader.uniforms, {
-      uPercentGlare: 1 + glareSize / 2,
+      uPercentGlare: 1.5 + glareSize / 2,
       duration: Math.random() + 0.6,
       onComplete: () => {
         gsapWithCSS.delayedCall(Math.random() * 1.2, this.animateGlare.bind(this));
