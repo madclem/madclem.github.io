@@ -41260,7 +41260,7 @@ class AnimatedLetters {
       lineContainer.scaleV = 1;
       this.view.addChild(lineContainer);
       this.lines.push(lineContainer);
-      const segmentedLine = segmentText(line);
+      const segmentedLine = segmentText(line.trim()).filter((c) => !!c);
       for (let index = 0; index <= segmentedLine.length; index++) {
         let text = segmentedLine.slice(0, index).join("");
         if (segmentedLine[index - 1] === " ") {
