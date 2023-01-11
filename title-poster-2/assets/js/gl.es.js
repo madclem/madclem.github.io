@@ -52,7 +52,7 @@ function allSettled(arr) {
   });
 }
 var setTimeoutFunc = setTimeout;
-function isArray$5(x) {
+function isArray$7(x) {
   return Boolean(x && typeof x.length !== "undefined");
 }
 function noop() {
@@ -176,7 +176,7 @@ Promise$1.prototype.then = function(onFulfilled, onRejected) {
 Promise$1.prototype["finally"] = finallyConstructor;
 Promise$1.all = function(arr) {
   return new Promise$1(function(resolve2, reject2) {
-    if (!isArray$5(arr)) {
+    if (!isArray$7(arr)) {
       return reject2(new TypeError("Promise.all accepts an array"));
     }
     var args = Array.prototype.slice.call(arr);
@@ -223,7 +223,7 @@ Promise$1.reject = function(value) {
 };
 Promise$1.race = function(arr) {
   return new Promise$1(function(resolve2, reject2) {
-    if (!isArray$5(arr)) {
+    if (!isArray$7(arr)) {
       return reject2(new TypeError("Promise.race accepts an array"));
     }
     for (var i = 0, len = arr.length; i < len; i++) {
@@ -263,7 +263,7 @@ object-assign
 @license MIT
 */
 var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
+var hasOwnProperty$2 = Object.prototype.hasOwnProperty;
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 function toObject(val) {
   if (val === null || val === void 0) {
@@ -310,7 +310,7 @@ var objectAssign = shouldUseNative() ? Object.assign : function(target, source) 
   for (var s = 1; s < arguments.length; s++) {
     from = Object(arguments[s]);
     for (var key in from) {
-      if (hasOwnProperty$1.call(from, key)) {
+      if (hasOwnProperty$2.call(from, key)) {
         to[key] = from[key];
       }
     }
@@ -1415,12 +1415,12 @@ var earcut$1 = earcut$2.exports;
 var punycode$2 = { exports: {} };
 /*! https://mths.be/punycode v1.3.2 by @mathias */
 (function(module, exports) {
-  (function(root) {
+  (function(root2) {
     var freeExports = exports && !exports.nodeType && exports;
     var freeModule = module && !module.nodeType && module;
-    var freeGlobal = typeof commonjsGlobal == "object" && commonjsGlobal;
-    if (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal || freeGlobal.self === freeGlobal) {
-      root = freeGlobal;
+    var freeGlobal2 = typeof commonjsGlobal == "object" && commonjsGlobal;
+    if (freeGlobal2.global === freeGlobal2 || freeGlobal2.window === freeGlobal2 || freeGlobal2.self === freeGlobal2) {
+      root2 = freeGlobal2;
     }
     var punycode2, maxInt = 2147483647, base = 36, tMin = 1, tMax = 26, skew = 38, damp = 700, initialBias = 72, initialN = 128, delimiter = "-", regexPunycode = /^xn--/, regexNonASCII = /[^\x20-\x7E]/, regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g, errors = {
       "overflow": "Overflow: input needs wider integers to process",
@@ -1634,7 +1634,7 @@ var punycode$2 = { exports: {} };
         }
       }
     } else {
-      root.punycode = punycode2;
+      root2.punycode = punycode2;
     }
   })(commonjsGlobal);
 })(punycode$2, punycode$2.exports);
@@ -1653,12 +1653,12 @@ var util$1 = {
   }
 };
 var querystring$2 = {};
-function hasOwnProperty(obj2, prop) {
+function hasOwnProperty$1(obj2, prop) {
   return Object.prototype.hasOwnProperty.call(obj2, prop);
 }
-var decode = function(qs, sep, eq, options) {
+var decode = function(qs, sep, eq2, options) {
   sep = sep || "&";
-  eq = eq || "=";
+  eq2 = eq2 || "=";
   var obj2 = {};
   if (typeof qs !== "string" || qs.length === 0) {
     return obj2;
@@ -1674,7 +1674,7 @@ var decode = function(qs, sep, eq, options) {
     len = maxKeys;
   }
   for (var i = 0; i < len; ++i) {
-    var x = qs[i].replace(regexp, "%20"), idx = x.indexOf(eq), kstr, vstr, k, v;
+    var x = qs[i].replace(regexp, "%20"), idx = x.indexOf(eq2), kstr, vstr, k, v;
     if (idx >= 0) {
       kstr = x.substr(0, idx);
       vstr = x.substr(idx + 1);
@@ -1684,7 +1684,7 @@ var decode = function(qs, sep, eq, options) {
     }
     k = decodeURIComponent(kstr);
     v = decodeURIComponent(vstr);
-    if (!hasOwnProperty(obj2, k)) {
+    if (!hasOwnProperty$1(obj2, k)) {
       obj2[k] = v;
     } else if (Array.isArray(obj2[k])) {
       obj2[k].push(v);
@@ -1706,15 +1706,15 @@ var stringifyPrimitive = function(v) {
       return "";
   }
 };
-var encode = function(obj2, sep, eq, name) {
+var encode = function(obj2, sep, eq2, name) {
   sep = sep || "&";
-  eq = eq || "=";
+  eq2 = eq2 || "=";
   if (obj2 === null) {
     obj2 = void 0;
   }
   if (typeof obj2 === "object") {
     return Object.keys(obj2).map(function(k) {
-      var ks = encodeURIComponent(stringifyPrimitive(k)) + eq;
+      var ks = encodeURIComponent(stringifyPrimitive(k)) + eq2;
       if (Array.isArray(obj2[k])) {
         return obj2[k].map(function(v) {
           return ks + encodeURIComponent(stringifyPrimitive(v));
@@ -1726,7 +1726,7 @@ var encode = function(obj2, sep, eq, name) {
   }
   if (!name)
     return "";
-  return encodeURIComponent(stringifyPrimitive(name)) + eq + encodeURIComponent(stringifyPrimitive(obj2));
+  return encodeURIComponent(stringifyPrimitive(name)) + eq2 + encodeURIComponent(stringifyPrimitive(obj2));
 };
 querystring$2.decode = querystring$2.parse = decode;
 querystring$2.encode = querystring$2.stringify = encode;
@@ -6300,13 +6300,13 @@ var InteractionManager = function(_super) {
     enumerable: false,
     configurable: true
   });
-  InteractionManager2.prototype.hitTest = function(globalPoint, root) {
+  InteractionManager2.prototype.hitTest = function(globalPoint, root2) {
     hitTestEvent.target = null;
     hitTestEvent.data.global = globalPoint;
-    if (!root) {
-      root = this.lastObjectRendered;
+    if (!root2) {
+      root2 = this.lastObjectRendered;
     }
-    this.processInteractive(hitTestEvent, root, null, true);
+    this.processInteractive(hitTestEvent, root2, null, true);
     return hitTestEvent.target;
   };
   InteractionManager2.prototype.setTargetElement = function(element, resolution) {
@@ -11711,10 +11711,10 @@ var ProjectionSystem = function() {
     this.projectionMatrix = new Matrix();
     this.transform = null;
   }
-  ProjectionSystem2.prototype.update = function(destinationFrame, sourceFrame, resolution, root) {
+  ProjectionSystem2.prototype.update = function(destinationFrame, sourceFrame, resolution, root2) {
     this.destinationFrame = destinationFrame || this.destinationFrame || this.defaultFrame;
     this.sourceFrame = sourceFrame || this.sourceFrame || destinationFrame;
-    this.calculateProjection(this.destinationFrame, this.sourceFrame, resolution, root);
+    this.calculateProjection(this.destinationFrame, this.sourceFrame, resolution, root2);
     if (this.transform) {
       this.projectionMatrix.append(this.transform);
     }
@@ -11725,9 +11725,9 @@ var ProjectionSystem = function() {
       renderer2.shader.syncUniformGroup(renderer2.shader.shader.uniforms.globals);
     }
   };
-  ProjectionSystem2.prototype.calculateProjection = function(_destinationFrame, sourceFrame, _resolution, root) {
+  ProjectionSystem2.prototype.calculateProjection = function(_destinationFrame, sourceFrame, _resolution, root2) {
     var pm = this.projectionMatrix;
-    var sign2 = !root ? 1 : -1;
+    var sign2 = !root2 ? 1 : -1;
     pm.identity();
     pm.a = 1 / sourceFrame.width * 2;
     pm.d = sign2 * (1 / sourceFrame.height * 2);
@@ -22785,9 +22785,9 @@ var TextFormat = function() {
       var attributeList = items[i].match(/[a-zA-Z]+=([^\s"']+|"([^"]*)")/gm);
       var itemData = {};
       for (var i_1 in attributeList) {
-        var split = attributeList[i_1].split("=");
-        var key = split[0];
-        var strValue2 = split[1].replace(/"/gm, "");
+        var split2 = attributeList[i_1].split("=");
+        var key = split2[0];
+        var strValue2 = split2[1].replace(/"/gm, "");
         var floatValue = parseFloat(strValue2);
         var value = isNaN(floatValue) ? strValue2 : floatValue;
         itemData[key] = value;
@@ -27880,13 +27880,13 @@ var hasSymbols$3 = typeof Symbol === "function" && typeof Symbol("foo") === "sym
 var toStr$6 = Object.prototype.toString;
 var concat = Array.prototype.concat;
 var origDefineProperty = Object.defineProperty;
-var isFunction = function(fn) {
+var isFunction$2 = function(fn) {
   return typeof fn === "function" && toStr$6.call(fn) === "[object Function]";
 };
 var hasPropertyDescriptors$1 = hasPropertyDescriptors_1();
 var supportsDescriptors = origDefineProperty && hasPropertyDescriptors$1;
 var defineProperty = function(object, name, value, predicate) {
-  if (name in object && (!isFunction(predicate) || !predicate())) {
+  if (name in object && (!isFunction$2(predicate) || !predicate())) {
     return;
   }
   if (supportsDescriptors) {
@@ -27992,9 +27992,9 @@ var supportsStandardArguments = function() {
 }();
 isStandardArguments.isLegacyArguments = isLegacyArguments;
 var isArguments$1 = supportsStandardArguments ? isStandardArguments : isLegacyArguments;
-var toString = {}.toString;
+var toString$2 = {}.toString;
 var isarray = Array.isArray || function(arr) {
-  return toString.call(arr) == "[object Array]";
+  return toString$2.call(arr) == "[object Array]";
 };
 var strValue = String.prototype.valueOf;
 var tryStringObject = function tryStringObject2(value) {
@@ -28095,7 +28095,7 @@ if (hasSymbols$5() || shams$1()) {
     }
   };
 } else {
-  var isArray$4 = isarray;
+  var isArray$6 = isarray;
   var isString$2 = isString$3;
   var GetIntrinsic$p = getIntrinsic;
   var $Map = GetIntrinsic$p("%Map%", true);
@@ -28137,7 +28137,7 @@ if (hasSymbols$5() || shams$1()) {
     };
   };
   var getNonCollectionIterator = function getNonCollectionIterator2(iterable, noPrimordialCollections) {
-    if (isArray$4(iterable) || isArguments4(iterable)) {
+    if (isArray$6(iterable) || isArguments4(iterable)) {
       return getArrayIterator(iterable);
     }
     if (isString$2(iterable)) {
@@ -28313,7 +28313,7 @@ var $RangeError = GetIntrinsic$m("%RangeError%");
 var $SyntaxError$1 = GetIntrinsic$m("%SyntaxError%");
 var $TypeError$d = GetIntrinsic$m("%TypeError%");
 var IsIntegralNumber$1 = IsIntegralNumber$2;
-var MAX_ARRAY_LENGTH = Math.pow(2, 32) - 1;
+var MAX_ARRAY_LENGTH$1 = Math.pow(2, 32) - 1;
 var $setProto = GetIntrinsic$m("%Object.setPrototypeOf%", true) || ([].__proto__ !== $ArrayPrototype ? null : function(O, proto) {
   O.__proto__ = proto;
   return O;
@@ -28322,7 +28322,7 @@ var ArrayCreate$1 = function ArrayCreate(length) {
   if (!IsIntegralNumber$1(length) || length < 0) {
     throw new $TypeError$d("Assertion failed: `length` must be an integer Number >= 0");
   }
-  if (length > MAX_ARRAY_LENGTH) {
+  if (length > MAX_ARRAY_LENGTH$1) {
     throw new $RangeError("length is greater than (2**32 - 1)");
   }
   var proto = arguments.length > 1 ? arguments[1] : $ArrayPrototype;
@@ -28359,7 +28359,7 @@ var weakSetHas = hasWeakSet ? WeakSet.prototype.has : null;
 var hasWeakRef = typeof WeakRef === "function" && WeakRef.prototype;
 var weakRefDeref = hasWeakRef ? WeakRef.prototype.deref : null;
 var booleanValueOf = Boolean.prototype.valueOf;
-var objectToString = Object.prototype.toString;
+var objectToString$2 = Object.prototype.toString;
 var functionToString = Function.prototype.toString;
 var $match$1 = String.prototype.match;
 var $slice$1 = String.prototype.slice;
@@ -28397,7 +28397,7 @@ function addNumericSeparator(num, str) {
 }
 var utilInspect = require$$0;
 var inspectCustom = utilInspect.custom;
-var inspectSymbol = isSymbol$2(inspectCustom) ? inspectCustom : null;
+var inspectSymbol = isSymbol$4(inspectCustom) ? inspectCustom : null;
 var objectInspect = function inspect_(obj2, options, depth, seen) {
   var opts = options || {};
   if (has$8(opts, "quoteStyle") && (opts.quoteStyle !== "single" && opts.quoteStyle !== "double")) {
@@ -28445,7 +28445,7 @@ var objectInspect = function inspect_(obj2, options, depth, seen) {
     depth = 0;
   }
   if (depth >= maxDepth && maxDepth > 0 && typeof obj2 === "object") {
-    return isArray$3(obj2) ? "[Array]" : "[Object]";
+    return isArray$5(obj2) ? "[Array]" : "[Object]";
   }
   var indent = getIndent(opts, depth);
   if (typeof seen === "undefined") {
@@ -28469,12 +28469,12 @@ var objectInspect = function inspect_(obj2, options, depth, seen) {
     }
     return inspect_(value, opts, depth + 1, seen);
   }
-  if (typeof obj2 === "function" && !isRegExp(obj2)) {
+  if (typeof obj2 === "function" && !isRegExp$2(obj2)) {
     var name = nameOf(obj2);
     var keys3 = arrObjKeys(obj2, inspect2);
     return "[Function" + (name ? ": " + name : " (anonymous)") + "]" + (keys3.length > 0 ? " { " + $join.call(keys3, ", ") + " }" : "");
   }
-  if (isSymbol$2(obj2)) {
+  if (isSymbol$4(obj2)) {
     var symString = hasShammedSymbols ? $replace$1.call(String(obj2), /^(Symbol\(.*\))_[^)]*$/, "$1") : symToString.call(obj2);
     return typeof obj2 === "object" && !hasShammedSymbols ? markBoxed(symString) : symString;
   }
@@ -28491,7 +28491,7 @@ var objectInspect = function inspect_(obj2, options, depth, seen) {
     s += "</" + $toLowerCase.call(String(obj2.nodeName)) + ">";
     return s;
   }
-  if (isArray$3(obj2)) {
+  if (isArray$5(obj2)) {
     if (obj2.length === 0) {
       return "[]";
     }
@@ -28553,7 +28553,7 @@ var objectInspect = function inspect_(obj2, options, depth, seen) {
   if (isString$1(obj2)) {
     return markBoxed(inspect2(String(obj2)));
   }
-  if (!isDate$1(obj2) && !isRegExp(obj2)) {
+  if (!isDate$1(obj2) && !isRegExp$2(obj2)) {
     var ys = arrObjKeys(obj2, inspect2);
     var isPlainObject = gPO ? gPO(obj2) === Object.prototype : obj2 instanceof Object || obj2.constructor === Object;
     var protoTag = obj2 instanceof Object ? "" : "null prototype";
@@ -28577,13 +28577,13 @@ function wrapQuotes(s, defaultStyle2, opts) {
 function quote(s) {
   return $replace$1.call(String(s), /"/g, "&quot;");
 }
-function isArray$3(obj2) {
+function isArray$5(obj2) {
   return toStr$4(obj2) === "[object Array]" && (!toStringTag || !(typeof obj2 === "object" && toStringTag in obj2));
 }
 function isDate$1(obj2) {
   return toStr$4(obj2) === "[object Date]" && (!toStringTag || !(typeof obj2 === "object" && toStringTag in obj2));
 }
-function isRegExp(obj2) {
+function isRegExp$2(obj2) {
   return toStr$4(obj2) === "[object RegExp]" && (!toStringTag || !(typeof obj2 === "object" && toStringTag in obj2));
 }
 function isError(obj2) {
@@ -28598,7 +28598,7 @@ function isNumber(obj2) {
 function isBoolean(obj2) {
   return toStr$4(obj2) === "[object Boolean]" && (!toStringTag || !(typeof obj2 === "object" && toStringTag in obj2));
 }
-function isSymbol$2(obj2) {
+function isSymbol$4(obj2) {
   if (hasShammedSymbols) {
     return obj2 && typeof obj2 === "object" && obj2 instanceof Symbol;
   }
@@ -28633,7 +28633,7 @@ function has$8(obj2, key) {
   return hasOwn.call(obj2, key);
 }
 function toStr$4(obj2) {
-  return objectToString.call(obj2);
+  return objectToString$2.call(obj2);
 }
 function nameOf(f) {
   if (f.name) {
@@ -28803,7 +28803,7 @@ function indentedJoin(xs, indent) {
   return lineJoiner + $join.call(xs, "," + lineJoiner) + "\n" + indent.prev;
 }
 function arrObjKeys(obj2, inspect2) {
-  var isArr = isArray$3(obj2);
+  var isArr = isArray$5(obj2);
   var xs = [];
   if (isArr) {
     xs.length = obj2.length;
@@ -28898,7 +28898,7 @@ var hasPropertyDescriptors2 = hasPropertyDescriptors_1;
 var GetIntrinsic$h = getIntrinsic;
 var $defineProperty = hasPropertyDescriptors2() && GetIntrinsic$h("%Object.defineProperty%", true);
 var hasArrayLengthDefineBug2 = hasPropertyDescriptors2.hasArrayLengthDefineBug();
-var isArray$2 = hasArrayLengthDefineBug2 && IsArray$4;
+var isArray$4 = hasArrayLengthDefineBug2 && IsArray$4;
 var callBound$7 = callBound$a;
 var $isEnumerable$1 = callBound$7("Object.prototype.propertyIsEnumerable");
 var DefineOwnProperty$2 = function DefineOwnProperty(IsDataDescriptor3, SameValue3, FromPropertyDescriptor3, O, P, desc) {
@@ -28916,7 +28916,7 @@ var DefineOwnProperty$2 = function DefineOwnProperty(IsDataDescriptor3, SameValu
     O[P] = V;
     return SameValue3(O[P], V);
   }
-  if (hasArrayLengthDefineBug2 && P === "length" && "[[Value]]" in desc && isArray$2(O) && O.length !== desc["[[Value]]"]) {
+  if (hasArrayLengthDefineBug2 && P === "length" && "[[Value]]" in desc && isArray$4(O) && O.length !== desc["[[Value]]"]) {
     O.length = desc["[[Value]]"];
     return O.length === desc["[[Value]]"];
   }
@@ -29482,7 +29482,7 @@ var isDateObject = function isDateObject2(value) {
   }
   return hasToStringTag ? tryDateObject(value) : toStr$1.call(value) === dateClass;
 };
-var isSymbol$1 = { exports: {} };
+var isSymbol$3 = { exports: {} };
 var toStr = Object.prototype.toString;
 var hasSymbols$1 = hasSymbols$5();
 if (hasSymbols$1) {
@@ -29494,7 +29494,7 @@ if (hasSymbols$1) {
     }
     return symStringRegex.test(symToStr.call(value));
   };
-  isSymbol$1.exports = function isSymbol2(value) {
+  isSymbol$3.exports = function isSymbol2(value) {
     if (typeof value === "symbol") {
       return true;
     }
@@ -29508,7 +29508,7 @@ if (hasSymbols$1) {
     }
   };
 } else {
-  isSymbol$1.exports = function isSymbol2(value) {
+  isSymbol$3.exports = function isSymbol2(value) {
     return false;
   };
 }
@@ -29516,7 +29516,7 @@ var hasSymbols2 = typeof Symbol === "function" && typeof Symbol.iterator === "sy
 var isPrimitive$1 = isPrimitive$2;
 var isCallable3 = isCallable$1;
 var isDate = isDateObject;
-var isSymbol = isSymbol$1.exports;
+var isSymbol$2 = isSymbol$3.exports;
 var ordinaryToPrimitive = function OrdinaryToPrimitive(O, hint) {
   if (typeof O === "undefined" || O === null) {
     throw new TypeError("Cannot call method on " + O);
@@ -29563,7 +29563,7 @@ var es2015 = function ToPrimitive(input) {
   if (hasSymbols2) {
     if (Symbol.toPrimitive) {
       exoticToPrim = GetMethod(input, Symbol.toPrimitive);
-    } else if (isSymbol(input)) {
+    } else if (isSymbol$2(input)) {
       exoticToPrim = Symbol.prototype.valueOf;
     }
   }
@@ -29574,7 +29574,7 @@ var es2015 = function ToPrimitive(input) {
     }
     throw new TypeError("unable to convert exotic object to primitive");
   }
-  if (hint === "default" && (isDate(input) || isSymbol(input))) {
+  if (hint === "default" && (isDate(input) || isSymbol$2(input))) {
     hint = "string";
   }
   return ordinaryToPrimitive(input, hint === "default" ? "number" : hint);
@@ -30885,9 +30885,9 @@ var _config = {
 }(), _wake = function _wake2() {
   return !_tickerActive && _ticker.wake();
 }, _easeMap = {}, _customEaseExp = /^[\d.\-M][\d.\-,\s]/, _quotesExp = /["']/g, _parseObjectInString = function _parseObjectInString2(value) {
-  var obj2 = {}, split = value.substr(1, value.length - 3).split(":"), key = split[0], i = 1, l = split.length, index, val, parsedVal;
+  var obj2 = {}, split2 = value.substr(1, value.length - 3).split(":"), key = split2[0], i = 1, l = split2.length, index, val, parsedVal;
   for (; i < l; i++) {
-    val = split[i];
+    val = split2[i];
     index = i !== l - 1 ? val.lastIndexOf(",") : val.length;
     parsedVal = val.substr(0, index);
     obj2[key] = isNaN(parsedVal) ? parsedVal.replace(_quotesExp, "").trim() : +parsedVal;
@@ -30898,8 +30898,8 @@ var _config = {
   var open = value.indexOf("(") + 1, close = value.indexOf(")"), nested = value.indexOf("(", open);
   return value.substring(open, ~nested && nested < close ? value.indexOf(")", close + 1) : close);
 }, _configEaseFromString = function _configEaseFromString2(name) {
-  var split = (name + "").split("("), ease = _easeMap[split[0]];
-  return ease && split.length > 1 && ease.config ? ease.config.apply(null, ~name.indexOf("{") ? [_parseObjectInString(split[1])] : _valueInParentheses(name).split(",").map(_numericIfPossible)) : _easeMap._CE && _customEaseExp.test(name) ? _easeMap._CE("", name) : ease;
+  var split2 = (name + "").split("("), ease = _easeMap[split2[0]];
+  return ease && split2.length > 1 && ease.config ? ease.config.apply(null, ~name.indexOf("{") ? [_parseObjectInString(split2[1])] : _valueInParentheses(name).split(",").map(_numericIfPossible)) : _easeMap._CE && _customEaseExp.test(name) ? _easeMap._CE("", name) : ease;
 }, _invertEase = function _invertEase2(ease) {
   return function(p) {
     return 1 - ease(1 - p);
@@ -33273,15 +33273,15 @@ var _win, _doc, _docElement, _pluginInitted, _tempDiv, _recentSetterPlugin, _rev
   right: "100%",
   center: "50%"
 }, _convertKeywordsToPercentages = function _convertKeywordsToPercentages2(value) {
-  var split = value.split(" "), x = split[0], y = split[1] || "50%";
+  var split2 = value.split(" "), x = split2[0], y = split2[1] || "50%";
   if (x === "top" || x === "bottom" || y === "left" || y === "right") {
     value = x;
     x = y;
     y = value;
   }
-  split[0] = _keywordToPercent[x] || x;
-  split[1] = _keywordToPercent[y] || y;
-  return split.join(" ");
+  split2[0] = _keywordToPercent[x] || x;
+  split2[1] = _keywordToPercent[y] || y;
+  return split2.join(" ");
 }, _renderClearProps = function _renderClearProps2(ratio, data) {
   if (data.tween && data.tween._time === data.tween._dur) {
     var target = data.t, style = target.style, props = data.u, cache = target._gsap, prop, clearTransforms, i;
@@ -33876,8 +33876,8 @@ gsap.core.getStyleSaver = _getStyleSaver;
   });
   _propertyAliases[all2[13]] = positionAndScale + "," + rotation;
   _forEachName(aliases, function(name) {
-    var split = name.split(":");
-    _propertyAliases[split[1]] = all2[split[0]];
+    var split2 = name.split(":");
+    _propertyAliases[split2[1]] = all2[split2[0]];
   });
 })("x,y,z,scale,scaleX,scaleY,xPercent,yPercent", "rotation,rotationX,rotationY,skewX,skewY", "transform,transformOrigin,svgOrigin,force3D,smoothOrigin,transformPerspective", "0:translateX,1:translateY,2:translateZ,8:rotate,8:rotationZ,8:rotateZ,9:rotateX,10:rotateY");
 _forEachName("x,y,z,top,right,bottom,left,width,height,fontSize,padding,margin,perspective", function(name) {
@@ -40986,6 +40986,257 @@ function shuffleArray(array) {
     array[j] = temp2;
   }
 }
+var freeGlobal$1 = typeof commonjsGlobal == "object" && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
+var _freeGlobal = freeGlobal$1;
+var freeGlobal = _freeGlobal;
+var freeSelf = typeof self == "object" && self && self.Object === Object && self;
+var root$1 = freeGlobal || freeSelf || Function("return this")();
+var _root = root$1;
+var root = _root;
+var Symbol$4 = root.Symbol;
+var _Symbol = Symbol$4;
+function arrayMap$1(array, iteratee) {
+  var index = -1, length = array == null ? 0 : array.length, result = Array(length);
+  while (++index < length) {
+    result[index] = iteratee(array[index], index, array);
+  }
+  return result;
+}
+var _arrayMap = arrayMap$1;
+var isArray$3 = Array.isArray;
+var isArray_1 = isArray$3;
+var Symbol$3 = _Symbol;
+var objectProto$1 = Object.prototype;
+var hasOwnProperty = objectProto$1.hasOwnProperty;
+var nativeObjectToString$1 = objectProto$1.toString;
+var symToStringTag$1 = Symbol$3 ? Symbol$3.toStringTag : void 0;
+function getRawTag$1(value) {
+  var isOwn = hasOwnProperty.call(value, symToStringTag$1), tag = value[symToStringTag$1];
+  try {
+    value[symToStringTag$1] = void 0;
+    var unmasked = true;
+  } catch (e) {
+  }
+  var result = nativeObjectToString$1.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag$1] = tag;
+    } else {
+      delete value[symToStringTag$1];
+    }
+  }
+  return result;
+}
+var _getRawTag = getRawTag$1;
+var objectProto = Object.prototype;
+var nativeObjectToString = objectProto.toString;
+function objectToString$1(value) {
+  return nativeObjectToString.call(value);
+}
+var _objectToString = objectToString$1;
+var Symbol$2 = _Symbol, getRawTag = _getRawTag, objectToString = _objectToString;
+var nullTag = "[object Null]", undefinedTag = "[object Undefined]";
+var symToStringTag = Symbol$2 ? Symbol$2.toStringTag : void 0;
+function baseGetTag$3(value) {
+  if (value == null) {
+    return value === void 0 ? undefinedTag : nullTag;
+  }
+  return symToStringTag && symToStringTag in Object(value) ? getRawTag(value) : objectToString(value);
+}
+var _baseGetTag = baseGetTag$3;
+function isObjectLike$2(value) {
+  return value != null && typeof value == "object";
+}
+var isObjectLike_1 = isObjectLike$2;
+var baseGetTag$2 = _baseGetTag, isObjectLike$1 = isObjectLike_1;
+var symbolTag = "[object Symbol]";
+function isSymbol$1(value) {
+  return typeof value == "symbol" || isObjectLike$1(value) && baseGetTag$2(value) == symbolTag;
+}
+var isSymbol_1 = isSymbol$1;
+var Symbol$1 = _Symbol, arrayMap = _arrayMap, isArray$2 = isArray_1, isSymbol = isSymbol_1;
+var INFINITY = 1 / 0;
+var symbolProto = Symbol$1 ? Symbol$1.prototype : void 0, symbolToString = symbolProto ? symbolProto.toString : void 0;
+function baseToString$2(value) {
+  if (typeof value == "string") {
+    return value;
+  }
+  if (isArray$2(value)) {
+    return arrayMap(value, baseToString$2) + "";
+  }
+  if (isSymbol(value)) {
+    return symbolToString ? symbolToString.call(value) : "";
+  }
+  var result = value + "";
+  return result == "0" && 1 / value == -INFINITY ? "-0" : result;
+}
+var _baseToString = baseToString$2;
+function baseSlice$1(array, start, end) {
+  var index = -1, length = array.length;
+  if (start < 0) {
+    start = -start > length ? 0 : length + start;
+  }
+  end = end > length ? length : end;
+  if (end < 0) {
+    end += length;
+  }
+  length = start > end ? 0 : end - start >>> 0;
+  start >>>= 0;
+  var result = Array(length);
+  while (++index < length) {
+    result[index] = array[index + start];
+  }
+  return result;
+}
+var _baseSlice = baseSlice$1;
+var baseSlice = _baseSlice;
+function castSlice$1(array, start, end) {
+  var length = array.length;
+  end = end === void 0 ? length : end;
+  return !start && end >= length ? array : baseSlice(array, start, end);
+}
+var _castSlice = castSlice$1;
+var rsAstralRange$1 = "\\ud800-\\udfff", rsComboMarksRange$1 = "\\u0300-\\u036f", reComboHalfMarksRange$1 = "\\ufe20-\\ufe2f", rsComboSymbolsRange$1 = "\\u20d0-\\u20ff", rsComboRange$1 = rsComboMarksRange$1 + reComboHalfMarksRange$1 + rsComboSymbolsRange$1, rsVarRange$1 = "\\ufe0e\\ufe0f";
+var rsZWJ$1 = "\\u200d";
+var reHasUnicode = RegExp("[" + rsZWJ$1 + rsAstralRange$1 + rsComboRange$1 + rsVarRange$1 + "]");
+function hasUnicode$2(string) {
+  return reHasUnicode.test(string);
+}
+var _hasUnicode = hasUnicode$2;
+function eq$1(value, other) {
+  return value === other || value !== value && other !== other;
+}
+var eq_1 = eq$1;
+function isObject$3(value) {
+  var type = typeof value;
+  return value != null && (type == "object" || type == "function");
+}
+var isObject_1 = isObject$3;
+var baseGetTag$1 = _baseGetTag, isObject$2 = isObject_1;
+var asyncTag = "[object AsyncFunction]", funcTag = "[object Function]", genTag = "[object GeneratorFunction]", proxyTag = "[object Proxy]";
+function isFunction$1(value) {
+  if (!isObject$2(value)) {
+    return false;
+  }
+  var tag = baseGetTag$1(value);
+  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
+}
+var isFunction_1 = isFunction$1;
+var MAX_SAFE_INTEGER$1 = 9007199254740991;
+function isLength$1(value) {
+  return typeof value == "number" && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER$1;
+}
+var isLength_1 = isLength$1;
+var isFunction = isFunction_1, isLength = isLength_1;
+function isArrayLike$1(value) {
+  return value != null && isLength(value.length) && !isFunction(value);
+}
+var isArrayLike_1 = isArrayLike$1;
+var MAX_SAFE_INTEGER = 9007199254740991;
+var reIsUint = /^(?:0|[1-9]\d*)$/;
+function isIndex$1(value, length) {
+  var type = typeof value;
+  length = length == null ? MAX_SAFE_INTEGER : length;
+  return !!length && (type == "number" || type != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
+}
+var _isIndex = isIndex$1;
+var eq = eq_1, isArrayLike = isArrayLike_1, isIndex = _isIndex, isObject$1 = isObject_1;
+function isIterateeCall$1(value, index, object) {
+  if (!isObject$1(object)) {
+    return false;
+  }
+  var type = typeof index;
+  if (type == "number" ? isArrayLike(object) && isIndex(index, object.length) : type == "string" && index in object) {
+    return eq(object[index], value);
+  }
+  return false;
+}
+var _isIterateeCall = isIterateeCall$1;
+var baseGetTag = _baseGetTag, isObjectLike = isObjectLike_1;
+var regexpTag = "[object RegExp]";
+function baseIsRegExp$1(value) {
+  return isObjectLike(value) && baseGetTag(value) == regexpTag;
+}
+var _baseIsRegExp = baseIsRegExp$1;
+function baseUnary$1(func) {
+  return function(value) {
+    return func(value);
+  };
+}
+var _baseUnary = baseUnary$1;
+var _nodeUtil = { exports: {} };
+(function(module, exports) {
+  var freeGlobal2 = _freeGlobal;
+  var freeExports = exports && !exports.nodeType && exports;
+  var freeModule = freeExports && true && module && !module.nodeType && module;
+  var moduleExports = freeModule && freeModule.exports === freeExports;
+  var freeProcess = moduleExports && freeGlobal2.process;
+  var nodeUtil2 = function() {
+    try {
+      var types = freeModule && freeModule.require && freeModule.require("util").types;
+      if (types) {
+        return types;
+      }
+      return freeProcess && freeProcess.binding && freeProcess.binding("util");
+    } catch (e) {
+    }
+  }();
+  module.exports = nodeUtil2;
+})(_nodeUtil, _nodeUtil.exports);
+var baseIsRegExp = _baseIsRegExp, baseUnary = _baseUnary, nodeUtil = _nodeUtil.exports;
+var nodeIsRegExp = nodeUtil && nodeUtil.isRegExp;
+var isRegExp$1 = nodeIsRegExp ? baseUnary(nodeIsRegExp) : baseIsRegExp;
+var isRegExp_1 = isRegExp$1;
+function asciiToArray$1(string) {
+  return string.split("");
+}
+var _asciiToArray = asciiToArray$1;
+var rsAstralRange = "\\ud800-\\udfff", rsComboMarksRange = "\\u0300-\\u036f", reComboHalfMarksRange = "\\ufe20-\\ufe2f", rsComboSymbolsRange = "\\u20d0-\\u20ff", rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange, rsVarRange = "\\ufe0e\\ufe0f";
+var rsAstral = "[" + rsAstralRange + "]", rsCombo = "[" + rsComboRange + "]", rsFitz = "\\ud83c[\\udffb-\\udfff]", rsModifier = "(?:" + rsCombo + "|" + rsFitz + ")", rsNonAstral = "[^" + rsAstralRange + "]", rsRegional = "(?:\\ud83c[\\udde6-\\uddff]){2}", rsSurrPair = "[\\ud800-\\udbff][\\udc00-\\udfff]", rsZWJ = "\\u200d";
+var reOptMod = rsModifier + "?", rsOptVar = "[" + rsVarRange + "]?", rsOptJoin = "(?:" + rsZWJ + "(?:" + [rsNonAstral, rsRegional, rsSurrPair].join("|") + ")" + rsOptVar + reOptMod + ")*", rsSeq = rsOptVar + reOptMod + rsOptJoin, rsSymbol = "(?:" + [rsNonAstral + rsCombo + "?", rsCombo, rsRegional, rsSurrPair, rsAstral].join("|") + ")";
+var reUnicode = RegExp(rsFitz + "(?=" + rsFitz + ")|" + rsSymbol + rsSeq, "g");
+function unicodeToArray$1(string) {
+  return string.match(reUnicode) || [];
+}
+var _unicodeToArray = unicodeToArray$1;
+var asciiToArray = _asciiToArray, hasUnicode$1 = _hasUnicode, unicodeToArray = _unicodeToArray;
+function stringToArray$1(string) {
+  return hasUnicode$1(string) ? unicodeToArray(string) : asciiToArray(string);
+}
+var _stringToArray = stringToArray$1;
+var baseToString$1 = _baseToString;
+function toString$1(value) {
+  return value == null ? "" : baseToString$1(value);
+}
+var toString_1 = toString$1;
+var baseToString = _baseToString, castSlice = _castSlice, hasUnicode = _hasUnicode, isIterateeCall = _isIterateeCall, isRegExp = isRegExp_1, stringToArray = _stringToArray, toString = toString_1;
+var MAX_ARRAY_LENGTH = 4294967295;
+function split(string, separator, limit) {
+  if (limit && typeof limit != "number" && isIterateeCall(string, separator, limit)) {
+    separator = limit = void 0;
+  }
+  limit = limit === void 0 ? MAX_ARRAY_LENGTH : limit >>> 0;
+  if (!limit) {
+    return [];
+  }
+  string = toString(string);
+  if (string && (typeof separator == "string" || separator != null && !isRegExp(separator))) {
+    separator = baseToString(separator);
+    if (!separator && hasUnicode(string)) {
+      return castSlice(stringToArray(string), 0, limit);
+    }
+  }
+  return string.split(separator, limit);
+}
+var split_1 = split;
+const segmenter = (Intl == null ? void 0 : Intl.Segmenter) && new Intl.Segmenter();
+let lodashSplit;
+if (!segmenter) {
+  lodashSplit = split_1;
+}
+const segmentText = (text) => {
+  return lodashSplit ? lodashSplit(text, "") : segmenter ? [...segmenter.segment(text)].map((x) => x.segment) : Array.from ? Array.from(text) : text.split("");
+};
 class AnimatedLetters {
   constructor(title, style) {
     this.style = style;
@@ -41009,11 +41260,12 @@ class AnimatedLetters {
       lineContainer.scaleV = 1;
       this.view.addChild(lineContainer);
       this.lines.push(lineContainer);
-      for (let index = 0; index <= line.length; index++) {
-        let text = line.substring(0, index);
-        if (line[index - 1] === " ") {
-          const lastCharacter = line[index - 2];
-          text = text.slice(0, -2);
+      const segmentedLine = segmentText(line);
+      for (let index = 0; index <= segmentedLine.length; index++) {
+        let text = segmentedLine.slice(0, index).join("");
+        if (segmentedLine[index - 1] === " ") {
+          const lastCharacter = segmentedLine[index - 2];
+          text = segmentText(text).slice(0, -2).join("");
           text += ` ${lastCharacter}`;
         }
         const g = { scale: {} };
@@ -41022,10 +41274,13 @@ class AnimatedLetters {
         g.scale.x = tmLine.width - lastX;
         g.scale.y = tmLine.height;
         lastX = tmLine.width;
-        const charText = new Letter(line[index - 1], g.x + g.scale.x / 2, index, this.style);
-        this.letters.push(charText);
-        lineContainer.addChild(charText.view);
-        charText.view.letter = charText;
+        const char = segmentedLine[index - 1];
+        if (char) {
+          const charText = new Letter(char, g.x + g.scale.x / 2, index, this.style, textMetrics);
+          this.letters.push(charText);
+          lineContainer.addChild(charText.view);
+          charText.view.letter = charText;
+        }
       }
     }
     this.width = this.view.width;
@@ -41054,20 +41309,34 @@ class AnimatedLetters {
   }
 }
 class Letter {
-  constructor(letter, x, index, style) {
+  constructor(letter, x, index, style, textMetrics) {
+    this.isEmoji = /\p{Emoji}/u.test(letter);
     this.view = new Container$1();
     this.text = new Text(letter, {
       ...style,
       fill: "0xffffff"
     });
-    {
+    this.text.scale.set(1);
+    if (this.isEmoji) {
+      const heightTextMetrics = textMetrics.fontProperties.ascent;
+      const heightText = this.text.height;
+      const padding = Math.max(0, heightText - heightTextMetrics);
+      if (padding > this.text.style.padding) {
+        this.text.style.padding = padding;
+        this.text.scale.set(0.8);
+      }
+    }
+    if (!this.isEmoji) {
       this.text.anchor.set(0.5, 0);
+    } else {
+      this.text.anchor.set(0.5, 0.5);
+      this.text.position.y = textMetrics.height / 2;
     }
     this.view.position.x = x;
     this.view.addChild(this.text);
   }
   setColor(c) {
-    this.text.tint = c;
+    this.text.style.fill = c;
   }
   animate(delay, duration, cb) {
   }
@@ -42964,9 +43233,6 @@ void main(void)
   vTextureCoord=vec3(aTextureCoord,1.).xy;
 }
 `;
-const formatText = (text) => {
-  return text.replaceAll("\\n", "\n");
-};
 const getFontWeights = (fontFamily) => {
   return assets.fonts.filter((f) => {
     return f.includes(fontFamily);
@@ -43366,7 +43632,7 @@ class CurveDeform {
       wordWrap: true,
       fontSize
     });
-    const { lines } = TextMetrics.measureText(formatText(this.currentTheme.text), style);
+    const { lines } = TextMetrics.measureText(this.currentTheme.text, style);
     this.geometry.segHeight = lines.length + 1;
     this.geometry.build();
     this.lines = [...lines];
