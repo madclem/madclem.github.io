@@ -43233,6 +43233,9 @@ void main(void)
   vTextureCoord=vec3(aTextureCoord,1.).xy;
 }
 `;
+const formatText = (text) => {
+  return text.replaceAll("\\n", "\n");
+};
 const getFontWeights = (fontFamily) => {
   return assets.fonts.filter((f) => {
     return f.includes(fontFamily);
@@ -43632,7 +43635,7 @@ class CurveDeform {
       wordWrap: true,
       fontSize
     });
-    const { lines } = TextMetrics.measureText(this.currentTheme.text, style);
+    const { lines } = TextMetrics.measureText(formatText(this.currentTheme.text), style);
     this.geometry.segHeight = lines.length + 1;
     this.geometry.build();
     this.lines = [...lines];
