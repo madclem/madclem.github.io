@@ -43048,10 +43048,6 @@ class CurveDeform {
         });
       }
       fontFolder.addInput(f, "useOnce").on("change", this.refreshFonts.bind(this));
-      fontFolder.addInput(f, "italic").on("change", () => {
-        f.fontStyle = f.italic ? "italic" : "";
-        this.refreshFonts();
-      });
       fontFolder.addInput(f, "active").on("change", this.refreshFonts.bind(this));
       fontFolder.addInput(f, "fontSize", {
         min: 20,
