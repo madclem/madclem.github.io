@@ -41241,12 +41241,14 @@ class AnimatedLetters {
   constructor(title, style) {
     this.style = style;
     let textMetrics = TextMetrics.measureText(title, this.style);
+    textMetrics.lines = textMetrics.lines.filter((l) => !!l.trim());
     this.lines = [];
     this.letters = [];
     this.view = new Container$1();
     {
       this.view.pivot.set(0, textMetrics.height / 2);
     }
+    let nLine = 0;
     for (let i = 0; i < textMetrics.lines.length; i++) {
       const line = textMetrics.lines[i];
       textMetrics.lines[i];
@@ -41256,11 +41258,11 @@ class AnimatedLetters {
       lineContainer.pivot.x = startX + textMetrics.lineWidths[i] / 2;
       lineContainer.pivot.y = textMetrics.lineHeight * 1.5;
       lineContainer.x = lineContainer.pivot.x;
-      lineContainer.y = textMetrics.lineHeight * (i + 0.5) + lineContainer.pivot.y;
+      lineContainer.y = textMetrics.lineHeight * (nLine + 0.5) + lineContainer.pivot.y;
       lineContainer.scaleV = 1;
       this.view.addChild(lineContainer);
       this.lines.push(lineContainer);
-      const segmentedLine = segmentText(line.trim()).filter((c) => !!c);
+      const segmentedLine = segmentText(line).filter((c) => !!c);
       for (let index = 0; index <= segmentedLine.length; index++) {
         let text = segmentedLine.slice(0, index).join("");
         if (segmentedLine[index - 1] === " ") {
@@ -41282,6 +41284,7 @@ class AnimatedLetters {
           charText.view.letter = charText;
         }
       }
+      nLine++;
     }
     this.width = this.view.width;
   }
@@ -43641,7 +43644,7 @@ class CurveDeform {
       wordWrap: true,
       fontSize
     });
-    const { lines } = TextMetrics.measureText(formatText(this.currentTheme.text), style);
+    const lines = TextMetrics.measureText(formatText(this.currentTheme.text), style).lines.filter((l) => !!l.trim());
     this.geometry.segHeight = lines.length + 1;
     this.geometry.build();
     this.lines = [...lines];
