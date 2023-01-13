@@ -43837,9 +43837,21 @@ class CurveDeform {
     });
   }
   share() {
-    this.currentTheme.colorLetters = Object.values(this.paramsColorsLetters);
-    window.history.pushState("Kindeo Title Slide", "Title", window.location.origin + window.location.pathname + "?config=" + encodeURIComponent(JSON.stringify(this.currentTheme)));
-    console.log(JSON.stringify(this.currentTheme));
+    const theme = {
+      ...this.currentTheme
+    };
+    console.log("\u{1F680} ~ file: index.js:1127 ~ share ~ theme", theme);
+    theme.fonts = theme.fonts.filter((f) => f.active && !f.hidden);
+    if (!theme.useDifferentFonts) {
+      const font = theme.fonts[0];
+      font.useOnce = false;
+      theme.fonts = [font];
+    }
+    theme.colorLetters = Object.values(this.paramsColorsLetters);
+    window.history.pushState("Kindeo Title Slide", "Title", window.location.origin + window.location.pathname + "?config=" + encodeURIComponent(JSON.stringify(theme)));
+    theme.name = "";
+    delete theme.text;
+    console.log(JSON.stringify(theme));
   }
 }
 urlparser.queryString = querystringparser;
