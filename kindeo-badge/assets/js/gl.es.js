@@ -23110,12 +23110,12 @@ var BitmapFont = function() {
       };
     }
     for (var i = 0; i < data.kerning.length; i++) {
-      var _f = data.kerning[i], first = _f.first, second = _f.second, amount = _f.amount;
-      first /= res;
+      var _f = data.kerning[i], first2 = _f.first, second = _f.second, amount = _f.amount;
+      first2 /= res;
       second /= res;
       amount /= res;
       if (this.chars[second]) {
-        this.chars[second].kerning[first] = amount;
+        this.chars[second].kerning[first2] = amount;
       }
     }
     this.distanceFieldRange = distanceField === null || distanceField === void 0 ? void 0 : distanceField.distanceRange;
@@ -23240,16 +23240,16 @@ var BitmapFont = function() {
       positionX = Math.ceil(positionX);
     }
     for (var i = 0, len = charsList.length; i < len; i++) {
-      var first = charsList[i];
+      var first2 = charsList[i];
       for (var j = 0; j < len; j++) {
         var second = charsList[j];
-        var c1 = context4.measureText(first).width;
+        var c1 = context4.measureText(first2).width;
         var c2 = context4.measureText(second).width;
-        var total = context4.measureText(first + second).width;
+        var total = context4.measureText(first2 + second).width;
         var amount = total - (c1 + c2);
         if (amount) {
           fontData.kerning.push({
-            first: extractCharCode(first),
+            first: extractCharCode(first2),
             second: extractCharCode(second),
             amount
           });
@@ -27578,11 +27578,11 @@ var $exec$2 = bind2.call(Function.call, RegExp.prototype.exec);
 var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
 var reEscapeChar = /\\(\\)?/g;
 var stringToPath = function stringToPath2(string) {
-  var first = $strSlice$1(string, 0, 1);
+  var first2 = $strSlice$1(string, 0, 1);
   var last = $strSlice$1(string, -1);
-  if (first === "%" && last !== "%") {
+  if (first2 === "%" && last !== "%") {
     throw new $SyntaxError$2("invalid intrinsic syntax, expected closing `%`");
-  } else if (last === "%" && first !== "%") {
+  } else if (last === "%" && first2 !== "%") {
     throw new $SyntaxError$2("invalid intrinsic syntax, expected opening `%`");
   }
   var result = [];
@@ -27637,9 +27637,9 @@ var getIntrinsic = function GetIntrinsic(name, allowMissing) {
   }
   for (var i = 1, isOwn = true; i < parts.length; i += 1) {
     var part = parts[i];
-    var first = $strSlice$1(part, 0, 1);
+    var first2 = $strSlice$1(part, 0, 1);
     var last = $strSlice$1(part, -1);
-    if ((first === '"' || first === "'" || first === "`" || (last === '"' || last === "'" || last === "`")) && first !== last) {
+    if ((first2 === '"' || first2 === "'" || first2 === "`" || (last === '"' || last === "'" || last === "`")) && first2 !== last) {
       throw new $SyntaxError$2("property names with quotes must have matching quotes");
     }
     if (part === "constructor" || !isOwn) {
@@ -28118,8 +28118,8 @@ if (hasSymbols$5() || shams$1()) {
     if (index + 1 >= length) {
       return index + 1;
     }
-    var first = $charCodeAt(S, index);
-    if (first < 55296 || first > 56319) {
+    var first2 = $charCodeAt(S, index);
+    if (first2 < 55296 || first2 > 56319) {
       return index + 1;
     }
     var second = $charCodeAt(S, index + 1);
@@ -32439,17 +32439,17 @@ var _setterPlain = function _setterPlain2(target, property, value) {
 }, _setterWithModifier = function _setterWithModifier2(target, property, value, data) {
   data.mSet(target, property, data.m.call(data.tween, value, data.mt), data);
 }, _sortPropTweensByPriority = function _sortPropTweensByPriority2(parent) {
-  var pt = parent._pt, next, pt2, first, last;
+  var pt = parent._pt, next, pt2, first2, last;
   while (pt) {
     next = pt._next;
-    pt2 = first;
+    pt2 = first2;
     while (pt2 && pt2.pr > pt.pr) {
       pt2 = pt2._next;
     }
     if (pt._prev = pt2 ? pt2._prev : last) {
       pt._prev._next = pt;
     } else {
-      first = pt;
+      first2 = pt;
     }
     if (pt._next = pt2) {
       pt2._prev = pt;
@@ -32458,7 +32458,7 @@ var _setterPlain = function _setterPlain2(target, property, value) {
     }
     pt = next;
   }
-  parent._pt = first;
+  parent._pt = first2;
 };
 var PropTween$1 = /* @__PURE__ */ function() {
   function PropTween2(next, target, prop, start, change, renderer2, data, setter, priority) {
@@ -34795,6 +34795,54 @@ const layers = [
     }
   },
   {
+    text: { color: "0xc92f5b" },
+    background: {
+      color: "0xf4dee4",
+      properties: {
+        type: "Dots",
+        alphaMin: 0.09782608695652174,
+        alphaGlobal: 0.1956521739130435,
+        scaleValue: 1.532608695652174,
+        alphaValue: 0.43478260869565216,
+        radius: 0.05304347826086957,
+        columnWidth: 30.543478260869563,
+        color: [1, 0.41568627450980394, 0.592156862745098]
+      }
+    },
+    scene: {
+      miniSceneColor: 16777215,
+      type: "PaperCutScene",
+      layers: {
+        colorsBaseLayer: [
+          { r: 255, g: 227.90625, b: 235.40026595744683 },
+          { r: 255, g: 228, b: 235 }
+        ],
+        colorsBackLayer: [
+          { r: 247.23046875, g: 193.1488037109375, b: 207.31304931640628 },
+          { r: 250.41796874999997, g: 203.464599609375, b: 215.7619105747768 }
+        ],
+        colorsMidLayer: [
+          { r: 255, g: 180.09375, b: 199.80592105263156 },
+          { r: 253.60546875, g: 212.394580078125, b: 223.3412223815918 }
+        ],
+        colorsFrontLayer: [
+          { r: 255, g: 149.8125, b: 177.36160714285722 },
+          { r: 247, g: 228, b: 233 }
+        ],
+        shadowOffset: 0.22,
+        shadowOpacity: 0.08999999999999997,
+        deformationFrequency: 1.3,
+        deformationAmplitude: 1.5,
+        deformationSpeed: 0.6,
+        effect: {}
+      },
+      scene: {
+        type: "PaperHeartScene",
+        heart: { colors: ["0xc92f5b", "0xa81b42", "0xc62d59", "0xd23864"] }
+      }
+    }
+  },
+  {
     text: { color: "0xffffff" },
     background: {
       color: "0x400049",
@@ -36609,7 +36657,7 @@ class Layers {
     this.currentEffect && this.currentEffect.update();
   }
 }
-const colors$1 = ["0x0D925D", "0x009243", "0x1BA369", "0x14B572"];
+const colors = ["0x0D925D", "0x009243", "0x1BA369", "0x14B572"];
 const colorsLight = [
   "0xF2D22E",
   "0xd77fe6",
@@ -36645,7 +36693,7 @@ class Tree extends Container$1 {
       const tree = Sprite.from("./assets/images/" + tex);
       const ind3 = Math.min(i, 2);
       tree.y = -ind3 * 5;
-      tree.tint = colors$1[i % colors$1.length];
+      tree.tint = colors[i % colors.length];
       tree.baseScale = 1;
       tree.anchor.set(0.5, 1);
       if (i === 2) {
@@ -36898,7 +36946,7 @@ const _AstronautScene = class extends Container$1 {
 };
 let AstronautScene = _AstronautScene;
 __publicField(AstronautScene, "name", "AstronautScene");
-const colors = ["0x920D33", "0x920029", "0xA31B42", "0xB51442"];
+const colorsDef = ["0xc92f5b", "0xa81b42", "0xc62d59", "0xd23864"];
 class PaperHeart extends Container$1 {
   constructor(pane) {
     super();
@@ -36907,15 +36955,14 @@ class PaperHeart extends Container$1 {
     for (let i = 0; i < 4; i++) {
       const tex = i < 2 ? "heart-paper.png" : "heart-paper-half.png";
       const tree = Sprite.from("./assets/images/" + tex);
-      tree.tint = colors[i % colors.length];
+      tree.tint = colorsDef[i % colorsDef.length];
       const c = {
-        color: colors[i % colors.length]
+        color: colorsDef[i % colorsDef.length]
       };
       coloursHeart.addInput(c, "color", {
         view: "color",
         label: `heart ${i}`
       }).on("change", () => {
-        console.log(c.color);
         tree.tint = c.color.replace("#", "0x");
       });
       tree.baseScale = 1;
@@ -36937,11 +36984,15 @@ class PaperHeart extends Container$1 {
       colors: this.trees.map((t) => t.tint)
     };
   }
+  reset({ colors: colors2 = colorsDef } = {}) {
+    this.trees.forEach((t, i) => t.tint = colors2[i % colors2.length]);
+  }
   animate() {
     this.trees.forEach((t, i) => {
       const ind3 = Math.min(i, 2);
+      t.scale.x = 0;
       gsapWithCSS.to(t.scale, {
-        x: (1 - ind3 * 0.2) * t.baseScale,
+        x: (1 - ind3 * 0.1) * t.baseScale,
         ease: "back.out",
         duration: 1,
         delay: ind3 * 0.1,
@@ -36956,6 +37007,7 @@ class PaperHeart extends Container$1 {
   update() {
   }
 }
+let first = true;
 const _PaperHeartScene = class extends Container$1 {
   constructor(pane) {
     super();
@@ -36969,10 +37021,18 @@ const _PaperHeartScene = class extends Container$1 {
       heart: { ...this.paperHeart.getProps() }
     };
   }
-  reset({ colors: colors2 } = {}) {
+  reset({ heart } = {}) {
+    this.paperHeart.reset(heart);
   }
   animate() {
-    this.paperHeart.animate();
+    if (first) {
+      setTimeout(() => {
+        this.paperHeart.animate();
+      }, 1200);
+      first = false;
+    } else {
+      this.paperHeart.animate();
+    }
   }
   update() {
   }
@@ -45867,9 +45927,9 @@ Url.prototype._parsePort = function Url$_parsePort(str, start, end) {
 };
 Url.prototype._parseHost = function Url$_parseHost(str, start, end, slashesDenoteHost) {
   var hostEndingCharacters = this._hostEndingCharacters;
-  var first = str.charCodeAt(start);
+  var first2 = str.charCodeAt(start);
   var second = str.charCodeAt(start + 1);
-  if ((first === 47 || first === 92) && (second === 47 || second === 92)) {
+  if ((first2 === 47 || first2 === 92) && (second === 47 || second === 92)) {
     this.slashes = true;
     if (start === 0) {
       if (end < 2)
