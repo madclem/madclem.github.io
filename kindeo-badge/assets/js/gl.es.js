@@ -36609,7 +36609,7 @@ class Layers {
     this.currentEffect && this.currentEffect.update();
   }
 }
-const colors = ["0x0D925D", "0x009243", "0x1BA369", "0x14B572"];
+const colors$1 = ["0x0D925D", "0x009243", "0x1BA369", "0x14B572"];
 const colorsLight = [
   "0xF2D22E",
   "0xd77fe6",
@@ -36645,7 +36645,7 @@ class Tree extends Container$1 {
       const tree = Sprite.from("./assets/images/" + tex);
       const ind3 = Math.min(i, 2);
       tree.y = -ind3 * 5;
-      tree.tint = colors[i % colors.length];
+      tree.tint = colors$1[i % colors$1.length];
       tree.baseScale = 1;
       tree.anchor.set(0.5, 1);
       if (i === 2) {
@@ -36898,6 +36898,93 @@ const _AstronautScene = class extends Container$1 {
 };
 let AstronautScene = _AstronautScene;
 __publicField(AstronautScene, "name", "AstronautScene");
+const colors = ["0x920D33", "0x920029", "0xA31B42", "0xB51442"];
+class PaperHeart extends Container$1 {
+  constructor(pane) {
+    super();
+    const coloursHeart = pane.addFolder({ title: "colors heart" });
+    this.trees = [];
+    for (let i = 0; i < 4; i++) {
+      const tex = i < 2 ? "heart-paper.png" : "heart-paper-half.png";
+      const tree = Sprite.from("./assets/images/" + tex);
+      tree.tint = colors[i % colors.length];
+      const c = {
+        color: colors[i % colors.length]
+      };
+      coloursHeart.addInput(c, "color", {
+        view: "color",
+        label: `heart ${i}`
+      }).on("change", () => {
+        console.log(c.color);
+        tree.tint = c.color.replace("#", "0x");
+      });
+      tree.baseScale = 1;
+      tree.anchor.set(0.5, 0.5);
+      if (i === 2) {
+        tree.anchor.x = 0;
+      } else if (i === 3) {
+        tree.baseScale = -1;
+        tree.anchor.x = 0;
+      }
+      tree.scale.x = 0;
+      this.trees.push(tree);
+      this.addChild(tree);
+    }
+    this.ready = false;
+  }
+  getProps() {
+    return {
+      colors: this.trees.map((t) => t.tint)
+    };
+  }
+  animate() {
+    this.trees.forEach((t, i) => {
+      const ind3 = Math.min(i, 2);
+      gsapWithCSS.to(t.scale, {
+        x: (1 - ind3 * 0.2) * t.baseScale,
+        ease: "back.out",
+        duration: 1,
+        delay: ind3 * 0.1,
+        onComplete: () => {
+          if (i === 3) {
+            this.ready = true;
+          }
+        }
+      });
+    });
+  }
+  update() {
+  }
+}
+const _PaperHeartScene = class extends Container$1 {
+  constructor(pane) {
+    super();
+    this.tick = 0;
+    this.paperHeart = new PaperHeart(pane);
+    this.addChild(this.paperHeart);
+  }
+  getProps() {
+    return {
+      type: _PaperHeartScene.name,
+      heart: { ...this.paperHeart.getProps() }
+    };
+  }
+  reset({ colors: colors2 } = {}) {
+  }
+  animate() {
+    this.paperHeart.animate();
+  }
+  update() {
+  }
+  resize(r) {
+    if (!r)
+      return;
+    this.paperHeart.scale.set(1);
+    this.paperHeart.scale.set(r * 0.5 / this.paperHeart.height);
+  }
+};
+let PaperHeartScene = _PaperHeartScene;
+__publicField(PaperHeartScene, "name", "PaperHeartScene");
 class Rocket1 extends Container$1 {
   constructor(pane) {
     super();
@@ -37512,10 +37599,11 @@ const _RocketScene = class extends Container$1 {
 let RocketScene = _RocketScene;
 __publicField(RocketScene, "name", "RocketScene");
 const defaultScene = layers[0];
-const scenes$1 = [AstronautScene, ChristmasScene, RocketScene];
+const scenes$1 = [AstronautScene, ChristmasScene, PaperHeartScene, RocketScene];
 const scenesMap$1 = {
   "ChristmasScene": ChristmasScene,
   "AstronautScene": AstronautScene,
+  "PaperHeartScene": PaperHeartScene,
   "RocketScene": RocketScene
 };
 const scenesSelected$1 = {};
@@ -46863,6 +46951,8 @@ var assets = {
     { src: "./assets/images/xmastree.png" },
     { src: "./assets/images/half-xmastree.png" },
     { src: "./assets/images/star.png" },
+    { src: "./assets/images/heart-paper.png" },
+    { src: "./assets/images/heart-paper-half.png" },
     { src: "./assets/images/astronaut.png" },
     { src: "./assets/images/rocket-1/rocket-1-body.png" },
     { src: "./assets/images/rocket-1/rocket-1-bolts.png" },
