@@ -36950,49 +36950,65 @@ const colorsDef = ["0xc92f5b", "0xa81b42", "0xc62d59", "0xd23864"];
 class PaperHeart extends Container$1 {
   constructor(pane) {
     super();
-    const coloursHeart = pane.addFolder({ title: "colors heart" });
-    this.trees = [];
+    this.animated = true;
+    const heartsFolder = pane.addFolder({ title: "hearts" });
+    heartsFolder.addInput(this, "animated").on("change", () => {
+      if (!this.animated) {
+        this.animate();
+      }
+    });
+    this.hearts = [];
     for (let i = 0; i < 4; i++) {
       const tex = i < 2 ? "heart-paper.png" : "heart-paper-half.png";
-      const tree = Sprite.from("./assets/images/" + tex);
-      tree.tint = colorsDef[i % colorsDef.length];
+      const heart = Sprite.from("./assets/images/" + tex);
+      heart.tick = 0;
+      heart.tint = colorsDef[i % colorsDef.length];
       const c = {
         color: colorsDef[i % colorsDef.length]
       };
-      coloursHeart.addInput(c, "color", {
+      heartsFolder.addInput(c, "color", {
         view: "color",
         label: `heart ${i}`
       }).on("change", () => {
-        tree.tint = c.color.replace("#", "0x");
+        heart.tint = c.color.replace("#", "0x");
       });
-      tree.baseScale = 1;
-      tree.anchor.set(0.5, 0.5);
+      heart.baseScale = 1;
+      heart.anchor.set(0.5, 0.5);
       if (i === 2) {
-        tree.anchor.x = 0;
+        heart.anchor.x = 0;
       } else if (i === 3) {
-        tree.baseScale = -1;
-        tree.anchor.x = 0;
+        heart.baseScale = -1;
+        heart.anchor.x = 0;
       }
-      tree.scale.x = 0;
-      this.trees.push(tree);
-      this.addChild(tree);
+      heart.scale.x = 0;
+      this.hearts.push(heart);
+      this.addChild(heart);
     }
     this.ready = false;
   }
   getProps() {
     return {
-      colors: this.trees.map((t) => t.tint)
+      colors: this.hearts.map((t) => t.tint),
+      animated: this.animated
     };
   }
-  reset({ colors: colors2 = colorsDef } = {}) {
-    this.trees.forEach((t, i) => t.tint = colors2[i % colors2.length]);
+  reset({ colors: colors2 = colorsDef, animated = true } = {}) {
+    this.animated = animated;
+    this.hearts.forEach((t, i) => t.tint = colors2[i % colors2.length]);
   }
   animate() {
-    this.trees.forEach((t, i) => {
+    this.hearts.forEach((t, i) => {
       const ind3 = Math.min(i, 2);
+      const amountScale = 1 - ind3 * 0.1;
       t.scale.x = 0;
+      t.amount = 0;
+      gsapWithCSS.to(t, {
+        amount: amountScale,
+        duration: 1,
+        delay: ind3 * 0.1
+      });
       gsapWithCSS.to(t.scale, {
-        x: (1 - ind3 * 0.1) * t.baseScale,
+        x: amountScale * t.baseScale,
         ease: "back.out",
         duration: 1,
         delay: ind3 * 0.1,
@@ -37005,6 +37021,13 @@ class PaperHeart extends Container$1 {
     });
   }
   update() {
+    if (!this.animated)
+      return;
+    for (let i = 0; i < this.hearts.length; i++) {
+      const heart = this.hearts[i];
+      heart.tick++;
+      heart.scale.x += Math.cos(heart.tick / 40) * 1e-3 * ((i + 1) / this.hearts.length) * 1.5 * heart.baseScale;
+    }
   }
 }
 let first = true;
@@ -37035,6 +37058,7 @@ const _PaperHeartScene = class extends Container$1 {
     }
   }
   update() {
+    this.paperHeart.update();
   }
   resize(r) {
     if (!r)
