@@ -46800,12 +46800,22 @@ const STATES = {
   animateText: "animateText"
 };
 let currentConfig;
+const getQuery = (index) => {
+  const url2 = window.location.href;
+  const qs = url2.substring(url2.indexOf("?") + 1).split("&");
+  const result = {};
+  for (let i = 0; i < qs.length; i++) {
+    qs[i] = qs[i].split("=");
+    result[qs[i][0]] = decodeURIComponent(qs[i][1]);
+  }
+  return result.hasOwnProperty(index) ? result[index] : false;
+};
 class Scene extends AbstractScene {
   constructor() {
     super();
-    const parsed = urlparser.parse(window.location.search, true);
-    if (parsed.query.config) {
-      currentConfig = JSON.parse(parsed.query.config);
+    if (getQuery("config")) {
+      console.log("cpomnfig");
+      currentConfig = JSON.parse(getQuery("config"));
     }
     this.currentAnimation = null;
     const originalPane = new tweakpane.exports.Pane();
@@ -46915,6 +46925,9 @@ class Scene extends AbstractScene {
     this.currentState = state;
     switch (state) {
       case STATES.prepare:
+        if (getQuery("hideUI")) {
+          app.view.style.zIndex = 1e5;
+        }
         this.resetScene();
         this.animatedText.hide();
         if (miniScenesDataMap[(_a2 = currentConfig == null ? void 0 : currentConfig.scene) == null ? void 0 : _a2.type]) {
