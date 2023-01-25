@@ -37021,7 +37021,7 @@ class PaperHeart extends Container$1 {
     });
   }
   update() {
-    if (!this.animated)
+    if (!this.animated || !this.ready)
       return;
     for (let i = 0; i < this.hearts.length; i++) {
       const heart = this.hearts[i];
@@ -48623,6 +48623,10 @@ class MainApp extends Emitter {
       if (mConfig.container)
         ;
       this.app.resizeTo = window;
+      const canvas = this.app.view;
+      canvas.style.position = "fixed";
+      canvas.style.top = 0;
+      canvas.style.left = 0;
       this.stage = this.app.stage;
       this.preloader = new LoaderPixi({ optimize: false });
       this._loadAssets(mConfig.ASSETS_PATH || "assets/");
