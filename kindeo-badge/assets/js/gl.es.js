@@ -36993,6 +36993,7 @@ class PaperHeart extends Container$1 {
     };
   }
   reset({ colors: colors2 = colorsDef, animated = true } = {}) {
+    this.ready = false;
     this.animated = animated;
     this.hearts.forEach((t, i) => t.tint = colors2[i % colors2.length]);
   }
@@ -45504,7 +45505,7 @@ class AnimatedText {
   createText(style) {
     this.clear();
     this.style = style || this.style;
-    this.title = "Wow so much love!";
+    this.title = "Happy Valentine's Day!";
     let textMetrics = TextMetrics.measureText(this.title, style);
     this.view.pivot.set(textMetrics.width / 2, textMetrics.height / 2);
     this.letters = [];
