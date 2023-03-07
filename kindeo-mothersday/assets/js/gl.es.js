@@ -42333,7 +42333,6 @@ class FillingText {
 }
 var frag$1 = `
 uniform sampler2D uMap;
-uniform vec2 uScreenDimension;
 
 varying float vAlpha;
 varying vec2 vUVScreen;
@@ -45099,6 +45098,146 @@ class BackgroundGradientRadial {
     this.geometry.build();
   }
 }
+class DelayedCalls {
+  constructor() {
+    this.delayedCalls = [];
+  }
+  clear(obj) {
+    if (!obj) {
+      this.delayedCalls = [];
+      Ticker.system.remove(this.update, this);
+      this.updating = false;
+    } else {
+      for (let i = 0; i < this.delayedCalls.length; i++) {
+        const delayedObj = this.delayedCalls[i];
+        if (delayedObj === obj) {
+          this.delayedCalls.splice(i, 1);
+          break;
+        }
+      }
+    }
+  }
+  add(func, delay, args) {
+    const obj = {
+      func,
+      args,
+      tick: 0,
+      delay,
+      delete: false
+    };
+    this.delayedCalls.push(obj);
+    if (!this.updating && !this.paused) {
+      Ticker.system.add(this.update, this);
+      this.updating = true;
+    }
+    return obj;
+  }
+  getRemainingTime(id) {
+    const obj = this.delayedCalls[id];
+    if (obj && obj.delay) {
+      return obj.delay * 60 - obj.tick;
+    }
+    return 0;
+  }
+  pause() {
+    this.paused = true;
+    Ticker.system.remove(this.update, this);
+    this.updating = false;
+  }
+  resume() {
+    if (this.updating)
+      return;
+    if (this.delayedCalls.length > 0) {
+      Ticker.system.add(this.update, this);
+      this.updating = true;
+    }
+    this.paused = false;
+  }
+  update(dt) {
+    for (let i = 0; i < this.delayedCalls.length; i++) {
+      const c = this.delayedCalls[i];
+      c.tick += dt;
+      if (c.tick > c.delay * 60) {
+        c.func(c.args);
+        c.delete = true;
+      }
+    }
+    for (let i = 0; i < this.delayedCalls.length; i++) {
+      const c = this.delayedCalls[i];
+      if (c.delete) {
+        this.delayedCalls.splice(i, 1);
+        i--;
+      }
+    }
+    if (this.delayedCalls.length === 0) {
+      Ticker.system.remove(this.update, this);
+      this.updating = false;
+    }
+  }
+}
+class PreviousNextDoubleClick {
+  constructor(view) {
+    this.onNext = new MiniSignal();
+    this.onPrevious = new MiniSignal();
+    this.locked = false;
+    this.paused = false;
+    this.isDown = false;
+    this.clicks = 0;
+    this.isSecondClick = false;
+    this.view = view;
+    this.pt = { x: 0, y: 0 };
+    this.delayedCalls = new DelayedCalls();
+    this.onDown = this._onDown.bind(this);
+    this.onUp = this._onUp.bind(this);
+    this.start();
+  }
+  start() {
+    this.locked = false;
+    this.clicks = 0;
+    this.paused = false;
+    this.isDown = false;
+    this.view.on("pointerdown", this.onDown);
+    this.view.on("pointerup", this.onUp);
+    this.view.on("pointerupoutside", this.onUp);
+  }
+  _onDown(e) {
+    if (this.paused || this.locked)
+      return;
+    this.delayedCalls.clear();
+    this.isDown = true;
+    this.delayedCalls.add(this._cancel.bind(this), 1 / 3);
+  }
+  _lock() {
+    this._cancel();
+    this.locked = true;
+    this.delayedCalls.add(() => {
+      this.locked = false;
+    }, 0.4);
+  }
+  _cancel() {
+    this.isDown = false;
+    this.clicks = 0;
+  }
+  _onUp(e) {
+    if (!this.isDown || this.locked)
+      return;
+    this.clicks++;
+    if (this.clicks >= 2) {
+      e.data.getLocalPosition(this.view, this.pt);
+      this._lock();
+      if (this.pt.x < this.w / 2) {
+        this.onPrevious.dispatch();
+      } else {
+        this.onNext.dispatch();
+      }
+    }
+    this.delayedCalls.add(this._cancel.bind(this), 1 / 2);
+    this.isDown = false;
+  }
+  resize(w, h) {
+    this.w = w;
+  }
+}
 let indTheme = -1;
 const scenes = [ParticlesText, ShapeFrame];
 const scenesMap = {
@@ -45148,6 +45287,13 @@ class Scene extends AbstractScene {
       this.next(currentConfig2);
     } else {
       this.next();
+    }
+    if (!!getQuery("hideUI")) {
+      this.view.interactive = true;
+      this.view.buttonMode = true;
+      this.doubleClick = new PreviousNextDoubleClick(this.view);
+      this.doubleClick.onPrevious.add(this.prev.bind(this));
+      this.doubleClick.onNext.add(this.next.bind(this));
     }
   }
   selectScene(scene, props = {}) {
@@ -45205,6 +45351,7 @@ class Scene extends AbstractScene {
   }
   onResize(w, h) {
     this.bg.resize(w, h);
+    this.doubleClick && this.doubleClick.resize(w);
     if (this.currentScene) {
       this.currentScene.resize(w, h);
     }
