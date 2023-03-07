@@ -2748,7 +2748,7 @@ var cssColorNames = {
   yellow,
   yellowgreen
 };
-function hex2rgb(hex, out) {
+function hex2rgb$1(hex, out) {
   if (out === void 0) {
     out = [];
   }
@@ -12760,7 +12760,7 @@ var AbstractRenderer = function(_super) {
     set: function(value) {
       this._backgroundColor = value;
       this._backgroundColorString = hex2string(value);
-      hex2rgb(value, this._backgroundColorRgba);
+      hex2rgb$1(value, this._backgroundColorRgba);
     },
     enumerable: false,
     configurable: true
@@ -17634,7 +17634,7 @@ function __extends$f(d, b) {
     },
     set: function(value) {
       this._tint = value;
-      hex2rgb(value, this.tintRgb);
+      hex2rgb$1(value, this.tintRgb);
     },
     enumerable: false,
     configurable: true
@@ -19817,7 +19817,7 @@ var Graphics = function(_super) {
         blendMode,
         indices: indices2,
         uvs,
-        _batchRGB: hex2rgb(color),
+        _batchRGB: hex2rgb$1(color),
         _tintRGB: color,
         _texture: gI.style.texture,
         alpha: gI.style.alpha,
@@ -19904,7 +19904,7 @@ var Graphics = function(_super) {
   Graphics2.prototype.calculateTints = function() {
     if (this.batchTint !== this.tint) {
       this.batchTint = this.tint;
-      var tintRGB = hex2rgb(this.tint, temp);
+      var tintRGB = hex2rgb$1(this.tint, temp);
       for (var i = 0; i < this.batches.length; i++) {
         var batch = this.batches[i];
         var batchTint = batch._batchRGB;
@@ -21267,7 +21267,7 @@ var Text = function(_super) {
         context4.fillStyle = "black";
         context4.strokeStyle = "black";
         var dropShadowColor = style.dropShadowColor;
-        var rgb = hex2rgb(typeof dropShadowColor === "number" ? dropShadowColor : string2hex(dropShadowColor));
+        var rgb = hex2rgb$1(typeof dropShadowColor === "number" ? dropShadowColor : string2hex(dropShadowColor));
         var dropShadowBlur = style.dropShadowBlur * this._resolution;
         var dropShadowDistance = style.dropShadowDistance * this._resolution;
         context4.shadowColor = "rgba(" + rgb[0] * 255 + "," + rgb[1] * 255 + "," + rgb[2] * 255 + "," + style.dropShadowAlpha + ")";
@@ -23005,7 +23005,7 @@ function drawGlyph(canvas, context4, metrics, x, y, resolution, style) {
   context4.strokeStyle = style.stroke;
   if (style.dropShadow) {
     var dropShadowColor = style.dropShadowColor;
-    var rgb = hex2rgb(typeof dropShadowColor === "number" ? dropShadowColor : string2hex(dropShadowColor));
+    var rgb = hex2rgb$1(typeof dropShadowColor === "number" ? dropShadowColor : string2hex(dropShadowColor));
     var dropShadowBlur = style.dropShadowBlur * resolution;
     var dropShadowDistance = style.dropShadowDistance * resolution;
     context4.shadowColor = "rgba(" + rgb[0] * 255 + "," + rgb[1] * 255 + "," + rgb[2] * 255 + "," + style.dropShadowAlpha + ")";
@@ -42180,7 +42180,7 @@ const init4 = (exportFn) => {
   });
   return { pane, currentConfig };
 };
-var frag$1 = `
+var frag$2 = `
 varying vec2 vTextureCoord;
 uniform float uPercent;
 
@@ -42225,7 +42225,7 @@ class FillingPlane {
   constructor() {
     this.texture = Texture.WHITE;
     const geometry = new PlaneGeometry(1, 1, 2, 2);
-    const shader = Shader.from(basicVert, frag$1, {
+    const shader = Shader.from(basicVert, frag$2, {
       uPercent: 0,
       uMap: this.texture
     });
@@ -42308,6 +42308,7 @@ class FillingText {
     });
   }
   animate(v) {
+    gsapWithCSS.killTweensOf(this.fillPlane);
     gsapWithCSS.to(this.fillPlane, {
       duration: 3,
       percent: v,
@@ -42315,6 +42316,7 @@ class FillingText {
     });
   }
   animateIn() {
+    this.fillPlane.percent = 0;
     this.animate(1);
   }
   animateOut() {
@@ -42329,7 +42331,7 @@ class FillingText {
     this.fillPlane.view.pivot.set(this.text.width / 2, this.text.height / 2);
   }
 }
-var frag = `
+var frag$1 = `
 uniform sampler2D uMap;
 uniform vec2 uScreenDimension;
 
@@ -42345,13 +42347,13 @@ void main()
     vec2 uv = vec2(vFrame.x + vFrame.z * vTextureCoord.x, vFrame.y + vFrame.w * vTextureCoord.y);
     vec4 ownColor = texture2D(uMap, uv);
 
-    // if (ownColor.a < 0.08) discard;
+    // if (ownColor.a < 0.01) discard;
     ownColor.rgb *= vColor;
     // ownColor.rgb = vColor;
 
     float alpha = vAlpha * ownColor.a;
     gl_FragColor = vec4(ownColor.rgb, alpha);
-    // gl_FragColor.rgb *= alpha;
+    gl_FragColor.rgb *= vAlpha;
     // gl_FragColor.rgb *= alpha;
     // gl_FragColor.a = alpha;
 }
@@ -42367,6 +42369,8 @@ attribute vec4 aExtra;
 attribute vec3 aColors;
 
 uniform float uTime;
+uniform float uAmountMoving;
+uniform float uScaleScreen;
 uniform float uScale;
 uniform float uPercent;
 uniform sampler2D uMapMask;
@@ -42402,7 +42406,7 @@ float circularOut(float t) {
 
 void main(void)
 {
-  vec2 uvScreen = aPosOffset.xy;
+  vec2 uvScreen = aPosOffset.xy / 2. + .5;
 
   vec4 colorMask = texture2D(uMapMask, uvScreen);
 
@@ -42411,10 +42415,10 @@ void main(void)
   
   // float zeroToOne = clamp(aExtra.w + colorMask.r * 2. - 1., 0., 1.) / 1.;
   float maxDelay = aExtra.w;
-  float zeroToOne = clamp(aExtra.w + colorMask.r * 2. - 1., 0., 1.) / 1.;
+  float zeroToOne =  clamp(aExtra.w + colorMask.r * 2. - 1., 0., 1.) / 1.;
   // float zeroToOne = clamp((colorMask.r * 2. - 1.) - maxDelay, 0., 1.) / (1.);
   // float zeroToOne = clamp(min(1., colorMask.r) - aExtra.w, 0., 1.) / (1. - aExtra.w);
-  float scale = backOut(zeroToOne);
+  float scale = uPercent * backOut(zeroToOne);
 
 
   float randomMinus1to1 = (aExtra.w - 0.5) * 2.;
@@ -42443,8 +42447,8 @@ void main(void)
   
   position = rotate(position, angle);
   
-  position.x += cos(uTime / (aExtra.y * 10.) / 2.) * aExtra.x * 20.;
-  position.y += cos(uTime / (aExtra.y * 10.)) * aExtra.x * 20.;
+  position.x += cos(uTime / (aExtra.y * 10.) / 2.) * aExtra.x * 20. * uAmountMoving;
+  position.y += cos(uTime / (aExtra.y * 10.)) * aExtra.x * 20. * uAmountMoving;
   
   
   
@@ -42469,9 +42473,11 @@ void main(void)
   position.x += (1. - scale) * cos(aExtra.z * 2.) * aExtra.w * 20.;
   position.y += (1. - scale) * sin(aExtra.z * 2.) * aExtra.w * 20.;
 
-  gl_Position=vec4((projectionMatrix*translationMatrix*vec3(position + aPosOffset.xy * uScreenDimension + aPosOffset.zw,1.)).xy,0.,1.);
+  gl_Position=vec4((projectionMatrix*translationMatrix*
+    vec3(position + uScreenDimension / 2. + aPosOffset.xy * uScreenDimension  / 2. * uScaleScreen + aPosOffset.zw,1.)).xy,
+  0.,1.);
 
-  vAlpha = clamp(scale, 0., 1.);
+  vAlpha = clamp(scale, 0.2, 1.);
 }
 `;
 const assetsList = [
@@ -42730,14 +42736,16 @@ class Particles {
     const uMap = Texture.from("flower-4.png");
     this.scaleDots = 1;
     this.material = new Shader.from();
-    this.material = Shader.from(vert, frag, {
+    this.material = Shader.from(vert, frag$1, {
       uMap,
       uScale: 1,
-      uPercent: 0,
+      uPercent: 1,
       uMapMask: Texture.WHITE,
       uMapFrame: new Rectangle(0, 0, 1, 1),
       uScreenDimension: [window.innerWidth, window.innerHeight],
-      uTime: 0
+      uTime: 0,
+      uAmountMoving: 1,
+      uScaleScreen: 1
     });
     this.geometry = new Geometry();
     const folder = pane.addFolder({
@@ -42952,8 +42960,8 @@ class Particles {
         y = pos.y;
         rot = pos.r;
       } else {
-        x = Math.random();
-        y = Math.random();
+        x = Math.random() * 2 - 1;
+        y = Math.random() * 2 - 1;
       }
       transformsData.push(rot);
       posOffset.push(x, y);
@@ -42997,6 +43005,7 @@ class Particles {
     this.w = w;
     this.h = h;
     this.material.uniforms.uScreenDimension = [w, h];
+    this.material.uniforms.uAmountMoving = this.isMobile ? 0.5 : 1;
     if (this.isMobile !== this.wasMobile) {
       this.draw();
     }
@@ -43211,6 +43220,10 @@ class BorderFiller {
         if (textureRotated) {
           r += Math.PI / 2;
         }
+        x *= 2;
+        x -= 1;
+        y *= 2;
+        y -= 1;
         return { x, y, r, offsetX, offsetY };
       }
     });
@@ -43440,6 +43453,16 @@ class ShapeFiller {
       ...particlesData,
       anchors: anchorsMap,
       label: "shape-particles"
+    });
+    this.animateIn();
+  }
+  animateIn() {
+    this.particles.material.uniforms.uPercent = 0;
+    gsapWithCSS.killTweensOf(this.particles.material.uniforms);
+    gsapWithCSS.to(this.particles.material.uniforms, {
+      uPercent: 1,
+      ease: "sin.inout",
+      duration: 1.2
     });
   }
   getProps() {
@@ -43692,6 +43715,51 @@ class AnimatedLetters {
     this.customAnimateIn({ snap: snap3, lines: this.lines, letters: this.letters });
   }
 }
+class FlowerWord extends DefaultText {
+  constructor() {
+    super();
+  }
+  reset(letter, x, index, style) {
+    super.reset(...arguments);
+    gsapWithCSS.killTweensOf(this.view);
+    this.view.alpha = 0;
+    this.text.position.y = this.text.height / 2;
+    this.view.position.y = 0;
+    this.view.position.x = x;
+    this.text.position.x = this.view.pivot.x;
+  }
+  show(delay, duration) {
+    const snap3 = duration === 0 && delay === 0;
+    gsapWithCSS.killTweensOf(this.view);
+    this.view.alpha = 0;
+    if (snap3) {
+      this.view.alpha = 1;
+      return;
+    }
+    gsapWithCSS.to(this.view, {
+      alpha: 1,
+      delay,
+      ease: "linear",
+      duration
+    });
+  }
+  hide() {
+    super.hide();
+    gsapWithCSS.killTweensOf(this.text);
+  }
+  update() {
+  }
+}
+function shuffleArray(array) {
+  const arr = [...array];
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp2 = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp2;
+  }
+  return arr;
+}
 const getFontWeights = (fontFamily) => {
   return assets.fonts.filter((f) => {
     return f.includes(fontFamily);
@@ -43769,9 +43837,22 @@ class Texts1 {
     this.text1.reset({
       title: this.textContent,
       style: this.style,
+      splitter: " ",
       pivotScale: {
         x: 0.5,
         y: 0.5
+      },
+      ClassText: FlowerWord,
+      animateIn: ({ lines, letters: originalLetters }) => {
+        const letters = shuffleArray([...originalLetters]);
+        let prevDuration = 0;
+        for (let i = 0; i < letters.length; i++) {
+          const duration = 0.4 + i * 0.4;
+          const text = letters[i];
+          text.show(prevDuration * 0.6, duration);
+          prevDuration = duration;
+          prevDuration = duration;
+        }
       }
     });
     const colors = this.getColorLetters();
@@ -43877,6 +43958,9 @@ class Texts1 {
     this.setLettersColors(colors);
     this.refreshColorsLettersInput(colors);
     this.updateFont();
+    setTimeout(() => {
+      this.text1.animate();
+    }, 200);
   }
   getProps() {
     return {
@@ -43896,13 +43980,35 @@ class BorderEdge {
     this.pane = pane.addFolder({ title: "Border-Edge" });
     this.borderFiller = new BorderFiller(this.pane);
     this.view = this.borderFiller.view;
+    this.animateObj = {
+      scale: 1
+    };
   }
   show(props) {
     this.borderFiller.reset(props);
+    this.animateIn();
+  }
+  animateIn() {
+    gsapWithCSS.killTweensOf(this.animateObj);
+    this.animating = true;
+    this.animateObj.scale = 1 + 100 / Math.min(window.innerWidth, window.innerHeight);
+    this.borderFiller.particles.material.uniforms.uScaleScreen = this.animateObj.scale;
+    gsapWithCSS.to(this.animateObj, {
+      scale: 1,
+      duration: 2,
+      onUpdate: () => {
+        this.borderFiller.particles.material.uniforms.uScaleScreen = this.animateObj.scale;
+      },
+      onComplete: () => {
+        this.animating = false;
+      }
+    });
   }
   hide(snap3) {
   }
   resize(w, h) {
+    this.w = w;
+    this.h = h;
     this.borderFiller.resize(w, h);
   }
   getProps() {
@@ -43998,6 +44104,7 @@ class ParticlesText {
     if (borderData) {
       this.selectBorder(borderTypesMap$1[borderData.name], borderData);
     }
+    this.title.animateIn();
     this.shadow.alpha = ((_a2 = data.shadow) == null ? void 0 : _a2.alpha) || 0.1;
     this.mainParticles.reset(data.particles || {});
   }
@@ -44308,7 +44415,12 @@ class ShapeFrame {
 }
 const themes = [
   {
-    background: { color: 16445671 },
+    background: {
+      colors: [
+        [0.9803921568627451, 0.9411764705882353, 0.9058823529411765],
+        [0.9921568627450981, 0.5764705882352941, 0.5568627450980392]
+      ]
+    },
     scene: {
       name: "ShapeFrame",
       shadow: { alpha: 0.07 },
@@ -44384,7 +44496,12 @@ const themes = [
     }
   },
   {
-    background: { color: 2434875 },
+    background: {
+      colors: [
+        [0.1843137254901961, 0.19215686274509805, 0.29411764705882354],
+        [0.023529411764705882, 0.023529411764705882, 0.03137254901960784]
+      ]
+    },
     scene: {
       name: "ShapeFrame",
       shadow: { alpha: 0.1 },
@@ -44416,10 +44533,10 @@ const themes = [
             "gold-flower1.png",
             "gold-flower2.png"
           ],
-          nb: 8760,
-          nbMobile: 6170,
-          scale: 1.48,
-          scaleMobile: 0.9500000000000001,
+          nb: 16880,
+          nbMobile: 6610,
+          scale: 1.8,
+          scaleMobile: 1.58,
           scaleDots: 1,
           dotsColors: [
             [255, 255, 255],
@@ -44485,7 +44602,12 @@ const themes = [
     }
   },
   {
-    background: { color: 16776438 },
+    background: {
+      colors: [
+        [0.9803921568627451, 0.984313725490196, 1],
+        [0.6431372549019608, 0.7137254901960784, 1]
+      ]
+    },
     scene: {
       name: "ShapeFrame",
       shadow: { alpha: 0.1 },
@@ -44494,18 +44616,15 @@ const themes = [
         shape: { id: "heart" },
         particles: {
           assets: [
-            "baby-2.png",
-            "baby-3.png",
-            "baby-4.png",
-            "baby-9.png",
-            "baby-10.png",
-            "baby-12.png",
-            "baby-13.png",
-            "baby-14.png"
+            "blue-flower-7.png",
+            "blue-flower-9.png",
+            "blue-flower-11.png",
+            "blue-flower-12.png",
+            "blue-flower-14.png"
           ],
-          nb: 3300,
+          nb: 6870,
           nbMobile: 1400,
-          scale: 1.35,
+          scale: 1.8,
           scaleMobile: 1.27,
           scaleDots: 1,
           dotsColors: [
@@ -44525,8 +44644,8 @@ const themes = [
           "#8ac5eb",
           "#aec7ee",
           "#7998c9",
-          "#7998C9",
-          "#7998C9"
+          "#7998c9",
+          "#7998c9"
         ]
       },
       border: {
@@ -44553,10 +44672,15 @@ const themes = [
     }
   },
   {
-    background: { color: 16774378 },
+    background: {
+      colors: [
+        [1, 0.9882352941176471, 0.9215686274509803],
+        [0.9568627450980393, 0.7803921568627451, 0.7803921568627451]
+      ]
+    },
     scene: {
       name: "ParticlesText",
-      shadow: { alpha: 0.34 },
+      shadow: { alpha: 0.45 },
       particles: {
         particles: {
           assets: [
@@ -44568,9 +44692,9 @@ const themes = [
             "flower-6.png"
           ],
           nb: 25e3,
-          nbMobile: 25e3,
+          nbMobile: 4e4,
           scale: 1,
-          scaleMobile: 0.52,
+          scaleMobile: 0.39999999999999997,
           scaleDots: 0.39999999999999997,
           dotsColors: [
             [249.22265625, 204.07648426777595, 54.517456054687486],
@@ -44584,11 +44708,12 @@ const themes = [
         name: "BorderEdge",
         particles: {
           assets: [
-            "flower-watercolor-2.png",
+            "flower-3.png",
+            "flower-4.png",
+            "flower-5.png",
+            "flower-watercolor-1.png",
             "flower-watercolor-4.png",
-            "flower-watercolor-7.png",
-            "flower-watercolor-9.png",
-            "flower-vintage-6.png"
+            "flower-watercolor-7.png"
           ],
           nb: 400,
           nbMobile: 100,
@@ -44606,108 +44731,12 @@ const themes = [
     }
   },
   {
-    background: { color: 2434875 },
-    scene: {
-      name: "ShapeFrame",
-      shadow: { alpha: 0.1 },
-      photo: { url: "", visible: true },
-      particles: {
-        shape: { id: "circle" },
-        particles: {
-          assets: [
-            "gold-flower-22.png",
-            "gold-flower-20.png",
-            "gold-flower-21.png",
-            "gold-flower19.png",
-            "gold-flower18.png",
-            "gold-flower16.png",
-            "gold-flower17.png",
-            "gold-flower13.png",
-            "gold-flower14.png",
-            "gold-flower15.png",
-            "gold-flower10.png",
-            "gold-flower11.png",
-            "gold-flower12.png",
-            "gold-flower7.png",
-            "gold-flower8.png",
-            "gold-flower9.png",
-            "gold-flower5.png",
-            "gold-flower6.png",
-            "gold-flower3.png",
-            "gold-flower4.png",
-            "gold-flower1.png",
-            "gold-flower2.png"
-          ],
-          nb: 8760,
-          nbMobile: 6170,
-          scale: 1.48,
-          scaleMobile: 0.9500000000000001,
-          scaleDots: 1,
-          dotsColors: [
-            [255, 255, 255],
-            [252.41015625, 247.6774658203125, 247.6774658203125],
-            [255, 255, 255],
-            [255, 255, 255]
-          ]
-        }
-      },
-      text: {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: "400",
-        colors: [
-          "#f5eded",
-          "#f5ecdc",
-          "#f8e6c9",
-          "#e8d5ab",
-          "#f5eded",
-          "#f5eded"
-        ]
-      },
-      border: {
-        name: "BorderEdge",
-        particles: {
-          assets: [
-            "gold-flower-22.png",
-            "gold-flower-20.png",
-            "gold-flower-21.png",
-            "gold-flower19.png",
-            "gold-flower18.png",
-            "gold-flower16.png",
-            "gold-flower17.png",
-            "gold-flower13.png",
-            "gold-flower14.png",
-            "gold-flower15.png",
-            "gold-flower10.png",
-            "gold-flower11.png",
-            "gold-flower12.png",
-            "gold-flower7.png",
-            "gold-flower8.png",
-            "gold-flower9.png",
-            "gold-flower5.png",
-            "gold-flower6.png",
-            "gold-flower3.png",
-            "gold-flower4.png",
-            "gold-flower1.png",
-            "gold-flower2.png"
-          ],
-          nb: 110,
-          nbMobile: 100,
-          scale: 0.8400000000000001,
-          scaleMobile: 0.9500000000000001,
-          scaleDots: 1,
-          dotsColors: [
-            [255, 255, 255],
-            [252, 248, 248],
-            [255, 255, 255],
-            [255, 255, 255]
-          ]
-        }
-      }
-    }
-  },
-  {
-    background: { color: 13625599 },
+    background: {
+      colors: [
+        [0.9254901960784314, 0.9529411764705882, 0.9803921568627451],
+        [0.7137254901960784, 0.9490196078431372, 0.9921568627450981]
+      ]
+    },
     scene: {
       name: "ShapeFrame",
       shadow: { alpha: 0.22 },
@@ -44776,7 +44805,12 @@ const themes = [
     }
   },
   {
-    background: { color: 5591470 },
+    background: {
+      colors: [
+        [0.4980392156862745, 0.6235294117647059, 0.7803921568627451],
+        [0.8941176470588236, 0.9725490196078431, 0.9921568627450981]
+      ]
+    },
     scene: {
       name: "ParticlesText",
       shadow: { alpha: 0.29 },
@@ -44830,7 +44864,12 @@ const themes = [
     }
   },
   {
-    background: { color: 15595770 },
+    background: {
+      colors: [
+        [0.9294117647058824, 0.9725490196078431, 0.9803921568627451],
+        [0.3764705882352941, 0.396078431372549, 0.6431372549019608]
+      ]
+    },
     scene: {
       name: "ShapeFrame",
       shadow: { alpha: 0.07 },
@@ -44906,7 +44945,12 @@ const themes = [
     }
   },
   {
-    background: { color: 4345166 },
+    background: {
+      colors: [
+        [0.2235294117647059, 0.3568627450980392, 0.3803921568627451],
+        [0.06274509803921569, 0.06666666666666667, 0.06666666666666667]
+      ]
+    },
     scene: {
       name: "ParticlesText",
       shadow: { alpha: 0.32 },
@@ -44965,6 +45009,96 @@ const themes = [
     }
   }
 ];
+var frag = `
+
+
+uniform float uRatio;
+uniform vec3 uColor1;
+uniform vec3 uColor2;
+
+varying vec2 vTextureCoord;
+
+void main() {
+
+    vec2 uv = (vTextureCoord * 2. - 1.) / 2.;
+
+    if (uRatio < 1.) {
+        uv.x *= uRatio;
+    } else {
+        uv.y /= uRatio;
+    }	
+
+    float dist = distance(uv, vec2(0.));
+
+    dist = smoothstep(0.1, 0.8, dist);
+    gl_FragColor = vec4(mix(uColor1, uColor2, dist), 1.);
+    // gl_FragColor = vec4(vec3(smoothstep(0.1, 0.8, dist)), 1.);
+}
+`;
+function hex2rgb(hex) {
+  hex = hex.replace("#", "0x");
+  var bigint = parseInt(hex, 16);
+  var r = bigint >> 16 & 255;
+  var g = bigint >> 8 & 255;
+  var b = bigint & 255;
+  return [r, g, b];
+}
+function rgb2rgbSmall([r, g, b]) {
+  return [r / 255, g / 255, b / 255];
+}
+function rgb2rgbBig([r, g, b]) {
+  return [r * 255, g * 255, b * 255];
+}
+function rgb2hex([r, g, b], useHash) {
+  const color = "0x" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  return useHash ? color.replace("0x", "#") : color;
+}
+let inputsColors = [];
+class BackgroundGradientRadial {
+  constructor(pane) {
+    this.pane = pane.addFolder({ title: "background" });
+    const geometry = new PlaneGeometry(1, 1, 2, 2);
+    const shader = Shader.from(basicVert, frag, {
+      uRatio: 1,
+      uColor1: [1, 1, 1],
+      uColor2: [1, 1, 1]
+    });
+    this.view = new Mesh(geometry, shader);
+    this.geometry = geometry;
+    this.shader = shader;
+    this.color1 = "#ffffff";
+    inputsColors.push(pane.addInput(this, "color1").on("change", () => {
+      const rgb = hex2rgb(this.color1);
+      this.shader.uniforms.uColor1 = [...rgb2rgbSmall(rgb)];
+    }));
+    this.color2 = "#ffffff";
+    inputsColors.push(pane.addInput(this, "color2").on("change", () => {
+      const rgb = hex2rgb(this.color2);
+      this.shader.uniforms.uColor2 = [...rgb2rgbSmall(rgb)];
+    }));
+  }
+  reset(props = {}) {
+    const { colors } = props;
+    this.color1 = rgb2hex(rgb2rgbBig(colors[0] || [1, 1, 1]));
+    this.shader.uniforms.uColor1 = colors[0] || this.shader.uniforms.uColor1;
+    this.color2 = rgb2hex(rgb2rgbBig(colors[1] || [1, 1, 1]));
+    this.shader.uniforms.uColor2 = colors[1] || this.shader.uniforms.uColor2;
+    inputsColors.forEach((inp) => inp.refresh());
+  }
+  getProps() {
+    return {
+      colors: [this.shader.uniforms.uColor1, this.shader.uniforms.uColor2]
+    };
+  }
+  resize(w, h) {
+    this.w = w;
+    this.h = h;
+    this.shader.uniforms.uRatio = this.w / this.h;
+    this.geometry.width = w;
+    this.geometry.height = h;
+    this.geometry.build();
+  }
+}
 let indTheme = -1;
 const scenes = [ParticlesText, ShapeFrame];
 const scenesMap = {
@@ -44977,17 +45111,24 @@ class Scene extends AbstractScene {
     super();
     const { pane: originalPane, currentConfig: currentConfig2 } = init4(this.export.bind(this));
     this.originalPane = originalPane;
+    document.addEventListener("keydown", (e) => {
+      e = e || window.event;
+      if (e.keyCode == "37") {
+        this.next();
+      } else if (e.keyCode == "39") {
+        this.prev();
+      }
+    });
+    const button = originalPane.addButton({
+      title: "Next"
+    });
+    button.on("click", () => this.next());
     const pane = originalPane.addFolder({
       title: "params",
       expanded: false
     });
     this.pane = pane;
-    this.bg = new Sprite(Texture.WHITE);
-    this.bg.tint = 16775670;
-    this.pane.addInput(this.bg, "tint", {
-      view: "color",
-      label: "bg-color"
-    });
+    this.bg = new BackgroundGradientRadial(this.pane);
     this.currentScene = null;
     this.containerScene = new Container$1();
     this.pane.addBlade({
@@ -45001,11 +45142,7 @@ class Scene extends AbstractScene {
     }).on("change", (v) => {
       this.selectScene(v.value);
     });
-    const button = this.pane.addButton({
-      title: "Next"
-    });
-    button.on("click", () => this.next());
-    this.view.addChild(this.bg, this.containerScene);
+    this.view.addChild(this.bg.view, this.containerScene);
     this.currentConfig = currentConfig2;
     if (currentConfig2) {
       this.next(currentConfig2);
@@ -45042,8 +45179,23 @@ class Scene extends AbstractScene {
     } else {
       data = this.currentConfig;
     }
+    this.loadTheme(data);
+  }
+  prev(data) {
+    if (!data) {
+      indTheme--;
+      if (indTheme < 0) {
+        indTheme = themes.length - 1;
+      }
+      data = themes[indTheme];
+    } else {
+      data = this.currentConfig;
+    }
+    this.loadTheme(data);
+  }
+  loadTheme(data) {
     const { background } = data;
-    this.bg.tint = background.color;
+    this.bg.reset(background);
     const sceneData = data.scene;
     if (sceneData) {
       this.selectScene(scenesMap[sceneData.name], sceneData);
@@ -45052,8 +45204,7 @@ class Scene extends AbstractScene {
     this.originalPane.refresh();
   }
   onResize(w, h) {
-    this.bg.width = w;
-    this.bg.height = h;
+    this.bg.resize(w, h);
     if (this.currentScene) {
       this.currentScene.resize(w, h);
     }
@@ -45062,7 +45213,7 @@ class Scene extends AbstractScene {
     var _a2;
     const obj = {
       background: {
-        color: this.bg.tint
+        ...this.bg.getProps()
       },
       scene: {
         ...((_a2 = this.currentScene) == null ? void 0 : _a2.getProps()) || {}
@@ -45436,6 +45587,7 @@ var Emitter = events.exports;
 let app = null;
 let renderer = null;
 const preview = new Container$1();
+preview.visible = false;
 const bgPreview = Sprite.from(Texture.WHITE);
 bgPreview.width = 120;
 bgPreview.height = 120;
@@ -45486,6 +45638,10 @@ class MainApp extends Emitter {
           error: "Mobile not supported for this experiment"
         });
       }, 10);
+    }
+    if (getQuery("hideUI")) {
+      app.view.style.zIndex = 1e5;
+      mConfig.container.style.zIndex = 1e4;
     }
   }
   _loadAssets(assetsPath) {
