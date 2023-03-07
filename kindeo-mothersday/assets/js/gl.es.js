@@ -42734,7 +42734,6 @@ class Particles {
     const { pane, label = "particles" } = this.options;
     const uMap = Texture.from("flower-4.png");
     this.scaleDots = 1;
-    this.material = new Shader.from();
     this.material = Shader.from(vert, frag$1, {
       uMap,
       uScale: 1,
@@ -42746,6 +42745,7 @@ class Particles {
       uAmountMoving: 1,
       uScaleScreen: 1
     });
+    console.log(this.material);
     this.geometry = new Geometry();
     const folder = pane.addFolder({
       title: label
@@ -43406,10 +43406,12 @@ class ShapeFiller {
         this.g.lineStyle(40, 16711680).drawRect(-m / 2, -m / 2, m, m);
         dispatchProps.width = m;
         dispatchProps.height = m;
+        dispatchProps.texture = Texture.from("./assets/images/square.png");
         break;
       case "circle":
         m = Math.max(min, Math.min(max, this.w * 0.8, this.h * 0.8));
         this.g.lineStyle(40, 16711680).drawCircle(0, 0, m / 2);
+        dispatchProps.texture = Texture.from("./assets/images/circle.png");
         dispatchProps.width = m;
         dispatchProps.height = m;
         break;
@@ -43492,6 +43494,8 @@ class ShapeFiller {
 }
 var assets = {
   images: [
+    { src: "./assets/images/square.png" },
+    { src: "./assets/images/circle.png" },
     { src: "./assets/images/heart.png" },
     { src: "./assets/images/heart-white.png" },
     { src: "./assets/images/heart-border.png" },
@@ -43776,7 +43780,7 @@ class Texts1 {
   constructor(pane) {
     this.view = new Container$1();
     this.view.visible = true;
-    this.textContent = "HAPPY MOTHER'S DAY MUM!";
+    this.textContent = "BONNE FETE MAMIE\n";
     this.pane = pane.addFolder({
       title: "texts1"
     });
@@ -44190,7 +44194,7 @@ class FramedPhoto {
     this.line.position.x = -this.photo.mask.width / 2 * 1.5;
     this.line.scale.set((25 + Math.random() * 60) / this.line.width, this.photo.mask.height * 1.5 / this.line.height * 2);
     gsapWithCSS.to(this.line.position, {
-      x: this.photo.mask.width,
+      x: this.photo.mask.width * 1.5,
       duration: 4 * 0.3 + Math.random() * 0.4,
       ease: "sin.out",
       onComplete: () => {
@@ -44218,12 +44222,18 @@ class FramedPhoto {
     this.photo.mask = null;
     switch (id) {
       case "square":
-        this.shapeMask.beginFill(16777215).drawRect(-width / 2, -height / 2, width, height);
-        this.photo.mask = this.shapeMask;
+        this.spriteMask.visible = true;
+        this.spriteMask.texture = texture;
+        this.spriteMask.scale.set(1);
+        this.spriteMask.scale.set(width / this.spriteMask.width, height / this.spriteMask.height);
+        this.photo.mask = this.spriteMask;
         break;
       case "circle":
-        this.shapeMask.beginFill(16777215).drawCircle(0, 0, width / 2);
-        this.photo.mask = this.shapeMask;
+        this.spriteMask.visible = true;
+        this.spriteMask.texture = texture;
+        this.spriteMask.scale.set(1);
+        this.spriteMask.scale.set(width / this.spriteMask.width, height / this.spriteMask.height);
+        this.photo.mask = this.spriteMask;
         break;
       case "heart":
         this.spriteMask.visible = true;
