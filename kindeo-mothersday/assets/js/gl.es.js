@@ -8964,7 +8964,7 @@ var Buffer = function() {
   };
   return Buffer2;
 }();
-var map$1 = {
+var map$1$1 = {
   Float32Array,
   Uint32Array,
   Int32Array,
@@ -8986,7 +8986,7 @@ function interleaveTypedArrays(arrays, sizes) {
     var array = arrays[i];
     var type = getBufferType(array);
     if (!views[type]) {
-      views[type] = new map$1[type](buffer);
+      views[type] = new map$1$1[type](buffer);
     }
     out = views[type];
     for (var j = 0; j < array.length; j++) {
@@ -29748,7 +29748,7 @@ requirePromise$3();
 var PromiseResolve2 = PromiseResolve$1;
 var Type3 = Type$d;
 var iterate = iterateValue;
-var map3 = array_prototype_map;
+var map$1 = array_prototype_map;
 var GetIntrinsic2 = getIntrinsic;
 var callBind$1 = callBind$4.exports;
 var all = callBind$1(GetIntrinsic2("%Promise.all%"));
@@ -29759,7 +29759,7 @@ var implementation$2 = function allSettled2(iterable) {
     throw new TypeError("`this` value must be an object");
   }
   var values = iterate(iterable);
-  return all(C, map3(values, function(item) {
+  return all(C, map$1(values, function(item) {
     var onFulfill = function(value) {
       return { status: "fulfilled", value };
     };
@@ -42258,8 +42258,8 @@ const defaultStyle = {
   fontSize: 300,
   wordWrap: true,
   wordWrapWidth: window.innerWidth * 0.9,
-  fontFamily: "Martian Mono",
-  fontWeight: "800",
+  fontFamily: "Delius Unicase",
+  fontWeight: "700",
   dropShadow: true,
   dropShadowAngle: 0,
   dropShadowBlur: 14,
@@ -42322,10 +42322,14 @@ class FillingText {
   animateOut() {
     this.animate(0);
   }
+  getFont() {
+    const { fontFamily, fontWeight } = this.text.style;
+    return `${fontFamily}:${fontWeight}`;
+  }
   resize(w, h) {
+    this.text.style.wordWrapWidth = w * 2;
     this.text.scale.set(1);
     this.text.scale.set(Math.min(1, w / this.text.width, h / this.text.height));
-    this.text.style.wordWrapWidth = w * 0.98;
     this.screenshot();
     this.fillPlane.resize(this.text.width, this.text.height);
     this.fillPlane.view.pivot.set(this.text.width / 2, this.text.height / 2);
@@ -42701,6 +42705,7 @@ const collections = {
     "baby-14.png"
   ]
 };
+const map3 = (val, inputMin, inputMax, outputMin, outputMax) => (outputMax - outputMin) * ((val - inputMin) / (inputMax - inputMin)) + outputMin;
 function rotate_point(cx, cy, angle, p) {
   let s = Math.sin(angle);
   let c = Math.cos(angle);
@@ -42727,6 +42732,7 @@ const defaultDotsColors = [
 class Particles {
   constructor(options = {}) {
     this.currentAssetsInUse = {};
+    this.scaleExtraBig = 1;
     for (const key of assetsList) {
       this.currentAssetsInUse[key] = false;
     }
@@ -42775,7 +42781,7 @@ class Particles {
     });
     tab.pages[0].addInput(this, "nb", {
       min: 100,
-      max: 25e3,
+      max: 4e4,
       step: 10
     }).on("change", () => {
       this.draw();
@@ -43005,6 +43011,14 @@ class Particles {
     this.h = h;
     this.material.uniforms.uScreenDimension = [w, h];
     this.material.uniforms.uAmountMoving = this.isMobile ? 0.5 : 1;
+    const maxNormalScreen = 1440 * 876;
+    const maxMassiveScreen = 2560 * 1440;
+    const scaleRatio = 1.41;
+    const currentPixels = w * h;
+    this.scaleExtraBig = 1;
+    if (!this.isMobile && currentPixels > maxNormalScreen) {
+      this.scaleExtraBig = map3(Math.min(maxMassiveScreen, currentPixels), maxNormalScreen, maxMassiveScreen, 1, scaleRatio);
+    }
     if (this.isMobile !== this.wasMobile) {
       this.draw();
     }
@@ -43012,7 +43026,8 @@ class Particles {
   }
   set time(value) {
     this.material.uniforms.uTime = value;
-    this.material.uniforms.uScale = this.isMobile ? this.scaleMobile : this.scale;
+    console.log(this.scaleExtraBig);
+    this.material.uniforms.uScale = (this.isMobile ? this.scaleMobile : this.scale) * this.scaleExtraBig;
   }
 }
 const anchorsMap = {
@@ -43406,25 +43421,25 @@ class ShapeFiller {
         this.g.lineStyle(40, 16711680).drawRect(-m / 2, -m / 2, m, m);
         dispatchProps.width = m;
         dispatchProps.height = m;
-        dispatchProps.texture = Texture.from("./assets/images/square.png");
+        dispatchProps.texture = Texture.from("./assets/images/square-mask.png");
         break;
       case "circle":
         m = Math.max(min, Math.min(max, this.w * 0.8, this.h * 0.8));
         this.g.lineStyle(40, 16711680).drawCircle(0, 0, m / 2);
-        dispatchProps.texture = Texture.from("./assets/images/circle.png");
+        dispatchProps.texture = Texture.from("./assets/images/circle-mask.png");
         dispatchProps.width = m;
         dispatchProps.height = m;
         break;
       case "heart":
         m = Math.max(min, Math.min(max, this.w, this.h * 1));
         this.sprite.visible = true;
-        this.sprite.texture = Texture.from("./assets/images/heart.png");
+        this.sprite.texture = Texture.from("./assets/images/flowers-heart.png");
         this.sprite.tint = 16711680;
         this.sprite.scale.set(1);
         this.sprite.scale.set(Math.min(m / this.sprite.width, m / this.sprite.height));
         dispatchProps.width = this.sprite.width;
         dispatchProps.height = this.sprite.height;
-        dispatchProps.texture = Texture.from("./assets/images/heart-full.png");
+        dispatchProps.texture = Texture.from("./assets/images/flowers-heart-full.png");
         dispatchProps.scale = this.sprite.scale.x * 1.8;
         break;
     }
@@ -43494,24 +43509,24 @@ class ShapeFiller {
 }
 var assets = {
   images: [
-    { src: "./assets/images/square.png" },
-    { src: "./assets/images/circle.png" },
-    { src: "./assets/images/heart.png" },
-    { src: "./assets/images/heart-white.png" },
-    { src: "./assets/images/heart-border.png" },
-    { src: "./assets/images/heart-full.png" },
+    { src: "./assets/images/square-mask.png" },
+    { src: "./assets/images/circle-mask.png" },
+    { src: "./assets/images/flowers-heart.png" },
+    { src: "./assets/images/flowers-heart-full.png" },
     { src: "./assets/images/mother2.webp" },
     { src: "./assets/images/flowers.json" }
   ],
   fonts: [
-    "Comic Neue:400",
-    "Handlee:400",
-    "Montserrat:800",
-    "Montserrat:400",
-    "Montserrat:700",
-    "Caveat Brush:400",
-    "Martian Mono:800",
-    "Amatic SC:700"
+    "Delius Unicase:700",
+    "Rochester:400",
+    "Orelega One:400",
+    "Orelega One:400",
+    "Sansita Swashed:300",
+    "Sansita Swashed:400",
+    "Sansita Swashed:500",
+    "Sansita Swashed:600",
+    "Delius Swash Caps:400",
+    "Spicy Rice:400"
   ]
 };
 class DefaultLine extends Container$1 {
@@ -43719,14 +43734,10 @@ class AnimatedLetters {
   }
 }
 class FlowerWord extends DefaultText {
-  constructor() {
-    super();
-  }
   reset(letter, x, index, style) {
     super.reset(...arguments);
     gsapWithCSS.killTweensOf(this.view);
-    this.view.alpha = 0;
-    this.text.position.y = this.text.height / 2;
+    this.view.alpha = 1;
     this.view.position.y = 0;
     this.view.position.x = x;
     this.text.position.x = this.view.pivot.x;
@@ -43748,7 +43759,8 @@ class FlowerWord extends DefaultText {
   }
   hide() {
     super.hide();
-    gsapWithCSS.killTweensOf(this.text);
+    gsapWithCSS.killTweensOf(this.view);
+    this.view.alpha = 0;
   }
   update() {
   }
@@ -43777,18 +43789,22 @@ const colourTextsColours = [
 ];
 let colorsLettersArray;
 class Texts1 {
-  constructor(pane) {
+  constructor(pane, parent) {
+    this.parent = parent;
     this.view = new Container$1();
     this.view.visible = true;
-    this.textContent = "BONNE FETE MAMIE\n";
+    this.textContent = "Happy Mother's Day";
     this.pane = pane.addFolder({
       title: "texts1"
     });
     this.pane.addInput(this.view, "visible");
+    this.pane.addInput(this, "textContent").on("change", () => {
+      this.reset();
+    });
     this.currentFontToAdd = {
-      fontFamily: "Comic Neue",
+      fontFamily: "Orelega One",
       fontSize: 100,
-      fontWeight: getFontWeights("Comic Neue")[0]
+      fontWeight: getFontWeights("Orelega One")[0]
     };
     this.pane.addBlade({
       view: "list",
@@ -43816,6 +43832,13 @@ class Texts1 {
       this.fontWeightEl.value = fontWeightList[0];
       this.updateFont();
     });
+    this.pane.addInput(this.currentFontToAdd, "fontSize", {
+      min: 20,
+      max: 100,
+      step: 1
+    }).on("change", () => {
+      this.updateFont();
+    });
     this.fontWeightEl = this.pane.addBlade({
       view: "list",
       label: "font weight",
@@ -43837,27 +43860,6 @@ class Texts1 {
       padding: 10
     });
     this.text1 = new AnimatedLetters();
-    this.text1.reset({
-      title: this.textContent,
-      style: this.style,
-      splitter: " ",
-      pivotScale: {
-        x: 0.5,
-        y: 0.5
-      },
-      ClassText: FlowerWord,
-      animateIn: ({ lines, letters: originalLetters }) => {
-        const letters = shuffleArray([...originalLetters]);
-        let prevDuration = 0;
-        for (let i = 0; i < letters.length; i++) {
-          const duration = 0.4 + i * 0.4;
-          const text = letters[i];
-          text.show(prevDuration * 0.6, duration);
-          prevDuration = duration;
-          prevDuration = duration;
-        }
-      }
-    });
     const colors = this.getColorLetters();
     colors[0];
     this.paramsColorsLetters = {
@@ -43880,6 +43882,11 @@ class Texts1 {
           [key]: this.paramsColorsLetters[key]
         }));
       });
+    });
+    const button = this.pane.addButton({ title: "animate text" });
+    button.on("click", () => {
+      this.text1.hide(true);
+      this.text1.animate();
     });
     this.view.addChild(this.text1.view);
   }
@@ -43920,8 +43927,12 @@ class Texts1 {
     return this.w < this.h && this.w < 600;
   }
   updateFont() {
+    this.style.fontSize = this.currentFontToAdd.fontSize;
     this.style.fontFamily = this.currentFontToAdd.fontFamily;
     this.style.fontWeight = this.currentFontToAdd.fontWeight;
+    this.propsReset.fontFamily = this.style.fontFamily;
+    this.propsReset.fontWeight = this.style.fontWeight;
+    this.propsReset.fontSize = this.style.fontSize;
     this.onShapeChange(this.props);
   }
   onShapeChange(props) {
@@ -43930,30 +43941,33 @@ class Texts1 {
       return;
     const w = this.w;
     this.h;
-    let fontSize = 50;
+    let fontSize = this.currentFontToAdd.fontSize;
     if (this.isMobile) {
-      fontSize = 30;
+      fontSize = fontSize * 0.75;
     }
     this.style.fontSize = fontSize;
     const { width, height, texture, scale, id } = props;
-    this.style.wordWrapWidth = Math.min(w * 0.9, width * 0.8);
+    console.log("this.parent.hasPhoto", this.parent);
+    this.style.wordWrapWidth = this.parent.hasPhoto ? w / 0.9 : Math.min(w * 0.9, width * 0.8);
     this.text1.updateStyle(this.style);
+    this.text1.animate();
     switch (id) {
       case "square":
         break;
       case "circle":
         break;
       case "heart":
-        this.text1.view.position.y -= height * 0.05;
+        this.text1.view.position.y = this.h / 2 - height * 0.05;
         break;
     }
   }
   reset(props = {}) {
+    this.propsReset = props || this.propsReset;
     const {
       fontFamily = "Comic Neue",
       fontSize = 100,
       fontWeight = getFontWeights("Comic Neue")[0]
-    } = props;
+    } = this.propsReset;
     this.currentFontToAdd.fontWeight = fontWeight;
     this.currentFontToAdd.fontFamily = fontFamily;
     this.currentFontToAdd.fontSize = fontSize;
@@ -43961,9 +43975,32 @@ class Texts1 {
     this.setLettersColors(colors);
     this.refreshColorsLettersInput(colors);
     this.updateFont();
-    setTimeout(() => {
-      this.text1.animate();
-    }, 200);
+    this.text1.reset({
+      title: this.textContent,
+      style: this.style,
+      splitter: "",
+      pivotScale: {
+        x: 0.5,
+        y: 0.5
+      },
+      ClassText: FlowerWord,
+      animateIn: ({ lines, letters: originalLetters }) => {
+        const letters = shuffleArray([...originalLetters]);
+        const durationTotal = 1.5;
+        const minDuration = 1;
+        for (let i = 0; i < letters.length; i++) {
+          let delay = (durationTotal - minDuration) / letters.length * i;
+          const duration = durationTotal - delay;
+          const text = letters[i];
+          text.show(delay, duration);
+        }
+      }
+    });
+    this.text1.hide(true);
+    this.text1.animate();
+  }
+  getFont() {
+    return `${this.currentFontToAdd.fontFamily}:${this.currentFontToAdd.fontWeight}`;
   }
   getProps() {
     return {
@@ -43974,7 +44011,6 @@ class Texts1 {
   resize(w, h) {
     this.w = w;
     this.h = h;
-    this.onShapeChange(this.props);
   }
 }
 class BorderEdge {
@@ -44041,7 +44077,7 @@ class ParticlesText {
     this.view = new Container$1();
     this.shadowContainer = new Container$1();
     this.containerFlower = new Container$1();
-    this.title = new FillingText("HAPPY MOTHER'S DAY", void 0, {
+    this.title = new FillingText("Happy Mother's Day", void 0, {
       pane
     });
     this.title.screenshot();
@@ -44136,6 +44172,9 @@ class ParticlesText {
     this.mainParticles.resize(w, h);
     this.currentBorder && this.currentBorder.resize(w, h);
   }
+  getFont() {
+    return this.title.getFont();
+  }
   getProps() {
     return {
       name: this.name,
@@ -44158,12 +44197,6 @@ class FramedPhoto {
       this.photo.texture = Texture.from(this.url);
       this.onShapeChange(this.props);
     });
-    this.line = new Sprite(Texture.WHITE);
-    this.line.rotation = Math.PI / 10;
-    this.line.visible = false;
-    this.line.anchor.set(0.5);
-    this.line.alpha = 0.2;
-    this.line.blendMode = BLEND_MODES$4.ADD;
     this.shapeMask = new Graphics();
     this.spriteMask = new Sprite();
     this.spriteMask.anchor.set(0.5);
@@ -44173,7 +44206,6 @@ class FramedPhoto {
     this.photo.anchor.set(0.5);
     this.view.addChild(this.photo);
     this.view.addChild(this.shapeMask, this.spriteMask);
-    this.photo.addChild(this.line);
     this.delay = Math.random() * 240;
     this.pane.addInput(this.view, "visible").on("change", () => {
       this.onPhotoToggle.dispatch(this.view.visible);
@@ -44185,31 +44217,6 @@ class FramedPhoto {
       this.photo.texture = Texture.from(this.url);
     }
     this.view.visible = props.visible;
-  }
-  animate() {
-    this.line.visible = true;
-    this.delay = Math.random() * 60 * 3 + 50;
-    this.animating = true;
-    this.line.scale.set(1);
-    this.line.position.x = -this.photo.mask.width / 2 * 1.5;
-    this.line.scale.set((25 + Math.random() * 60) / this.line.width, this.photo.mask.height * 1.5 / this.line.height * 2);
-    gsapWithCSS.to(this.line.position, {
-      x: this.photo.mask.width * 1.5,
-      duration: 4 * 0.3 + Math.random() * 0.4,
-      ease: "sin.out",
-      onComplete: () => {
-        this.animating = false;
-      }
-    });
-  }
-  update() {
-    if (!this.view.visible)
-      return;
-    if (this.delay < 0 && !this.animating) {
-      this.animate();
-    } else {
-      this.delay--;
-    }
   }
   get visible() {
     return this.view.visible;
@@ -44239,6 +44246,8 @@ class FramedPhoto {
         this.spriteMask.visible = true;
         this.spriteMask.texture = texture;
         this.spriteMask.scale.set(scale);
+        this.spriteMask.scale.set(1);
+        this.spriteMask.scale.set(width / this.spriteMask.width, height / this.spriteMask.height);
         this.photo.mask = this.spriteMask;
         break;
     }
@@ -44292,7 +44301,7 @@ class ShapeFrame {
       step: 0.01
     });
     this.shadow.anchor.set(0.5);
-    this.texts1 = new Texts1(this.pane, this.framedPhoto.photo);
+    this.texts1 = new Texts1(this.pane, this);
     this.shadowContainer.addChild(this.texts1.view, this.shapeParticles.view);
     this.shapeParticles.resizeShape.add((props) => {
       const { max } = this.getMinMaxHeightShape();
@@ -44361,10 +44370,10 @@ class ShapeFrame {
     if (borderData) {
       this.selectBorder(borderTypesMap[borderData.name], borderData);
     }
+    this.texts1.reset(data.text || {});
     this.shadow.alpha = ((_a2 = data.shadow) == null ? void 0 : _a2.alpha) || 0.1;
     this.framedPhoto.reset(data.photo || {});
     this.shapeParticles.reset(data.particles || {});
-    this.texts1.reset(data.text || {});
   }
   update() {
     this.shapeParticles.update();
@@ -44372,7 +44381,6 @@ class ShapeFrame {
     renderer.render(this.containerFlower, {
       renderTexture: this.renderTexture
     });
-    this.framedPhoto.update();
     renderer.render(this.shadowContainer, {
       renderTexture: this.renderTextureFlowers
     });
@@ -44403,6 +44411,9 @@ class ShapeFrame {
     this.currentBorder && this.currentBorder.resize(w, h);
     this.shapeParticles.resize(w, h);
   }
+  getFont() {
+    return this.texts1.getFont();
+  }
   getProps() {
     return {
       name: this.name,
@@ -44422,7 +44433,261 @@ class ShapeFrame {
     };
   }
 }
-const themes = [
+const themesTexts = [
+  {
+    background: {
+      colors: [
+        [0.9803921568627451, 0.9411764705882353, 0.9058823529411765],
+        [0.9921568627450981, 0.5764705882352941, 0.5568627450980392]
+      ]
+    },
+    font: "Delius Unicase:700",
+    scene: {
+      name: "ParticlesText",
+      shadow: { alpha: 0.45 },
+      particles: {
+        particles: {
+          assets: [
+            "flower-1.png",
+            "flower-2.png",
+            "flower-3.png",
+            "flower-4.png",
+            "flower-5.png",
+            "flower-6.png"
+          ],
+          nb: 4e4,
+          nbMobile: 4e4,
+          scale: 0.8400000000000001,
+          scaleMobile: 0.39999999999999997,
+          scaleDots: 0.39999999999999997,
+          dotsColors: [
+            [249.22265625, 204.07648426777595, 54.517456054687486],
+            [246.03515625, 154.04211260821378, 12.301757812500023],
+            [255, 214.27083333333334, 151.40625],
+            [255, 242.06105025773198, 199.21875]
+          ]
+        }
+      },
+      border: {
+        name: "BorderEdge",
+        particles: {
+          assets: [
+            "flower-1.png",
+            "flower-2.png",
+            "flower-3.png",
+            "flower-4.png",
+            "flower-5.png",
+            "flower-6.png",
+            "blue-flower-4.png",
+            "blue-flower-5.png",
+            "blue-flower-3.png"
+          ],
+          nb: 110,
+          nbMobile: 100,
+          scale: 0.8400000000000001,
+          scaleMobile: 0.52,
+          scaleDots: 1,
+          dotsColors: [
+            [255, 255, 255],
+            [252, 248, 248],
+            [255, 255, 255],
+            [255, 255, 255]
+          ]
+        }
+      }
+    }
+  },
+  {
+    background: {
+      colors: [
+        [0.9254901960784314, 0.9529411764705882, 0.9803921568627451],
+        [0.7137254901960784, 0.9490196078431372, 0.9921568627450981]
+      ]
+    },
+    scene: {
+      name: "ParticlesText",
+      shadow: { alpha: 0.29 },
+      particles: {
+        particles: {
+          assets: [
+            "blue-flower-8.png",
+            "blue-flower-9.png",
+            "blue-flower-10.png",
+            "blue-flower-11.png",
+            "blue-flower-12.png",
+            "blue-flower-14.png"
+          ],
+          nb: 3e4,
+          nbMobile: 4e4,
+          scale: 1,
+          scaleMobile: 0.52,
+          scaleDots: 0.29999999999999993,
+          dotsColors: [
+            [65.96630859375, 132.37833548880909, 175.91015625],
+            [159.6486486486486, 65.99999999999999, 176],
+            [66, 132, 176],
+            [66, 132, 176]
+          ]
+        }
+      },
+      border: {
+        name: "BorderEdge",
+        particles: {
+          assets: [
+            "blue-flower-5.png",
+            "blue-flower-3.png",
+            "blue-flower-2.png",
+            "blue-flower-1.png",
+            "blue-flower-13.png",
+            "blue-flower-14.png"
+          ],
+          nb: 400,
+          nbMobile: 100,
+          scale: 0.63,
+          scaleMobile: 1.1600000000000001,
+          scaleDots: 1,
+          dotsColors: [
+            [138.1196044921875, 203.57463684082032, 242.84765625],
+            [208.7202392578125, 225.35066476004465, 235.177734375],
+            [138, 204, 243],
+            [138, 204, 243]
+          ]
+        }
+      }
+    }
+  },
+  {
+    background: {
+      colors: [
+        [0.2235294117647059, 0.3568627450980392, 0.3803921568627451],
+        [0.06274509803921569, 0.06666666666666667, 0.06666666666666667]
+      ]
+    },
+    scene: {
+      name: "ParticlesText",
+      shadow: { alpha: 0.32 },
+      particles: {
+        particles: {
+          assets: ["gold-flower-21.png", "gold-flower19.png"],
+          nb: 3e4,
+          nbMobile: 4e4,
+          scale: 1.1,
+          scaleMobile: 0.7000000000000001,
+          scaleDots: 0.29999999999999993,
+          dotsColors: [
+            [242.008447265625, 244.8018138328758, 246.6328125],
+            [242, 245, 247],
+            [242, 245, 247],
+            [242, 245, 247]
+          ]
+        }
+      },
+      border: {
+        name: "BorderEdge",
+        particles: {
+          assets: [
+            "gold-flower19.png",
+            "gold-flower18.png",
+            "gold-flower16.png",
+            "gold-flower17.png",
+            "gold-flower13.png",
+            "gold-flower14.png",
+            "gold-flower15.png",
+            "gold-flower11.png",
+            "gold-flower12.png",
+            "gold-flower7.png",
+            "gold-flower8.png",
+            "gold-flower9.png",
+            "gold-flower5.png",
+            "gold-flower6.png",
+            "gold-flower3.png",
+            "gold-flower4.png",
+            "gold-flower1.png",
+            "gold-flower2.png"
+          ],
+          nb: 400,
+          nbMobile: 100,
+          scale: 0.9500000000000001,
+          scaleMobile: 1.37,
+          scaleDots: 0.45999999999999996,
+          dotsColors: [
+            [207.78515625, 172.06945010623426, 76.62077636718752],
+            [238.365234375, 217.8949375298187, 163.8760986328125],
+            [208, 172, 77],
+            [208, 172, 77]
+          ]
+        }
+      }
+    }
+  },
+  {
+    background: {
+      colors: [
+        [0.9294117647058824, 0.9725490196078431, 0.9803921568627451],
+        [0.3764705882352941, 0.396078431372549, 0.6431372549019608]
+      ]
+    },
+    scene: {
+      name: "ParticlesText",
+      shadow: { alpha: 0.1 },
+      particles: {
+        particles: {
+          assets: [
+            "flower-1.png",
+            "flower-2.png",
+            "flower-3.png",
+            "flower-4.png",
+            "flower-5.png",
+            "flower-6.png",
+            "blue-flower-6.png",
+            "blue-flower-4.png",
+            "blue-flower-3.png",
+            "blue-flower-9.png"
+          ],
+          nb: 3e4,
+          nbMobile: 4e4,
+          scale: 1.1,
+          scaleMobile: 0.7000000000000001,
+          scaleDots: 0.54,
+          dotsColors: [
+            [252.41015625, 248.37671017208612, 116.73969726562503],
+            [106.89305815825588, 230.09765625, 71.905517578125],
+            [43.99248046875, 159.97265625, 46.47403828388931],
+            [172.72265625, 3.2385498046874988, 149.9530009584168]
+          ]
+        }
+      },
+      border: {
+        name: "BorderEdge",
+        particles: {
+          assets: [
+            "flower-1.png",
+            "flower-2.png",
+            "flower-3.png",
+            "flower-4.png",
+            "flower-5.png",
+            "flower-6.png",
+            "blue-flower-4.png",
+            "blue-flower-5.png",
+            "blue-flower-3.png"
+          ],
+          nb: 110,
+          nbMobile: 100,
+          scale: 0.8400000000000001,
+          scaleMobile: 0.52,
+          scaleDots: 1,
+          dotsColors: [
+            [255, 255, 255],
+            [252, 248, 248],
+            [255, 255, 255],
+            [255, 255, 255]
+          ]
+        }
+      }
+    }
+  }
+];
+const themesShapes = [
   {
     background: {
       colors: [
@@ -44463,16 +44728,16 @@ const themes = [
         }
       },
       text: {
-        fontFamily: "Martian Mono",
-        fontSize: 100,
-        fontWeight: "800",
+        fontFamily: "Orelega One",
+        fontSize: 70,
+        fontWeight: "400",
         colors: [
-          "#214872",
-          "#14365c",
-          "#2f6095",
-          "#2a517c",
-          "#214872",
-          "#214872"
+          "#834664",
+          "#915573",
+          "#914269",
+          "#834664",
+          "#834664",
+          "#834664"
         ]
       },
       border: {
@@ -44511,6 +44776,7 @@ const themes = [
         [0.023529411764705882, 0.023529411764705882, 0.03137254901960784]
       ]
     },
+    font: "Rochester:400",
     scene: {
       name: "ShapeFrame",
       shadow: { alpha: 0.1 },
@@ -44556,16 +44822,16 @@ const themes = [
         }
       },
       text: {
-        fontFamily: "Montserrat",
-        fontSize: 100,
+        fontFamily: "Rochester",
+        fontSize: 80,
         fontWeight: "400",
         colors: [
-          "#f5eded",
-          "#f5ecdc",
+          "#f5e3bb",
+          "#ecdbb5",
           "#f8e6c9",
           "#e8d5ab",
-          "#f5eded",
-          "#f5eded"
+          "#f5ecdc",
+          "#e8d5ab"
         ]
       },
       border: {
@@ -44617,6 +44883,7 @@ const themes = [
         [0.6431372549019608, 0.7137254901960784, 1]
       ]
     },
+    font: "Sansita Swashed:400",
     scene: {
       name: "ShapeFrame",
       shadow: { alpha: 0.1 },
@@ -44645,16 +44912,16 @@ const themes = [
         }
       },
       text: {
-        fontFamily: "Comic Neue",
-        fontSize: 100,
-        fontWeight: "400",
+        fontFamily: "Sansita Swashed",
+        fontSize: 75,
+        fontWeight: 400,
         colors: [
-          "#99cbeb",
-          "#8ac5eb",
-          "#aec7ee",
-          "#7998c9",
-          "#7998c9",
-          "#7998c9"
+          "#6d4d99",
+          "#604389",
+          "#64458f",
+          "#604389",
+          "#604389",
+          "#604389"
         ]
       },
       border: {
@@ -44683,69 +44950,11 @@ const themes = [
   {
     background: {
       colors: [
-        [1, 0.9882352941176471, 0.9215686274509803],
-        [0.9568627450980393, 0.7803921568627451, 0.7803921568627451]
-      ]
-    },
-    scene: {
-      name: "ParticlesText",
-      shadow: { alpha: 0.45 },
-      particles: {
-        particles: {
-          assets: [
-            "flower-1.png",
-            "flower-2.png",
-            "flower-3.png",
-            "flower-4.png",
-            "flower-5.png",
-            "flower-6.png"
-          ],
-          nb: 25e3,
-          nbMobile: 4e4,
-          scale: 1,
-          scaleMobile: 0.39999999999999997,
-          scaleDots: 0.39999999999999997,
-          dotsColors: [
-            [249.22265625, 204.07648426777595, 54.517456054687486],
-            [246.03515625, 154.04211260821378, 12.301757812500023],
-            [255, 214.27083333333334, 151.40625],
-            [255, 242.06105025773198, 199.21875]
-          ]
-        }
-      },
-      border: {
-        name: "BorderEdge",
-        particles: {
-          assets: [
-            "flower-3.png",
-            "flower-4.png",
-            "flower-5.png",
-            "flower-watercolor-1.png",
-            "flower-watercolor-4.png",
-            "flower-watercolor-7.png"
-          ],
-          nb: 400,
-          nbMobile: 100,
-          scale: 0.85,
-          scaleMobile: 1,
-          scaleDots: 0.45999999999999996,
-          dotsColors: [
-            [56, 61, 64],
-            [82, 89, 66],
-            [140, 129, 70],
-            [89, 46, 21]
-          ]
-        }
-      }
-    }
-  },
-  {
-    background: {
-      colors: [
         [0.9254901960784314, 0.9529411764705882, 0.9803921568627451],
         [0.7137254901960784, 0.9490196078431372, 0.9921568627450981]
       ]
     },
+    font: "Delius Swash Caps:400",
     scene: {
       name: "ShapeFrame",
       shadow: { alpha: 0.22 },
@@ -44774,16 +44983,16 @@ const themes = [
         }
       },
       text: {
-        fontFamily: "Martian Mono",
-        fontSize: 100,
+        fontFamily: "Delius Swash Caps",
+        fontSize: 80,
         fontWeight: "400",
         colors: [
-          "#f87d7d",
-          "#ee6767",
-          "#d87373",
-          "#f87d7d",
-          "#f87d7d",
-          "#f87d7d"
+          "#704ea3",
+          "#634392",
+          "#7658a3",
+          "#634392",
+          "#634392",
+          "#634392"
         ]
       },
       border: {
@@ -44816,69 +45025,11 @@ const themes = [
   {
     background: {
       colors: [
-        [0.4980392156862745, 0.6235294117647059, 0.7803921568627451],
-        [0.8941176470588236, 0.9725490196078431, 0.9921568627450981]
-      ]
-    },
-    scene: {
-      name: "ParticlesText",
-      shadow: { alpha: 0.29 },
-      particles: {
-        particles: {
-          assets: [
-            "blue-flower-8.png",
-            "blue-flower-9.png",
-            "blue-flower-10.png",
-            "blue-flower-11.png",
-            "blue-flower-12.png",
-            "blue-flower-14.png"
-          ],
-          nb: 2e4,
-          nbMobile: 4e4,
-          scale: 1,
-          scaleMobile: 0.52,
-          scaleDots: 0.29999999999999993,
-          dotsColors: [
-            [65.96630859375, 132.37833548880909, 175.91015625],
-            [159.6486486486486, 65.99999999999999, 176],
-            [66, 132, 176],
-            [66, 132, 176]
-          ]
-        }
-      },
-      border: {
-        name: "BorderEdge",
-        particles: {
-          assets: [
-            "blue-flower-5.png",
-            "blue-flower-3.png",
-            "blue-flower-2.png",
-            "blue-flower-1.png",
-            "blue-flower-13.png",
-            "blue-flower-14.png"
-          ],
-          nb: 400,
-          nbMobile: 100,
-          scale: 0.63,
-          scaleMobile: 1.1600000000000001,
-          scaleDots: 1,
-          dotsColors: [
-            [138.1196044921875, 203.57463684082032, 242.84765625],
-            [208.7202392578125, 225.35066476004465, 235.177734375],
-            [138, 204, 243],
-            [138, 204, 243]
-          ]
-        }
-      }
-    }
-  },
-  {
-    background: {
-      colors: [
         [0.9294117647058824, 0.9725490196078431, 0.9803921568627451],
         [0.3764705882352941, 0.396078431372549, 0.6431372549019608]
       ]
     },
+    font: "Spicy Rice:400",
     scene: {
       name: "ShapeFrame",
       shadow: { alpha: 0.07 },
@@ -44912,16 +45063,16 @@ const themes = [
         }
       },
       text: {
-        fontFamily: "Martian Mono",
-        fontSize: 100,
-        fontWeight: "800",
+        fontFamily: "Spicy Rice",
+        fontSize: 70,
+        fontWeight: "400",
         colors: [
-          "#214872",
-          "#14365c",
-          "#2f6095",
-          "#2a517c",
-          "#214872",
-          "#214872"
+          "#4b7796",
+          "#4e7a99",
+          "#4f80a3",
+          "#4b7796",
+          "#4b7796",
+          "#4b7796"
         ]
       },
       border: {
@@ -44952,72 +45103,9 @@ const themes = [
         }
       }
     }
-  },
-  {
-    background: {
-      colors: [
-        [0.2235294117647059, 0.3568627450980392, 0.3803921568627451],
-        [0.06274509803921569, 0.06666666666666667, 0.06666666666666667]
-      ]
-    },
-    scene: {
-      name: "ParticlesText",
-      shadow: { alpha: 0.32 },
-      particles: {
-        particles: {
-          assets: ["gold-flower-21.png", "gold-flower19.png"],
-          nb: 22290,
-          nbMobile: 4e4,
-          scale: 1.05,
-          scaleMobile: 0.7000000000000001,
-          scaleDots: 0.29999999999999993,
-          dotsColors: [
-            [242.008447265625, 244.8018138328758, 246.6328125],
-            [242, 245, 247],
-            [242, 245, 247],
-            [242, 245, 247]
-          ]
-        }
-      },
-      border: {
-        name: "BorderEdge",
-        particles: {
-          assets: [
-            "gold-flower19.png",
-            "gold-flower18.png",
-            "gold-flower16.png",
-            "gold-flower17.png",
-            "gold-flower13.png",
-            "gold-flower14.png",
-            "gold-flower15.png",
-            "gold-flower11.png",
-            "gold-flower12.png",
-            "gold-flower7.png",
-            "gold-flower8.png",
-            "gold-flower9.png",
-            "gold-flower5.png",
-            "gold-flower6.png",
-            "gold-flower3.png",
-            "gold-flower4.png",
-            "gold-flower1.png",
-            "gold-flower2.png"
-          ],
-          nb: 400,
-          nbMobile: 100,
-          scale: 0.9500000000000001,
-          scaleMobile: 1.37,
-          scaleDots: 0.45999999999999996,
-          dotsColors: [
-            [207.78515625, 172.06945010623426, 76.62077636718752],
-            [238.365234375, 217.8949375298187, 163.8760986328125],
-            [208, 172, 77],
-            [208, 172, 77]
-          ]
-        }
-      }
-    }
   }
 ];
+const themes = [...themesShapes, ...themesTexts];
 var frag = `
 
 
@@ -45372,6 +45460,7 @@ class Scene extends AbstractScene {
       background: {
         ...this.bg.getProps()
       },
+      font: this.currentScene.getFont(),
       scene: {
         ...((_a2 = this.currentScene) == null ? void 0 : _a2.getProps()) || {}
       }
