@@ -379,8 +379,8 @@ if (!globalThis.requestAnimationFrame) {
   };
 }
 if (!globalThis.cancelAnimationFrame) {
-  globalThis.cancelAnimationFrame = function(id) {
-    return clearTimeout(id);
+  globalThis.cancelAnimationFrame = function(id2) {
+    return clearTimeout(id2);
   };
 }
 if (!Math.sign) {
@@ -3681,11 +3681,11 @@ var Matrix = function() {
   };
   Matrix2.prototype.applyInverse = function(pos, newPos) {
     newPos = newPos || new Point();
-    var id = 1 / (this.a * this.d + this.c * -this.b);
+    var id2 = 1 / (this.a * this.d + this.c * -this.b);
     var x = pos.x;
     var y = pos.y;
-    newPos.x = this.d * id * x + -this.c * id * y + (this.ty * this.c - this.tx * this.d) * id;
-    newPos.y = this.a * id * y + -this.b * id * x + (-this.ty * this.a + this.tx * this.b) * id;
+    newPos.x = this.d * id2 * x + -this.c * id2 * y + (this.ty * this.c - this.tx * this.d) * id2;
+    newPos.y = this.a * id2 * y + -this.b * id2 * x + (-this.ty * this.a + this.tx * this.b) * id2;
     return newPos;
   };
   Matrix2.prototype.translate = function(x, y) {
@@ -6532,10 +6532,10 @@ var InteractionManager = function(_super) {
   };
   InteractionManager2.prototype.processPointerDown = function(interactionEvent, displayObject, hit) {
     var data = interactionEvent.data;
-    var id = interactionEvent.data.identifier;
+    var id2 = interactionEvent.data.identifier;
     if (hit) {
-      if (!displayObject.trackedPointers[id]) {
-        displayObject.trackedPointers[id] = new InteractionTrackingData(id);
+      if (!displayObject.trackedPointers[id2]) {
+        displayObject.trackedPointers[id2] = new InteractionTrackingData(id2);
       }
       this.dispatchEvent(displayObject, "pointerdown", interactionEvent);
       if (data.pointerType === "touch") {
@@ -6543,9 +6543,9 @@ var InteractionManager = function(_super) {
       } else if (data.pointerType === "mouse" || data.pointerType === "pen") {
         var isRightButton = data.button === 2;
         if (isRightButton) {
-          displayObject.trackedPointers[id].rightDown = true;
+          displayObject.trackedPointers[id2].rightDown = true;
         } else {
-          displayObject.trackedPointers[id].leftDown = true;
+          displayObject.trackedPointers[id2].leftDown = true;
         }
         this.dispatchEvent(displayObject, isRightButton ? "rightdown" : "mousedown", interactionEvent);
       }
@@ -6579,9 +6579,9 @@ var InteractionManager = function(_super) {
   };
   InteractionManager2.prototype.processPointerCancel = function(interactionEvent, displayObject) {
     var data = interactionEvent.data;
-    var id = interactionEvent.data.identifier;
-    if (displayObject.trackedPointers[id] !== void 0) {
-      delete displayObject.trackedPointers[id];
+    var id2 = interactionEvent.data.identifier;
+    if (displayObject.trackedPointers[id2] !== void 0) {
+      delete displayObject.trackedPointers[id2];
       this.dispatchEvent(displayObject, "pointercancel", interactionEvent);
       if (data.pointerType === "touch") {
         this.dispatchEvent(displayObject, "touchcancel", interactionEvent);
@@ -6596,8 +6596,8 @@ var InteractionManager = function(_super) {
   };
   InteractionManager2.prototype.processPointerUp = function(interactionEvent, displayObject, hit) {
     var data = interactionEvent.data;
-    var id = interactionEvent.data.identifier;
-    var trackingData = displayObject.trackedPointers[id];
+    var id2 = interactionEvent.data.identifier;
+    var trackingData = displayObject.trackedPointers[id2];
     var isTouch = data.pointerType === "touch";
     var isMouse = data.pointerType === "mouse" || data.pointerType === "pen";
     var isMouseTap = false;
@@ -6644,7 +6644,7 @@ var InteractionManager = function(_super) {
       }
     }
     if (trackingData && trackingData.none) {
-      delete displayObject.trackedPointers[id];
+      delete displayObject.trackedPointers[id2];
     }
   };
   InteractionManager2.prototype.onPointerMove = function(originalEvent) {
@@ -6715,11 +6715,11 @@ var InteractionManager = function(_super) {
   };
   InteractionManager2.prototype.processPointerOverOut = function(interactionEvent, displayObject, hit) {
     var data = interactionEvent.data;
-    var id = interactionEvent.data.identifier;
+    var id2 = interactionEvent.data.identifier;
     var isMouse = data.pointerType === "mouse" || data.pointerType === "pen";
-    var trackingData = displayObject.trackedPointers[id];
+    var trackingData = displayObject.trackedPointers[id2];
     if (hit && !trackingData) {
-      trackingData = displayObject.trackedPointers[id] = new InteractionTrackingData(id);
+      trackingData = displayObject.trackedPointers[id2] = new InteractionTrackingData(id2);
     }
     if (trackingData === void 0) {
       return;
@@ -6742,7 +6742,7 @@ var InteractionManager = function(_super) {
         this.dispatchEvent(displayObject, "mouseout", interactionEvent);
       }
       if (trackingData.none) {
-        delete displayObject.trackedPointers[id];
+        delete displayObject.trackedPointers[id2];
       }
     }
   };
@@ -7432,15 +7432,15 @@ var BaseTexture = function(_super) {
     var type = buffer instanceof Float32Array ? TYPES$4.FLOAT : TYPES$4.UNSIGNED_BYTE;
     return new BaseTexture2(resource, Object.assign(defaultBufferOptions, options || { width, height, type }));
   };
-  BaseTexture2.addToCache = function(baseTexture, id) {
-    if (id) {
-      if (baseTexture.textureCacheIds.indexOf(id) === -1) {
-        baseTexture.textureCacheIds.push(id);
+  BaseTexture2.addToCache = function(baseTexture, id2) {
+    if (id2) {
+      if (baseTexture.textureCacheIds.indexOf(id2) === -1) {
+        baseTexture.textureCacheIds.push(id2);
       }
-      if (BaseTextureCache[id]) {
-        console.warn("BaseTexture added to the cache with an id [" + id + "] that already had an entry");
+      if (BaseTextureCache[id2]) {
+        console.warn("BaseTexture added to the cache with an id [" + id2 + "] that already had an entry");
       }
-      BaseTextureCache[id] = baseTexture;
+      BaseTextureCache[id2] = baseTexture;
     }
   };
   BaseTexture2.removeFromCache = function(baseTexture) {
@@ -8589,15 +8589,15 @@ var Texture = function(_super) {
       });
     });
   };
-  Texture2.addToCache = function(texture, id) {
-    if (id) {
-      if (texture.textureCacheIds.indexOf(id) === -1) {
-        texture.textureCacheIds.push(id);
+  Texture2.addToCache = function(texture, id2) {
+    if (id2) {
+      if (texture.textureCacheIds.indexOf(id2) === -1) {
+        texture.textureCacheIds.push(id2);
       }
-      if (TextureCache[id]) {
-        console.warn("Texture added to the cache with an id [" + id + "] that already had an entry");
+      if (TextureCache[id2]) {
+        console.warn("Texture added to the cache with an id [" + id2 + "] that already had an entry");
       }
-      TextureCache[id] = texture;
+      TextureCache[id2] = texture;
     }
   };
   Texture2.removeFromCache = function(texture) {
@@ -9025,7 +9025,7 @@ var Geometry = function() {
     this.disposeRunner = new Runner("disposeGeometry");
     this.refCount = 0;
   }
-  Geometry2.prototype.addAttribute = function(id, buffer, size, normalized, type, stride, start, instance) {
+  Geometry2.prototype.addAttribute = function(id2, buffer, size, normalized, type, stride, start, instance) {
     if (size === void 0) {
       size = 0;
     }
@@ -9044,7 +9044,7 @@ var Geometry = function() {
       }
       buffer = new Buffer(buffer);
     }
-    var ids = id.split("|");
+    var ids = id2.split("|");
     if (ids.length > 1) {
       for (var i = 0; i < ids.length; i++) {
         this.addAttribute(ids[i], buffer, size, normalized, type);
@@ -9056,15 +9056,15 @@ var Geometry = function() {
       this.buffers.push(buffer);
       bufferIndex = this.buffers.length - 1;
     }
-    this.attributes[id] = new Attribute(bufferIndex, size, normalized, type, stride, start, instance);
+    this.attributes[id2] = new Attribute(bufferIndex, size, normalized, type, stride, start, instance);
     this.instanced = this.instanced || instance;
     return this;
   };
-  Geometry2.prototype.getAttribute = function(id) {
-    return this.attributes[id];
+  Geometry2.prototype.getAttribute = function(id2) {
+    return this.attributes[id2];
   };
-  Geometry2.prototype.getBuffer = function(id) {
-    return this.buffers[this.getAttribute(id).buffer];
+  Geometry2.prototype.getBuffer = function(id2) {
+    return this.buffers[this.getAttribute(id2).buffer];
   };
   Geometry2.prototype.addIndex = function(buffer) {
     if (!(buffer instanceof Buffer)) {
@@ -12107,11 +12107,11 @@ var ShaderSystem = function() {
     syncFunc(glProgram.uniformData, group.uniforms, this.renderer, syncData);
   };
   ShaderSystem2.prototype.createSyncGroups = function(group) {
-    var id = this.getSignature(group, this.shader.program.uniformData, "u");
-    if (!this.cache[id]) {
-      this.cache[id] = generateUniformsSync(group, this.shader.program.uniformData);
+    var id2 = this.getSignature(group, this.shader.program.uniformData, "u");
+    if (!this.cache[id2]) {
+      this.cache[id2] = generateUniformsSync(group, this.shader.program.uniformData);
     }
-    group.syncUniforms[this.shader.program.id] = this.cache[id];
+    group.syncUniforms[this.shader.program.id] = this.cache[id2];
     return group.syncUniforms[this.shader.program.id];
   };
   ShaderSystem2.prototype.syncUniformBufferGroup = function(group, name) {
@@ -12131,10 +12131,10 @@ var ShaderSystem = function() {
     glProgram.uniformBufferBindings[name] = this.shader.uniformBindCount;
     gl.uniformBlockBinding(glProgram.program, uniformBlockIndex, this.shader.uniformBindCount);
     this.shader.uniformBindCount++;
-    var id = this.getSignature(group, this.shader.program.uniformData, "ubo");
-    var uboData = this._uboCache[id];
+    var id2 = this.getSignature(group, this.shader.program.uniformData, "ubo");
+    var uboData = this._uboCache[id2];
     if (!uboData) {
-      uboData = this._uboCache[id] = generateUniformBufferSync(group, this.shader.program.uniformData);
+      uboData = this._uboCache[id2] = generateUniformBufferSync(group, this.shader.program.uniformData);
     }
     if (group.autoManage) {
       var data = new Float32Array(uboData.size / 4);
@@ -19358,13 +19358,13 @@ var GraphicsGeometry = function(_super) {
       colors[offset2 + i] = rgba;
     }
   };
-  GraphicsGeometry2.prototype.addTextureIds = function(textureIds, id, size, offset2) {
+  GraphicsGeometry2.prototype.addTextureIds = function(textureIds, id2, size, offset2) {
     if (offset2 === void 0) {
       offset2 = 0;
     }
     textureIds.length = Math.max(textureIds.length, offset2 + size);
     for (var i = 0; i < size; i++) {
-      textureIds[offset2 + i] = id;
+      textureIds[offset2 + i] = id2;
     }
   };
   GraphicsGeometry2.prototype.addUvs = function(verts, uvs, texture, start, size, matrix) {
@@ -23077,14 +23077,14 @@ var BitmapFont = function() {
     this.chars = {};
     this.pageTextures = pageTextures;
     for (var i = 0; i < data.page.length; i++) {
-      var _c2 = data.page[i], id = _c2.id, file = _c2.file;
-      pageTextures[id] = textures instanceof Array ? textures[i] : textures[file];
+      var _c2 = data.page[i], id2 = _c2.id, file = _c2.file;
+      pageTextures[id2] = textures instanceof Array ? textures[i] : textures[file];
       if ((distanceField === null || distanceField === void 0 ? void 0 : distanceField.fieldType) && distanceField.fieldType !== "none") {
-        pageTextures[id].baseTexture.alphaMode = ALPHA_MODES$4.NO_PREMULTIPLIED_ALPHA;
+        pageTextures[id2].baseTexture.alphaMode = ALPHA_MODES$4.NO_PREMULTIPLIED_ALPHA;
       }
     }
     for (var i = 0; i < data.char.length; i++) {
-      var _d = data.char[i], id = _d.id, page_1 = _d.page;
+      var _d = data.char[i], id2 = _d.id, page_1 = _d.page;
       var _e = data.char[i], x = _e.x, y = _e.y, width = _e.width, height = _e.height, xoffset = _e.xoffset, yoffset = _e.yoffset, xadvance = _e.xadvance;
       x /= res;
       y /= res;
@@ -23094,7 +23094,7 @@ var BitmapFont = function() {
       yoffset /= res;
       xadvance /= res;
       var rect = new Rectangle(x + pageTextures[page_1].frame.x / res, y + pageTextures[page_1].frame.y / res, width, height);
-      this.chars[id] = {
+      this.chars[id2] = {
         xOffset: xoffset,
         yOffset: yoffset,
         xAdvance: xadvance,
@@ -23116,15 +23116,15 @@ var BitmapFont = function() {
     this.distanceFieldType = (_b2 = (_a2 = distanceField === null || distanceField === void 0 ? void 0 : distanceField.fieldType) === null || _a2 === void 0 ? void 0 : _a2.toLowerCase()) !== null && _b2 !== void 0 ? _b2 : "none";
   }
   BitmapFont2.prototype.destroy = function() {
-    for (var id in this.chars) {
-      this.chars[id].texture.destroy();
-      this.chars[id].texture = null;
+    for (var id2 in this.chars) {
+      this.chars[id2].texture.destroy();
+      this.chars[id2].texture = null;
     }
-    for (var id in this.pageTextures) {
+    for (var id2 in this.pageTextures) {
       if (this._ownsTextures) {
-        this.pageTextures[id].destroy(true);
+        this.pageTextures[id2].destroy(true);
       }
-      this.pageTextures[id] = null;
+      this.pageTextures[id2] = null;
     }
     this.chars = null;
     this.pageTextures = null;
@@ -23218,9 +23218,9 @@ var BitmapFont = function() {
         continue;
       }
       drawGlyph(canvas, context4, metrics, positionX, positionY, resolution, style);
-      var id = extractCharCode(metrics.text);
+      var id2 = extractCharCode(metrics.text);
       fontData.char.push({
-        id,
+        id: id2,
         page: textures.length - 1,
         x: positionX / resolution,
         y: positionY / resolution,
@@ -23760,10 +23760,10 @@ var charRenderDataPool = [];
   });
   BitmapText.prototype.destroy = function(options) {
     var _textureCache = this._textureCache;
-    for (var id in _textureCache) {
-      var texture = _textureCache[id];
+    for (var id2 in _textureCache) {
+      var texture = _textureCache[id2];
       texture.destroy();
-      delete _textureCache[id];
+      delete _textureCache[id2];
     }
     this._textureCache = null;
     _super.prototype.destroy.call(this, options);
@@ -29909,11 +29909,11 @@ class LoaderPixi {
   resizeTextures(textures) {
     for (const i in textures) {
       const texture = textures[i];
-      let id = i;
+      let id2 = i;
       if (texture.tags && texture.tags.tps) {
-        id = `${id}_image`;
+        id2 = `${id2}_image`;
       }
-      const baseTexture = BaseTextureCache[id];
+      const baseTexture = BaseTextureCache[id2];
       if (baseTexture) {
         if (texture.tags) {
           if (texture.tags.REPEAT) {
@@ -31541,10 +31541,10 @@ var Timeline = /* @__PURE__ */ function(_Animation) {
     }
     return a;
   };
-  _proto2.getById = function getById2(id) {
+  _proto2.getById = function getById2(id2) {
     var animations = this.getChildren(1, 1, 1), i = animations.length;
     while (i--) {
-      if (animations[i].vars.id === id) {
+      if (animations[i].vars.id === id2) {
         return animations[i];
       }
     }
@@ -32732,8 +32732,8 @@ var _gsap = {
   parseEase: function parseEase(ease, defaultEase) {
     return arguments.length ? _parseEase(ease, defaultEase) : _easeMap;
   },
-  getById: function getById(id) {
-    return _globalTimeline.getById(id);
+  getById: function getById(id2) {
+    return _globalTimeline.getById(id2);
   },
   exportRoot: function exportRoot(vars, includeDelayedCalls) {
     if (vars === void 0) {
@@ -42038,12 +42038,12 @@ var tweakpane = { exports: {} };
       }
       return elem;
     }
-    function embedStyle(doc, id, css) {
-      if (doc.querySelector(`style[data-tp-style=${id}]`)) {
+    function embedStyle(doc, id2, css) {
+      if (doc.querySelector(`style[data-tp-style=${id2}]`)) {
         return;
       }
       const styleElem = doc.createElement("style");
-      styleElem.dataset.tpStyle = id;
+      styleElem.dataset.tpStyle = id2;
       styleElem.textContent = css;
       doc.head.appendChild(styleElem);
     }
@@ -42736,9 +42736,11 @@ const defaultDotsColors = [
   [89, 46, 21],
   [191, 144, 117]
 ];
+let id = 0;
 class Particles {
   constructor(options = {}) {
     this.currentAssetsInUse = {};
+    this.id = options.label || `particles- ${++id}`;
     this.scaleExtraBig = 1;
     for (const key of assetsList) {
       this.currentAssetsInUse[key] = false;
@@ -42769,7 +42771,7 @@ class Particles {
     this.scaleMobile = 1;
     this.scaleRatio = 1.4;
     folder.addInput(this, "scaleRatio", {
-      min: 0,
+      min: 1,
       max: 5,
       step: 0.01
     }).on("change", () => {
@@ -43020,8 +43022,8 @@ class Particles {
     return this.w < this.h && this.w < 600;
   }
   updateScaleRatio() {
-    const maxNormalScreen = 1440 * 876 / 2;
-    const maxMassiveScreen = 1440 * 876;
+    const maxNormalScreen = 1440 * 876;
+    const maxMassiveScreen = 2560 * 1440;
     const scaleRatio = this.scaleRatio;
     const currentPixels = this.w * this.h;
     this.scaleExtraBig = 1;
@@ -43042,7 +43044,7 @@ class Particles {
     }
     this.wasMobile = this.isMobile;
   }
-  setTime(value) {
+  set time(value) {
     this.material.uniforms.uTime = value;
     this.material.uniforms.uScale = (this.isMobile ? this.scaleMobile : this.scale) * this.scaleExtraBig;
   }
@@ -43166,7 +43168,7 @@ class MainFiller {
     this.particles.setTexture(texture);
   }
   update() {
-    this.particles.setTime(this.tick);
+    this.particles.time = this.tick;
     this.tick++;
   }
   resize(w, h) {
@@ -43268,7 +43270,7 @@ class BorderFiller {
     this.particles.setTexture(texture);
   }
   update() {
-    this.particles.setTime(this.tick);
+    this.particles.time = this.tick;
     this.tick++;
   }
   resize(w, h) {
@@ -43421,8 +43423,8 @@ class ShapeFiller {
     this.sprite.anchor.set(0.5);
     this.container.addChild(this.g, this.sprite);
   }
-  changeShape(id, hasPhoto) {
-    this.currentShape = id || this.currentShape;
+  changeShape(id2, hasPhoto) {
+    this.currentShape = id2 || this.currentShape;
     if (!this.currentShape)
       return;
     this.renderTexture.resize(this.w, this.h);
@@ -43468,9 +43470,9 @@ class ShapeFiller {
     });
   }
   reset(props) {
-    const { id } = props.shape || {};
-    if (id) {
-      this.changeShape(id);
+    const { id: id2 } = props.shape || {};
+    if (id2) {
+      this.changeShape(id2);
     }
     const particlesData = props.particles || {
       nb: 1e4,
@@ -43524,7 +43526,7 @@ class ShapeFiller {
     this.particles.setTexture(texture);
   }
   update() {
-    this.particles.setTime(this.tick);
+    this.particles.time = this.tick;
     this.tick++;
   }
   resize(w, h) {
@@ -43975,12 +43977,12 @@ class Texts1 {
       fontSize = fontSize * 0.75;
     }
     this.style.fontSize = fontSize;
-    const { width, height, texture, scale, id } = props;
+    const { width, height, texture, scale, id: id2 } = props;
     console.log("this.parent.hasPhoto", this.parent);
     this.style.wordWrapWidth = this.parent.hasPhoto ? w / 0.9 : Math.min(w * 0.9, width * 0.8);
     this.text1.updateStyle(this.style);
     this.text1.animate();
-    switch (id) {
+    switch (id2) {
       case "square":
         break;
       case "circle":
@@ -44256,11 +44258,11 @@ class FramedPhoto {
   }
   onShapeChange(props = {}) {
     this.props = props;
-    const { width, height, texture, scale, id } = props;
+    const { width, height, texture, scale, id: id2 } = props;
     this.shapeMask.clear();
     this.spriteMask.visible = false;
     this.photo.mask = null;
-    switch (id) {
+    switch (id2) {
       case "square":
         this.spriteMask.visible = true;
         this.spriteMask.texture = texture;
@@ -45265,8 +45267,8 @@ class DelayedCalls {
     }
     return obj;
   }
-  getRemainingTime(id) {
-    const obj = this.delayedCalls[id];
+  getRemainingTime(id2) {
+    const obj = this.delayedCalls[id2];
     if (obj && obj.delay) {
       return obj.delay * 60 - obj.tick;
     }
