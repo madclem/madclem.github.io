@@ -42315,11 +42315,18 @@ class FillingText {
       ease: "none"
     });
   }
+  hide(snap3) {
+    this.animateOut(snap3);
+  }
   animateIn() {
     this.fillPlane.percent = 0;
     this.animate(1);
   }
-  animateOut() {
+  animateOut(snap3) {
+    if (snap3) {
+      this.fillPlane.percent = 0;
+      return;
+    }
     this.animate(0);
   }
   getFont() {
@@ -42760,6 +42767,14 @@ class Particles {
     this.nbMobile = 0;
     this.scale = 1;
     this.scaleMobile = 1;
+    this.scaleRatio = 1.4;
+    folder.addInput(this, "scaleRatio", {
+      min: 0,
+      max: 5,
+      step: 0.01
+    }).on("change", () => {
+      this.updateScaleRatio();
+    });
     folder.addInput(this, "scaleDots", {
       label: "dot scale",
       min: 0,
@@ -43004,6 +43019,16 @@ class Particles {
   get isMobile() {
     return this.w < this.h && this.w < 600;
   }
+  updateScaleRatio() {
+    const maxNormalScreen = 1440 * 876 / 2;
+    const maxMassiveScreen = 1440 * 876;
+    const scaleRatio = this.scaleRatio;
+    const currentPixels = this.w * this.h;
+    this.scaleExtraBig = 1;
+    if (!this.isMobile && currentPixels > maxNormalScreen) {
+      this.scaleExtraBig = map3(Math.min(maxMassiveScreen, currentPixels), maxNormalScreen, maxMassiveScreen, 1, scaleRatio);
+    }
+  }
   resize(w, h) {
     if (!this.props)
       return;
@@ -43011,22 +43036,14 @@ class Particles {
     this.h = h;
     this.material.uniforms.uScreenDimension = [w, h];
     this.material.uniforms.uAmountMoving = this.isMobile ? 0.5 : 1;
-    const maxNormalScreen = 1440 * 876;
-    const maxMassiveScreen = 2560 * 1440;
-    const scaleRatio = 1.41;
-    const currentPixels = w * h;
-    this.scaleExtraBig = 1;
-    if (!this.isMobile && currentPixels > maxNormalScreen) {
-      this.scaleExtraBig = map3(Math.min(maxMassiveScreen, currentPixels), maxNormalScreen, maxMassiveScreen, 1, scaleRatio);
-    }
+    this.updateScaleRatio();
     if (this.isMobile !== this.wasMobile) {
       this.draw();
     }
     this.wasMobile = this.isMobile;
   }
-  set time(value) {
+  setTime(value) {
     this.material.uniforms.uTime = value;
-    console.log(this.scaleExtraBig);
     this.material.uniforms.uScale = (this.isMobile ? this.scaleMobile : this.scale) * this.scaleExtraBig;
   }
 }
@@ -43149,7 +43166,7 @@ class MainFiller {
     this.particles.setTexture(texture);
   }
   update() {
-    this.particles.time = this.tick;
+    this.particles.setTime(this.tick);
     this.tick++;
   }
   resize(w, h) {
@@ -43251,7 +43268,7 @@ class BorderFiller {
     this.particles.setTexture(texture);
   }
   update() {
-    this.particles.time = this.tick;
+    this.particles.setTime(this.tick);
     this.tick++;
   }
   resize(w, h) {
@@ -43472,6 +43489,18 @@ class ShapeFiller {
     });
     this.animateIn();
   }
+  hide(snap3) {
+    gsapWithCSS.killTweensOf(this.particles.material.uniforms);
+    if (snap3) {
+      this.particles.material.uniforms.uPercent = 0;
+      return;
+    }
+    gsapWithCSS.to(this.particles.material.uniforms, {
+      uPercent: 0,
+      ease: "sin.inout",
+      duration: 0.6
+    });
+  }
   animateIn() {
     this.particles.material.uniforms.uPercent = 0;
     gsapWithCSS.killTweensOf(this.particles.material.uniforms);
@@ -43495,7 +43524,7 @@ class ShapeFiller {
     this.particles.setTexture(texture);
   }
   update() {
-    this.particles.time = this.tick;
+    this.particles.setTime(this.tick);
     this.tick++;
   }
   resize(w, h) {
@@ -43999,6 +44028,9 @@ class Texts1 {
     this.text1.hide(true);
     this.text1.animate();
   }
+  hide(snap3) {
+    this.text1.hide(snap3);
+  }
   getFont() {
     return `${this.currentFontToAdd.fontFamily}:${this.currentFontToAdd.fontWeight}`;
   }
@@ -44124,6 +44156,7 @@ class ParticlesText {
   }
   hide(snap3) {
     this.hideBorder(snap3);
+    this.title.hide(snap3);
   }
   selectBorder(border, props = {}) {
     this.hideBorder(true);
@@ -44351,6 +44384,8 @@ class ShapeFrame {
   }
   hide(snap3) {
     this.hideBorder(snap3);
+    this.shapeParticles.hide(snap3);
+    this.texts1.hide(snap3);
   }
   selectBorder(border, props = {}) {
     this.hideBorder(true);
@@ -45393,10 +45428,21 @@ class Scene extends AbstractScene {
       this.doubleClick.onPrevious.add(this.prev.bind(this));
       this.doubleClick.onNext.add(this.next.bind(this));
     }
+    if (!!getQuery("manual")) {
+      document.addEventListener("keydown", (e) => {
+        e = e || window.event;
+        if (e.keyCode == "32") {
+          if (!!this.waitingForReset) {
+            this.currentScene.reset(this.waitingForReset);
+            this.waitingForReset = null;
+          }
+        }
+      });
+    }
   }
   selectScene(scene, props = {}) {
     if (this.currentScene) {
-      this.currentScene.hide();
+      this.currentScene.hide(true);
       this.containerScene.removeChild(this.currentScene.view);
     }
     if (!scene)
@@ -45407,7 +45453,11 @@ class Scene extends AbstractScene {
       this.currentScene = scenesSelected[scene.name];
     }
     this.currentScene.resize(this.w, this.h);
-    this.currentScene.reset(props);
+    if (getQuery("manual")) {
+      this.waitingForReset = props;
+    } else {
+      this.currentScene.reset(props);
+    }
     this.containerScene.addChild(this.currentScene.view);
   }
   onShow() {
