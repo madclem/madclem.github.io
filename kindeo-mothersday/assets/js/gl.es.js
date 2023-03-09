@@ -42333,6 +42333,12 @@ class FillingText {
     const { fontFamily, fontWeight } = this.text.style;
     return `${fontFamily}:${fontWeight}`;
   }
+  get width() {
+    return this.text.width;
+  }
+  get height() {
+    return this.text.height;
+  }
   resize(w, h) {
     this.text.style.wordWrapWidth = w * 0.96 * 2;
     this.text.scale.set(1);
@@ -42388,6 +42394,7 @@ uniform mat3 projectionMatrix;
 uniform mat3 translationMatrix;
 uniform mat3 uTextureMatrix;
 uniform vec2 uScreenDimension;
+uniform vec2 uScreenDimensionReal;
 
 
 varying float vScale;
@@ -42417,8 +42424,8 @@ float circularOut(float t) {
 void main(void)
 {
   vec2 uvScreen = aPosOffset.xy / 2. + .5;
-
-  vec4 colorMask = texture2D(uMapMask, uvScreen);
+  vec2 uvScreenReal = (aPosOffset.xy * uScreenDimension / uScreenDimensionReal) / 2. + .5;
+  vec4 colorMask = texture2D(uMapMask, uvScreenReal);
 
   // float scale = backOut(clamp(extraw.r + uPercent - 1., 0., 1.) / 1.);
   // float zeroToOne = clamp(aExtra.w + uPercent - 1., 0., 1.) / 1.;
@@ -42472,7 +42479,7 @@ void main(void)
   
   
   
-  if (uvScreen.x > 1.05 || uvScreen.x < -0.05 || uvScreen.y > 1.05 || uvScreen.y < -0.05 || colorMask.r < 0.001 || colorMask.a < 0.001) {
+  if (uvScreenReal.x > 1.05 || uvScreenReal.x < -0.05 || uvScreenReal.y > 1.05 || uvScreenReal.y < -0.05 || colorMask.r < 0.001 || colorMask.a < 0.001) {
     position.xy *= 0.;
   } else {
     position.xy *= scale * colorMask.r * (1. + colorMask.g * 1.5 * (step(aExtra.x, 0.)));
@@ -42755,6 +42762,7 @@ class Particles {
       uPercent: 1,
       uMapMask: Texture.WHITE,
       uMapFrame: new Rectangle(0, 0, 1, 1),
+      uScreenDimensionReal: [window.innerWidth, window.innerHeight],
       uScreenDimension: [window.innerWidth, window.innerHeight],
       uTime: 0,
       uAmountMoving: 1,
@@ -43031,12 +43039,19 @@ class Particles {
       this.scaleExtraBig = map3(Math.min(maxMassiveScreen, currentPixels), maxNormalScreen, maxMassiveScreen, 1, scaleRatio);
     }
   }
-  resize(w, h) {
+  resize(w, h, maxW, maxH) {
     if (!this.props)
       return;
     this.w = w;
     this.h = h;
-    this.material.uniforms.uScreenDimension = [w, h];
+    maxW = maxW || w;
+    maxH = maxH || h;
+    let maxSpaceW = Math.min(maxW, w);
+    let maxSpaceH = Math.min(maxH, h);
+    this.material.uniforms.uScreenDimension = [maxSpaceW, maxSpaceH];
+    this.material.uniforms.uScreenDimensionReal = [w, h];
+    this.mesh.position.x = this.w / 2 - maxSpaceW / 2;
+    this.mesh.position.y = this.h / 2 - maxSpaceH / 2;
     this.material.uniforms.uAmountMoving = this.isMobile ? 0.5 : 1;
     this.updateScaleRatio();
     if (this.isMobile !== this.wasMobile) {
@@ -43171,8 +43186,8 @@ class MainFiller {
     this.particles.time = this.tick;
     this.tick++;
   }
-  resize(w, h) {
-    this.particles.resize(w, h);
+  resize(w, h, maxW, maxH) {
+    this.particles.resize(w, h, maxW, maxH);
   }
 }
 const assetsFlowers = [
@@ -43388,12 +43403,15 @@ const shapes = ["square", "circle", "triangle", "heart"];
 class ShapeFiller {
   constructor(pane, parent) {
     this.parent = parent;
+    this.widthShape = 1;
+    this.heightShape = 1;
     this.resizeShape = new MiniSignal();
     this.particles = new Particles({
       pane,
       label: "particles"
     });
-    this.view = this.particles.mesh;
+    this.view = new Container$1();
+    this.view.addChild(this.particles.mesh);
     this.tick = 0;
     const folder = pane.addFolder({
       title: "Shape particles"
@@ -43434,23 +43452,25 @@ class ShapeFiller {
     let dispatchProps = {};
     let { min, max } = this.parent.getMinMaxHeightShape();
     max *= 0.8;
+    const maxW = 600;
+    const maxH = 600;
     switch (this.currentShape) {
       case "square":
-        m = Math.max(min, Math.min(max, this.w * 0.8, this.h * 0.8));
+        m = Math.max(min, Math.min(max, Math.min(maxW, this.w * 0.8), Math.min(maxH, this.h * 0.8)));
         this.g.lineStyle(40, 16711680).drawRect(-m / 2, -m / 2, m, m);
         dispatchProps.width = m;
         dispatchProps.height = m;
         dispatchProps.texture = Texture.from("./assets/images/square-mask.png");
         break;
       case "circle":
-        m = Math.max(min, Math.min(max, this.w * 0.8, this.h * 0.8));
+        m = Math.max(min, Math.min(max, Math.min(maxW, this.w * 0.8), Math.min(maxH, this.h * 0.8)));
         this.g.lineStyle(40, 16711680).drawCircle(0, 0, m / 2);
         dispatchProps.texture = Texture.from("./assets/images/circle-mask.png");
         dispatchProps.width = m;
         dispatchProps.height = m;
         break;
       case "heart":
-        m = Math.max(min, Math.min(max, this.w, this.h * 1));
+        m = Math.max(min, Math.min(max, Math.min(maxW, this.w * 1), Math.min(maxH, this.h * 1)));
         this.sprite.visible = true;
         this.sprite.texture = Texture.from("./assets/images/flowers-heart.png");
         this.sprite.tint = 16711680;
@@ -43462,12 +43482,14 @@ class ShapeFiller {
         dispatchProps.scale = this.sprite.scale.x * 1.8;
         break;
     }
-    this.resizeShape.dispatch({ ...dispatchProps, id: this.currentShape });
+    this.widthShape = dispatchProps.width;
+    this.heightShape = dispatchProps.height;
     this.container.x = this.w / 2;
     this.container.y = this.h / 2;
     renderer.render(this.container, {
       renderTexture: this.renderTexture
     });
+    this.resizeShape.dispatch({ ...dispatchProps, id: this.currentShape });
   }
   reset(props) {
     const { id: id2 } = props.shape || {};
@@ -43532,10 +43554,10 @@ class ShapeFiller {
   resize(w, h) {
     this.w = w;
     this.h = h;
-    this.particles.resize(w, h);
     if (this.currentShape) {
       this.changeShape(this.currentShape);
     }
+    this.particles.resize(w, h, this.widthShape, this.heightShape);
   }
 }
 var assets = {
@@ -44197,14 +44219,16 @@ class ParticlesText {
     this.shadow.y = h / 2 + 2;
     this.title.view.x = w / 2;
     this.title.view.y = h / 2;
-    if (this.isMobile) {
-      this.title.resize(w * 0.95, h * 0.85);
-    } else {
-      this.title.resize(w * 0.9, h * 0.8);
+    let wText = w * 0.95;
+    let hText = h * 0.85;
+    if (!this.isMobile) {
+      wText = Math.min(1200, w * 0.9);
+      hText = Math.min(800, h * 0.8);
     }
+    this.title.resize(wText, hText);
     this.renderTexture.resize(w, h);
     this.renderTextureFlowers.resize(w, h);
-    this.mainParticles.resize(w, h);
+    this.mainParticles.resize(w, h, this.title.width, this.title.height);
     this.currentBorder && this.currentBorder.resize(w, h);
   }
   getFont() {
