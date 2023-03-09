@@ -42334,7 +42334,7 @@ class FillingText {
     return `${fontFamily}:${fontWeight}`;
   }
   resize(w, h) {
-    this.text.style.wordWrapWidth = w * 2;
+    this.text.style.wordWrapWidth = w * 0.96 * 2;
     this.text.scale.set(1);
     this.text.scale.set(Math.min(1, w / this.text.width, h / this.text.height));
     this.screenshot();
@@ -44280,7 +44280,6 @@ class FramedPhoto {
       case "heart":
         this.spriteMask.visible = true;
         this.spriteMask.texture = texture;
-        this.spriteMask.scale.set(scale);
         this.spriteMask.scale.set(1);
         this.spriteMask.scale.set(width / this.spriteMask.width, height / this.spriteMask.height);
         this.photo.mask = this.spriteMask;
@@ -44684,7 +44683,7 @@ const themesTexts = [
           nb: 3e4,
           nbMobile: 4e4,
           scale: 1.1,
-          scaleMobile: 0.7000000000000001,
+          scaleMobile: 0.5,
           scaleDots: 0.54,
           dotsColors: [
             [252.41015625, 248.37671017208612, 116.73969726562503],
