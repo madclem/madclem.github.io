@@ -43080,6 +43080,64 @@ const getFontProps = (fontFamily, fontWeight, str) => {
 const styles$1 = [[style1A, style1B, style1C, style1D]];
 const themes = [
   {
+    shadow: {
+      alpha: 0.13,
+      color: "#000000",
+      scale: 1.17,
+      offset: { x: 8.823529411764724, y: 50 }
+    },
+    debug: false,
+    glare: {
+      alpha: 0,
+      size: 1,
+      speed: 1,
+      color: "#FFFFFF",
+      angle: 0,
+      smooth: 0
+    },
+    bg: {
+      flatColor: "#000000",
+      radial: {
+        center: { x: 0, y: 0 },
+        size: 0.48,
+        active: true,
+        blendMode: 0,
+        color1: { color: "#10174B", alpha: 1 },
+        color2: { color: "#3240A9", alpha: 1 }
+      },
+      linear: {
+        active: false,
+        angle: -1.5707963267948966,
+        size: 0.53,
+        blendMode: 0,
+        color1: { color: "#000000", alpha: 0.6 },
+        color2: { color: "#000000", alpha: 0 }
+      }
+    },
+    colorLetters: [],
+    margin: 19,
+    useDifferentFonts: false,
+    fonts: [
+      {
+        fontFamily: "Poppins",
+        fontSize: 100,
+        fontWeight: 800,
+        italic: false,
+        active: true,
+        useOnce: false
+      }
+    ],
+    hasGlare: true,
+    coloredLines: [
+      ["#FFC360", "#E4A43A", "#DBB43D", "#D67E00"],
+      ["#EBA4CE", "#E27FB9", "#D553A0", "#D269B8"],
+      ["#C02624", "#F2312F", "#D85B1B", "#E85946"]
+    ],
+    bgColor: "#258BBA",
+    glareAlpha: 0.08,
+    name: ""
+  },
+  {
     shadow: { alpha: 0.2, color: "#000000", scale: 1, offset: { x: 0, y: 12 } },
     debug: false,
     glare: {
@@ -43530,6 +43588,118 @@ var debugLinear = (pane, that) => {
     that.setLinearGradientColors();
   });
 };
+var debugThemeColors = (pane, theme) => {
+  var _a2;
+  console.log("\u{1F680} ~ file: debugThemeColors.js:4 ~ theme:", theme);
+  const folderTheme = pane.addFolder({
+    title: "colors - theme",
+    expanded: false
+  });
+  const div = document.createElement("div");
+  div.className = "icon-color";
+  div.style = "position: absolute; right: 30px; top: 1px";
+  const element = folderTheme.element.getElementsByClassName("tp-fldv_b")[0];
+  element.style = "position: relative;";
+  element.appendChild(div);
+  var style = document.createElement("style");
+  style.type = "text/css";
+  style.innerHTML = `
+.pie {
+  border: 1px solid black;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 10px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.pie-2 > div {
+
+  display: inline-block;
+  width: 20px;
+  height: 10px;
+}
+.pie-3 > div {
+
+  display: inline-block;
+  width: 10px;
+  height: 13px;
+  &:nth-child(1) {
+    transform: skewY(155deg);
+  }
+  &:nth-child(2) {
+
+  }
+    transform: skewY(-155deg);
+}
+.pie-4 > div {
+
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+`;
+  document.getElementsByTagName("head")[0].appendChild(style);
+  const regenerateHTML = () => {
+    const colors = [...theme.themeColors];
+    div.innerHTML = `
+    <div class="pie pie-${colors.length}" style="background: ${colors[0]};">
+      ${[...colors.slice(1)].map((color) => {
+      return `<div style="background: ${color}"></div>`;
+    }).join("")}
+    </div>
+  `;
+  };
+  theme.themeColors = ((_a2 = theme.themeColors) == null ? void 0 : _a2.length) ? theme.themeColors : ["#e4a43a"];
+  const currentColoredLinesInList = [];
+  folderTheme.addButton({
+    title: "Add color"
+  }).on("click", () => {
+    const c = "#000000";
+    theme.themeColors.push(c);
+    addColoredLinesToFolder();
+  });
+  const selectedColoursFolder = folderTheme;
+  const addColouredLineToList = (f, i) => {
+    const coloredLineFolder = selectedColoursFolder.addFolder({
+      title: `color - ${i}`,
+      index: i
+    });
+    const colors = [f];
+    const colorsParams = {
+      color1: colors[0]
+    };
+    Object.keys(colorsParams).map((key, ind) => {
+      return coloredLineFolder.addInput(colorsParams, key).on("change", () => {
+        console.log(colorsParams, key);
+        theme.themeColors[i] = colorsParams[key];
+        regenerateHTML();
+      });
+    });
+    if (i > 0) {
+      coloredLineFolder.addButton({
+        title: "Up"
+      }).on("click", () => {
+        theme.themeColors.splice(i - 1, 0, theme.themeColors.splice(i, 1)[0]);
+        addColoredLinesToFolder();
+      });
+    }
+    coloredLineFolder.addButton({
+      title: "Remove"
+    }).on("click", () => {
+      theme.themeColors.splice(i, 1);
+      addColoredLinesToFolder();
+    });
+    coloredLineFolder.addSeparator();
+    currentColoredLinesInList.push(coloredLineFolder);
+  };
+  const addColoredLinesToFolder = () => {
+    currentColoredLinesInList.forEach((folder) => folder.dispose());
+    theme.themeColors.forEach(addColouredLineToList.bind(void 0));
+    regenerateHTML();
+  };
+  addColoredLinesToFolder();
+};
 const getRGBSmall = (hex) => {
   return rgb2rgbSmall(hex2rgb(hex.replace("#", "0x")));
 };
@@ -43645,7 +43815,7 @@ class CurveDeform {
           title: "Up"
         }).on("click", () => {
           this.currentTheme.coloredLines.splice(i - 1, 0, this.currentTheme.coloredLines.splice(i, 1)[0]);
-          this.addFontsToFolder();
+          this.addColoredLinesToFolder();
         });
       }
       coloredLineFolder.addButton({
@@ -43744,7 +43914,7 @@ class CurveDeform {
     this.renderTexture = new RenderTexture(brt);
     this.sprite = new Sprite(this.renderTexture);
     this.view.addChild(this.sprite);
-    this.nbPoints = 50;
+    this.nbPoints = 100;
     this.geometry = new PlaneGeometry(0, 0, this.nbPoints, this.lines.length + 1);
     this.containerPlane = new Container$1();
     this.view.addChild(this.containerPlane);
@@ -43770,6 +43940,7 @@ class CurveDeform {
     const btnShare = orignalPane.addButton({
       title: "Share"
     });
+    debugThemeColors(orignalPane, this.currentTheme);
     btnShare.on("click", () => {
       this.share();
     });
@@ -43989,7 +44160,6 @@ class CurveDeform {
     this.toggleGlare();
     this.toggleRadialGradient();
     this.addFontsToFolder();
-    this.addColoredLinesToFolder();
     this.toggleGlare();
     this.toggleRadialGradient();
     this.toggleLinearGradient();
@@ -44124,6 +44294,7 @@ class CurveDeform {
       };
       const hasLowerCase = fontProperties.hasLowerCase;
       const t = new AnimatedLetters();
+      const indexColoredLine = i % coloredLinesList.length;
       t.reset({
         shuffleColors: false,
         title: hasLowerCase ? l : l.toUpperCase(),
@@ -44139,7 +44310,6 @@ class CurveDeform {
       width += t.width;
       this.texts.push(t);
       t.view.fontProperties = fontProperties;
-      const indexColoredLine = i % coloredLinesList.length;
       t.tints = coloredLinesList[indexColoredLine];
       this.containerText.addChild(t.view);
     });
@@ -44250,9 +44420,7 @@ class CurveDeform {
   }
   setPlanePosition() {
     let scale = 1;
-    if (this.containerText.width > this.w - 20) {
-      scale = Math.min(1, (this.w - 20) / this.containerText.width);
-    }
+    scale = Math.min(1.25, (this.w - 20) / this.containerText.width);
     this.containerText.width - scale * this.containerText.width;
     this.containerPlane.position.x = this.w / 2;
     this.containerPlane.position.y = this.h / 2;
