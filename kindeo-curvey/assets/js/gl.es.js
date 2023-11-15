@@ -43080,14 +43080,37 @@ const getFontProps = (fontFamily, fontWeight, str) => {
 const styles$1 = [[style1A, style1B, style1C, style1D]];
 const themes = [
   {
+    shadow: { alpha: 0.2, color: "#000000", scale: 1, offset: { x: 0, y: 12 } },
     debug: false,
-    hasGlare: true,
-    coloredLines: [
-      ["#b2edfa", "#a7e4f2", "#66cdd9", "#d9bba0", "#f2d5bb", "#f2d5bb"]
-    ],
+    glare: {
+      alpha: 0.5999999999999999,
+      size: 1,
+      speed: 1,
+      color: "#ffffff",
+      angle: 35,
+      smooth: 0.42000000000000004
+    },
+    bg: {
+      flatColor: "#fff6e7",
+      linear: {
+        active: true,
+        angle: -1.5707963267948966,
+        size: 0.53,
+        blendMode: 0,
+        color1: { color: "#000000", alpha: 0.6 },
+        color2: { color: "#000000", alpha: 0 }
+      },
+      radial: {
+        active: true,
+        center: { x: 0, y: 0 },
+        size: 0.93,
+        blendMode: 20,
+        color1: { color: "#ffffff", alpha: 0 },
+        color2: { color: "#facb75", alpha: 1 }
+      }
+    },
+    colorLetters: [],
     margin: 8,
-    bgColor: "#258bba",
-    glareAlpha: 0.08,
     useDifferentFonts: true,
     fonts: [
       {
@@ -43099,586 +43122,14 @@ const themes = [
         useOnce: false
       }
     ],
-    name: ""
-  },
-  {
-    debug: false,
     hasGlare: true,
     coloredLines: [
-      ["#b2edfa", "#a7e4f2", "#66cdd9", "#d9bba0", "#f2d5bb", "#f2d5bb"]
+      ["#b2edfa", "#a7e4f2", "#66cdd9", "#66cdd9"],
+      ["#e8a1a1", "#e88888", "#db9c9c", "#e8a1a1"],
+      ["#e8d491", "#d8c481", "#decc8f", "#d2be7b"]
     ],
-    margin: 8,
     bgColor: "#258bba",
     glareAlpha: 0.08,
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Raleway",
-        fontSize: 100,
-        fontWeight: 800,
-        italic: false,
-        active: true,
-        useOnce: true
-      },
-      {
-        fontFamily: "Montserrat",
-        fontSize: 120,
-        fontWeight: "200",
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Roboto Serif",
-        fontSize: 100,
-        fontWeight: "400",
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Montserrat",
-        fontSize: 60,
-        fontWeight: "400",
-        italic: false,
-        active: true,
-        useOnce: false
-      }
-    ],
-    name: ""
-  },
-  {
-    debug: false,
-    hasGlare: true,
-    colorLetters: [
-      "#0487d9",
-      "#049dd9",
-      "#04b2d9",
-      "#04c4d9",
-      "#04c4d9",
-      "#04c4d9"
-    ],
-    margin: 8,
-    bgColor: "#f2e6d8",
-    glareAlpha: 0.08,
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Raleway",
-        fontSize: 100,
-        fontWeight: 800,
-        italic: false,
-        active: true,
-        useOnce: true
-      },
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: "200",
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Raleway",
-        fontSize: 100,
-        fontWeight: 300,
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Roboto Serif",
-        fontSize: 100,
-        fontWeight: 600,
-        italic: false,
-        active: true,
-        useOnce: false
-      }
-    ],
-    name: ""
-  },
-  {
-    debug: false,
-    hasGlare: true,
-    colorLetters: [
-      "#dd797a",
-      "#eb7475",
-      "#eb6e70",
-      "#eb6e70",
-      "#eb6e70",
-      "#eb6e70"
-    ],
-    margin: 8,
-    bgColor: "#fff6f5",
-    glareAlpha: 0.08,
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Caveat Brush",
-        fontSize: 110,
-        fontWeight: "400",
-        italic: false,
-        active: true,
-        useOnce: false
-      }
-    ],
-    name: "poster-10"
-  },
-  {
-    debug: false,
-    hasGlare: false,
-    colorLetters: [
-      "#f0da91",
-      "#e39ca8",
-      "#6cd1ea",
-      "#e0a7b1",
-      "#92bdbc",
-      "#92bdbc"
-    ],
-    margin: 8,
-    bgColor: "#fffdfa",
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Dancing Script",
-        fontSize: 100,
-        fontWeight: "400",
-        italic: false,
-        active: true,
-        useOnce: false
-      }
-    ],
-    name: ""
-  },
-  {
-    text: "You. Are. A STAR!",
-    debug: false,
-    hasGlare: true,
-    colorLetters: [
-      "#f8e70d",
-      "#aba226",
-      "#a59900",
-      "#f8e70d",
-      "#f8e70d",
-      "#f8e70d"
-    ],
-    margin: 8,
-    bgColor: "#00132c",
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Roboto Serif",
-        fontSize: 100,
-        fontWeight: "400",
-        active: true,
-        useOnce: false
-      },
-      {
-        fill: "white",
-        fontFamily: "Barlow Condensed",
-        fontWeight: 800,
-        fontSize: 100,
-        active: true,
-        useOnce: false
-      },
-      {
-        fill: "white",
-        fontFamily: "Barlow Condensed",
-        fontWeight: "400",
-        fontSize: 120,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Indie Flower",
-        fontSize: 80,
-        fontWeight: "400",
-        active: true,
-        useOnce: true
-      }
-    ]
-  },
-  {
-    text: "Happy birthday Bob. This is your day :D",
-    debug: false,
-    hasGlare: false,
-    colorLetters: [
-      "#e97778",
-      "#89c7b6",
-      "#ffc54e",
-      "#ad84c7",
-      "#7998c9",
-      "#7998c9"
-    ],
-    margin: 7,
-    bgColor: "#fffbe8",
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fill: "white",
-        fontFamily: "Barlow Condensed",
-        fontWeight: 800,
-        fontSize: 120,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Barlow Condensed",
-        fontSize: 100,
-        fontWeight: "400",
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Barlow Condensed",
-        fontSize: 95,
-        fontWeight: 600,
-        active: true,
-        useOnce: false
-      }
-    ]
-  },
-  {
-    text: "So sad you're leaving... not!!!",
-    debug: false,
-    hasGlare: false,
-    colorLetters: [
-      "#f8efb6",
-      "#febac5",
-      "#6cd1ea",
-      "#facfd7",
-      "#c2eae9",
-      "#c2eae9"
-    ],
-    margin: 8,
-    bgColor: "#023535",
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Barlow Condensed",
-        fontSize: 120,
-        fontWeight: 600,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Barlow Condensed",
-        fontSize: 80,
-        fontWeight: "400",
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Roboto Serif",
-        fontSize: 100,
-        fontWeight: "400",
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Barlow Condensed",
-        fontSize: 100,
-        fontWeight: 800,
-        active: true,
-        useOnce: false
-      }
-    ]
-  },
-  {
-    text: "Happy Valentine's, my love! \\nTo many more years of happiness...",
-    debug: false,
-    hasGlare: false,
-    colorLetters: [
-      "#f87a7c",
-      "#e55558",
-      "#e5575f",
-      "#f87a7c",
-      "#f87a7c",
-      "#f87a7c"
-    ],
-    margin: 17,
-    bgColor: "#fffbf3",
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Caveat",
-        fontSize: 105,
-        fontWeight: 700,
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Caveat",
-        fontSize: 135,
-        fontWeight: 400,
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Indie Flower",
-        fontSize: 110,
-        fontWeight: "400",
-        italic: false,
-        active: true,
-        useOnce: true
-      }
-    ]
-  },
-  {
-    text: "Our awesome trip to Disney, florida!!!",
-    debug: false,
-    hasGlare: false,
-    colorLetters: [
-      "#0f7cbf",
-      "#3098d9",
-      "#3dadd9",
-      "#79bed9",
-      "#79bed9",
-      "#79bed9"
-    ],
-    margin: 13,
-    bgColor: "#fffefa",
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: 400,
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Fredoka One",
-        fontSize: 100,
-        fontWeight: "400",
-        italic: false,
-        active: true,
-        useOnce: false,
-        fontStyle: ""
-      },
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: 700,
-        italic: false,
-        active: true,
-        useOnce: false
-      }
-    ]
-  },
-  {
-    text: "Welcome to the team, John!",
-    debug: false,
-    hasGlare: false,
-    colorLetters: [
-      "#e97778",
-      "#89c7b6",
-      "#f8c356",
-      "#ad84c7",
-      "#7998c9",
-      "#7998c9"
-    ],
-    margin: 13,
-    bgColor: "#fffefa",
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: 700,
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Indie Flower",
-        fontSize: 100,
-        fontWeight: "400",
-        italic: false,
-        active: true,
-        useOnce: true
-      },
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: 900,
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Barlow Condensed",
-        fontSize: 150,
-        fontWeight: "400",
-        italic: false,
-        active: true,
-        useOnce: false
-      }
-    ]
-  },
-  {
-    text: "Welcome to the team, John!",
-    debug: false,
-    hasGlare: false,
-    colorLetters: [
-      "#b37f9f",
-      "#f9afc4",
-      "#f9afc4",
-      "#b9d1dc",
-      "#b9d1dc",
-      "#b9d1dc"
-    ],
-    margin: 13,
-    bgColor: "#2e3352",
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: 400,
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Indie Flower",
-        fontSize: 100,
-        fontWeight: "400",
-        italic: false,
-        active: true,
-        useOnce: true
-      },
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: 700,
-        italic: false,
-        active: true,
-        useOnce: false
-      }
-    ]
-  },
-  {
-    text: "This is\\nnot\\ngoodbye.",
-    debug: false,
-    hasGlare: true,
-    colorLetters: [
-      "#ebedee",
-      "#b3b4b5",
-      "#c2c5c8",
-      "#ebedee",
-      "#ebedee",
-      "#ebedee"
-    ],
-    margin: 13,
-    bgColor: "#191919",
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: 400,
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Indie Flower",
-        fontSize: 100,
-        fontWeight: "400",
-        italic: false,
-        active: false,
-        useOnce: true
-      },
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: 700,
-        italic: false,
-        active: true,
-        useOnce: false
-      }
-    ]
-  },
-  {
-    text: "Oh, welcome!",
-    debug: false,
-    hasGlare: true,
-    colorLetters: [
-      "#cdcece",
-      "#b3b4b5",
-      "#c2c5c8",
-      "#ebedee",
-      "#ebedee",
-      "#ebedee"
-    ],
-    margin: 13,
-    bgColor: "#de652b",
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: 400,
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: 700,
-        italic: false,
-        active: true,
-        useOnce: false
-      }
-    ]
-  },
-  {
-    debug: false,
-    hasGlare: true,
-    colorLetters: [
-      "#fdf7cc",
-      "#f6ecaf",
-      "#fcffe0",
-      "#fdfff2",
-      "#fcfdf2",
-      "#fdffef"
-    ],
-    margin: 8,
-    bgColor: "#043174",
-    glareAlpha: 0.08,
-    useDifferentFonts: true,
-    fonts: [
-      {
-        fontFamily: "Raleway",
-        fontSize: 100,
-        fontWeight: 800,
-        italic: false,
-        active: true,
-        useOnce: true
-      },
-      {
-        fontFamily: "Montserrat",
-        fontSize: 100,
-        fontWeight: "200",
-        italic: false,
-        active: true,
-        useOnce: false
-      },
-      {
-        fontFamily: "Roboto Serif",
-        fontSize: 100,
-        fontWeight: 400,
-        italic: false,
-        active: true,
-        useOnce: false
-      }
-    ],
     name: ""
   }
 ];
@@ -43733,7 +43184,7 @@ var assets = {
     "Fredoka One:400"
   ]
 };
-var frag$1 = `
+var frag$2 = `
 uniform sampler2D uTexture;
 uniform float uPercentGlare;
 uniform float uGlareSize;
@@ -43823,7 +43274,7 @@ void main(void)
   vTextureCoord=vec3(aTextureCoord,1.).xy;
 }
 `;
-var frag = `
+var frag$1 = `
 
 
 uniform vec2 uCenter;
@@ -43858,7 +43309,7 @@ void main() {
 class BackgroundGradientRadial {
   constructor() {
     const geometry = new PlaneGeometry(1, 1, 2, 2);
-    const shader = Shader.from(void 0, frag, {
+    const shader = Shader.from(void 0, frag$1, {
       uCenter: [0, 0],
       uSize: 1,
       uRatio: 1,
@@ -43889,6 +43340,196 @@ class BackgroundGradientRadial {
     this.geometry.build();
   }
 }
+var frag = `
+
+uniform float uAngle;
+uniform float uSize;
+uniform vec4 uColor1;
+uniform vec4 uColor2;
+
+varying vec2 vTextureCoord;
+
+vec2 rotate(vec2 v, float a) {
+	float s = sin(a);
+	float c = cos(a);
+	mat2 m = mat2(c, -s, s, c);
+	return m * v;
+}
+
+float map(float value, float min1, float max1, float min2, float max2) {
+    return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+  }
+
+void main() {
+    vec2 uv = (vTextureCoord * 2. - 1.);
+    uv = rotate(uv, uAngle);
+    uv /= 2.;
+    uv += 0.5;
+
+    uv.x /= max(uSize, 0.0001);
+
+    uv.x = smoothstep(-0.1, 0.9, clamp(uv.x, 0., 1.));
+
+    vec4 c = mix(uColor1, uColor2, uv.x);
+
+    gl_FragColor = vec4(c);
+    gl_FragColor*= c.a;
+}
+`;
+class BackgroundGradientLinear {
+  constructor() {
+    const geometry = new PlaneGeometry(1, 1, 2, 2);
+    const shader = Shader.from(void 0, frag, {
+      uAngle: 0,
+      uSize: 1,
+      uColor1: [1, 1, 1, 1],
+      uColor2: [0, 0, 0, 1]
+    });
+    this.view = new Mesh(geometry, shader);
+    this.geometry = geometry;
+    this.shader = shader;
+  }
+  setAngle(angle = 0) {
+    this.shader.uniforms.uAngle = angle;
+  }
+  setSize(size = 1) {
+    this.shader.uniforms.uSize = size;
+  }
+  reset(props = {}) {
+    const { colors } = props;
+    this.shader.uniforms.uColor1 = colors[0] || this.shader.uniforms.uColor1;
+    this.shader.uniforms.uColor2 = colors[1] || this.shader.uniforms.uColor2;
+  }
+  resize(w, h) {
+    this.w = w;
+    this.h = h;
+    this.shader.uniforms.uRatio = this.w / this.h;
+    this.geometry.width = w;
+    this.geometry.height = h;
+    this.geometry.build();
+  }
+}
+var debugRadial = (pane, that) => {
+  const folderRadial = pane.addFolder({
+    title: "Radial Gr.",
+    expanded: false
+  });
+  folderRadial.addInput(that.currentTheme.bg.radial, "active").on("change", () => {
+    that.toggleRadialGradient();
+  });
+  folderRadial.addInput(that.currentTheme.bg.radial, "center", {
+    x: { min: -0.75, max: 0.75, step: 0.01 },
+    y: { min: -0.75, max: 0.75, step: 0.01 }
+  }).on("change", () => {
+    that.radialGradient.setCenter(that.currentTheme.bg.radial.center.x, that.currentTheme.bg.radial.center.y);
+  });
+  folderRadial.addInput(that.currentTheme.bg.radial, "size", {
+    min: 0,
+    max: 2,
+    step: 0.01
+  }).on("change", () => {
+    that.radialGradient.setSize(that.currentTheme.bg.radial.size);
+  });
+  folderRadial.addBlade({
+    view: "list",
+    label: "blend mode",
+    options: Object.values(BLEND_MODES$4).filter((b) => isNaN(b)).map((b) => ({
+      text: b,
+      value: b
+    })),
+    value: null
+  }).on("change", (v) => {
+    that.currentTheme.bg.radial.blendMode = BLEND_MODES$4[v.value];
+    that.radialGradient.view.blendMode = BLEND_MODES$4[v.value];
+  });
+  folderRadial.addInput(that.currentTheme.bg.radial.color1, "color", {
+    label: "color1"
+  }).on("change", () => {
+    that.setRadialGradientColors();
+  });
+  folderRadial.addInput(that.currentTheme.bg.radial.color1, "alpha", {
+    min: 0,
+    max: 1,
+    step: 0.01,
+    label: "color1-a"
+  }).on("change", () => {
+    that.setRadialGradientColors();
+  });
+  folderRadial.addInput(that.currentTheme.bg.radial.color2, "color", {
+    label: "color2"
+  }).on("change", () => {
+    that.setRadialGradientColors();
+  });
+  folderRadial.addInput(that.currentTheme.bg.radial.color2, "alpha", {
+    min: 0,
+    max: 1,
+    step: 0.01,
+    label: "color2-a"
+  }).on("change", () => {
+    that.setRadialGradientColors();
+  });
+};
+var debugLinear = (pane, that) => {
+  const folderLinear = pane.addFolder({
+    title: "Linear Gr.",
+    expanded: false
+  });
+  folderLinear.addInput(that.currentTheme.bg.linear, "active").on("change", () => {
+    that.toggleLinearGradient();
+  });
+  folderLinear.addInput(that.currentTheme.bg.linear, "angle", {
+    min: -Math.PI,
+    max: Math.PI,
+    step: Math.PI / 2
+  }).on("change", () => {
+    that.linearGradient.setAngle(that.currentTheme.bg.linear.angle);
+  });
+  folderLinear.addInput(that.currentTheme.bg.linear, "size", {
+    min: 0,
+    max: 1,
+    step: 0.01
+  }).on("change", () => {
+    that.linearGradient.setSize(that.currentTheme.bg.linear.size);
+  });
+  folderLinear.addBlade({
+    view: "list",
+    label: "blend mode",
+    options: Object.values(BLEND_MODES$4).filter((b) => isNaN(b)).map((b) => ({
+      text: b,
+      value: b
+    })),
+    value: null
+  }).on("change", (v) => {
+    that.currentTheme.bg.linear.blendMode = BLEND_MODES$4[v.value];
+    that.linearGradient.view.blendMode = BLEND_MODES$4[v.value];
+  });
+  folderLinear.addInput(that.currentTheme.bg.linear.color1, "color", {
+    label: "color1"
+  }).on("change", () => {
+    that.setLinearGradientColors();
+  });
+  folderLinear.addInput(that.currentTheme.bg.linear.color1, "alpha", {
+    min: 0,
+    max: 1,
+    step: 0.01,
+    label: "color1-a"
+  }).on("change", () => {
+    that.setLinearGradientColors();
+  });
+  folderLinear.addInput(that.currentTheme.bg.linear.color2, "color", {
+    label: "color2"
+  }).on("change", () => {
+    that.setLinearGradientColors();
+  });
+  folderLinear.addInput(that.currentTheme.bg.linear.color2, "alpha", {
+    min: 0,
+    max: 1,
+    step: 0.01,
+    label: "color2-a"
+  }).on("change", () => {
+    that.setLinearGradientColors();
+  });
+};
 const getRGBSmall = (hex) => {
   return rgb2rgbSmall(hex2rgb(hex.replace("#", "0x")));
 };
@@ -43939,10 +43580,24 @@ let obj = {
   },
   bg: {
     flatColor: "#f2e9d8",
+    linear: {
+      active: true,
+      angle: -Math.PI / 2,
+      size: 0.5,
+      blendMode: 0,
+      color1: {
+        color: "#000000",
+        alpha: 0.6
+      },
+      color2: {
+        color: "#000000",
+        alpha: 0
+      }
+    },
     radial: {
+      active: true,
       center: { x: 0, y: 0 },
       size: 1,
-      active: true,
       blendMode: 0,
       color1: {
         color: "#ffffff",
@@ -43977,9 +43632,7 @@ class CurveDeform {
         color1: colors[0],
         color2: colors[1],
         color3: colors[2],
-        color4: colors[3],
-        color5: colors[4],
-        color6: colors[5]
+        color4: colors[3]
       };
       Object.keys(colorsParams).map((key, ind) => {
         return coloredLineFolder.addInput(colorsParams, key).on("change", () => {
@@ -44084,6 +43737,8 @@ class CurveDeform {
     this.view.addChild(this.bg);
     this.radialGradient = new BackgroundGradientRadial();
     this.view.addChild(this.radialGradient.view);
+    this.linearGradient = new BackgroundGradientLinear();
+    this.view.addChild(this.linearGradient.view);
     this.containerText = new Container$1();
     const brt = new BaseRenderTexture(0, 0, SCALE_MODES$4.LINEAR, 2);
     this.renderTexture = new RenderTexture(brt);
@@ -44102,7 +43757,7 @@ class CurveDeform {
     this.shadow.tint = 0;
     this.shadow.alpha = 0.3;
     this.containerPlane.addChild(this.shadow);
-    this.shader = Shader.from(vert, frag$1, {
+    this.shader = Shader.from(vert, frag$2, {
       uTexture: this.renderTexture,
       uPercentGlare: 0,
       uGlareAlpha: 1,
@@ -44218,64 +43873,8 @@ class CurveDeform {
     folderBackground.addInput(this.currentTheme.bg, "flatColor").on("change", () => {
       this.bg.tint = this.currentTheme.bg.flatColor.replace("#", "0x");
     });
-    const folderRadial = folderBackground.addFolder({
-      title: "Radial Gr.",
-      expanded: false
-    });
-    folderRadial.addInput(this.currentTheme.bg.radial, "active").on("change", () => {
-      this.toggleRadialGradient();
-    });
-    folderRadial.addInput(this.currentTheme.bg.radial, "center", {
-      x: { min: -0.75, max: 0.75, step: 0.01 },
-      y: { min: -0.75, max: 0.75, step: 0.01 }
-    }).on("change", () => {
-      this.radialGradient.setCenter(this.currentTheme.bg.radial.center.x, this.currentTheme.bg.radial.center.y);
-    });
-    folderRadial.addInput(this.currentTheme.bg.radial, "size", {
-      min: 0,
-      max: 2,
-      step: 0.01
-    }).on("change", () => {
-      this.radialGradient.setSize(this.currentTheme.bg.radial.size);
-    });
-    folderRadial.addBlade({
-      view: "list",
-      label: "blend mode",
-      options: Object.values(BLEND_MODES$4).filter((b) => isNaN(b)).map((b) => ({
-        text: b,
-        value: b
-      })),
-      value: null
-    }).on("change", (v) => {
-      this.currentTheme.bg.radial.blendMode = BLEND_MODES$4[v.value];
-      this.radialGradient.view.blendMode = BLEND_MODES$4[v.value];
-    });
-    folderRadial.addInput(this.currentTheme.bg.radial.color1, "color", {
-      label: "color1"
-    }).on("change", () => {
-      this.setRadialGradientColors();
-    });
-    folderRadial.addInput(this.currentTheme.bg.radial.color1, "alpha", {
-      min: 0,
-      max: 1,
-      step: 0.01,
-      label: "color1-a"
-    }).on("change", () => {
-      this.setRadialGradientColors();
-    });
-    folderRadial.addInput(this.currentTheme.bg.radial.color2, "color", {
-      label: "color2"
-    }).on("change", () => {
-      this.setRadialGradientColors();
-    });
-    folderRadial.addInput(this.currentTheme.bg.radial.color2, "alpha", {
-      min: 0,
-      max: 1,
-      step: 0.01,
-      label: "color2-a"
-    }).on("change", () => {
-      this.setRadialGradientColors();
-    });
+    debugRadial(folderBackground, this);
+    debugLinear(folderBackground, this);
     pane.addSeparator();
     const folderGlare = pane.addFolder({
       expanded: false,
@@ -44319,7 +43918,7 @@ class CurveDeform {
       title: "Add coloured line"
     }).on("click", () => {
       const c = "#000000";
-      const colors = [c, c, c, c, c, c];
+      const colors = [c, c, c, c];
       this.currentTheme.coloredLines.push([...colors]);
       this.addColoredLinesToFolder();
     });
@@ -44381,6 +43980,10 @@ class CurveDeform {
     this.radialGradient.setSize(this.currentTheme.bg.radial.size);
     this.radialGradient.setCenter(this.currentTheme.bg.radial.center.x, this.currentTheme.bg.radial.center.y);
     this.setRadialGradientColors();
+    this.linearGradient.view.blendMode = this.currentTheme.bg.linear.blendMode;
+    this.linearGradient.setAngle(this.currentTheme.bg.linear.angle);
+    this.linearGradient.setSize(this.currentTheme.bg.linear.size);
+    this.setLinearGradientColors();
     this.addFontsToFolder();
     this.addColoredLinesToFolder();
     this.toggleGlare();
@@ -44389,6 +43992,7 @@ class CurveDeform {
     this.addColoredLinesToFolder();
     this.toggleGlare();
     this.toggleRadialGradient();
+    this.toggleLinearGradient();
     this.orignalPane.refresh();
   }
   animateGlare() {
@@ -44414,8 +44018,21 @@ class CurveDeform {
       ]
     });
   }
+  setLinearGradientColors() {
+    const { color: color1, alpha: alpha1 } = this.currentTheme.bg.linear.color1;
+    const { color: color2, alpha: alpha2 } = this.currentTheme.bg.linear.color2;
+    this.linearGradient.reset({
+      colors: [
+        [...getRGBSmall(color1), alpha1],
+        [...getRGBSmall(color2), alpha2]
+      ]
+    });
+  }
   toggleRadialGradient() {
     this.radialGradient.view.visible = this.currentTheme.bg.radial.active;
+  }
+  toggleLinearGradient() {
+    this.linearGradient.view.visible = this.currentTheme.bg.linear.active;
   }
   toggleGlare() {
     if (this.currentTheme.glare.alpha > 0) {
@@ -44653,6 +44270,7 @@ class CurveDeform {
     this.bg.height = h;
     this.resizeText();
     this.radialGradient.resize(this.w, this.h);
+    this.linearGradient.resize(this.w, this.h);
   }
   update() {
     matrix.identity();
