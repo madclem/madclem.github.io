@@ -41301,7 +41301,7 @@ class AnimatedLetters {
   tintText(text, i) {
     var _a2;
     const shuffleColors = (_a2 = this.args.shuffleColors) != null ? _a2 : true;
-    const indexColour = shuffleColors ? Math.floor(Math.random() * this._tints.length) : i % this._tints.length;
+    const indexColour = shuffleColors ? Math.floor(Math.random() * this._tints.length) : (i + this.args.startColorAtIndex) % this._tints.length;
     const color = this._tints[indexColour];
     text.setColor(color);
   }
@@ -43309,7 +43309,7 @@ void main() {
     // gl_FragColor = vec4(vec3(col), 1.);
 
     float alphaEdge = smoothstep(1., .9, abs(vTextureCoord.x * 2. - 1.));
-    vec3 colWithGlareBlended = blendAdd(color.rgb * alphaEdge, vec3(col) * uGlareColor * alpha, uGlareAlpha);
+    vec3 colWithGlareBlended = blendAdd(color.rgb, vec3(col) * uGlareColor * alpha * alphaEdge, uGlareAlpha);
     gl_FragColor = vec4(colWithGlareBlended, alpha * alphaEdge);
     
 }
@@ -44082,6 +44082,7 @@ class CurveDeform {
     });
     folderGlare.addInput(this.currentTheme.glare, "color").on("change", () => {
       const colorGlareRGB = getRGBSmall(this.currentTheme.glare.color);
+      console.log("colorGlareRGB", colorGlareRGB);
       this.shader.uniforms.uGlareColor = [...colorGlareRGB];
     });
     this.currentColoredLinesInList = [];
@@ -44160,8 +44161,6 @@ class CurveDeform {
     this.toggleGlare();
     this.toggleRadialGradient();
     this.addFontsToFolder();
-    this.toggleGlare();
-    this.toggleRadialGradient();
     this.toggleLinearGradient();
     this.orignalPane.refresh();
   }
@@ -44206,7 +44205,10 @@ class CurveDeform {
   }
   toggleGlare() {
     if (this.currentTheme.glare.alpha > 0) {
-      this.animateGlare();
+      if (!this.glareIsAnimated) {
+        this.animateGlare();
+      }
+      this.glareIsAnimated = true;
     } else {
       gsapWithCSS.killTweensOf(this.shader.uniforms);
       this.shader.uniforms.uPercentGlare = -2;
@@ -44264,6 +44266,8 @@ class CurveDeform {
     let width = 0;
     let removedFonts = 0;
     const coloredLinesList = [...this.currentTheme.coloredLines];
+    let prevIndexColoredLine, prevLine;
+    let startColorAtIndex = 0;
     this.lines.forEach((l, i) => {
       const indexFont = (i + removedFonts) % fontsList2.length;
       const currentFont = fontsList2[indexFont];
@@ -44295,6 +44299,10 @@ class CurveDeform {
       const hasLowerCase = fontProperties.hasLowerCase;
       const t = new AnimatedLetters();
       const indexColoredLine = i % coloredLinesList.length;
+      if (!!prevLine && indexColoredLine === prevIndexColoredLine) {
+        console.log("prevLine", prevLine, prevLine.length);
+        startColorAtIndex += prevLine.length;
+      }
       t.reset({
         shuffleColors: false,
         title: hasLowerCase ? l : l.toUpperCase(),
@@ -44302,6 +44310,7 @@ class CurveDeform {
           ...style,
           padding: fontProperties.padding || 0
         }),
+        startColorAtIndex,
         pivotScale: {
           x: 0,
           y: 0
@@ -44312,6 +44321,8 @@ class CurveDeform {
       t.view.fontProperties = fontProperties;
       t.tints = coloredLinesList[indexColoredLine];
       this.containerText.addChild(t.view);
+      prevIndexColoredLine = indexColoredLine;
+      prevLine = l;
     });
     const averageWidth = width / this.texts.length;
     this.averageWidth = averageWidth;
