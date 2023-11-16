@@ -63624,7 +63624,7 @@ class CurveDeform {
     this.renderTexture = new RenderTexture$1(brt);
     this.sprite = new Sprite$1(this.renderTexture);
     this.view.addChild(this.sprite);
-    this.nbPoints = 100;
+    this.nbPoints = 200;
     this.geometry = new PlaneGeometry(0, 0, this.nbPoints, this.lines.length + 1);
     this.containerPlane = new Container$2();
     this.view.addChild(this.containerPlane);
