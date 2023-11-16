@@ -42960,48 +42960,74 @@ const style1D = {
   fontSize: 100
 };
 const fontProps = {
-  Ultra: {
+  "Bungee Inline": {
     default: {
-      hasLowerCase: true,
-      top: -100,
-      bottom: -100,
+      hasLowerCase: false,
+      top: -0.15,
+      bottom: -0.31,
       padding: 20,
       rules: [
         {
           test: "[A-Z1234567890]",
-          value: { bottom: -0.36, top: -0.15 }
+          value: { bottom: -0.31, top: -0.14 }
         },
         {
-          test: "[Q]",
-          value: { bottom: -0.31, top: -0.15 }
-        },
-        {
-          test: "[acemnorsuvwxz]",
-          value: { bottom: -0.34, top: -0.24 }
-        },
-        {
-          test: "[gpqy]",
-          value: { bottom: -0.21, top: -0.24 }
-        },
-        {
-          test: "[j]",
-          value: { bottom: -0.21, top: -0.13 }
-        },
-        {
-          test: "[bdfhiklt]",
-          value: { bottom: -0.36, top: -0.13 }
-        },
-        {
-          test: "emoji",
+          test: `[(){}@[]"*/\\!']`,
           value: { bottom: -0.25, top: -0.09 }
         },
         {
+          test: "[Q]",
+          value: { bottom: -0.25, top: -0.14 }
+        },
+        {
+          test: "emoji",
+          value: { bottom: -0.19, top: -0.06 }
+        }
+      ]
+    }
+  },
+  Ultra: {
+    default: {
+      hasLowerCase: true,
+      top: -0.5,
+      bottom: -0.5,
+      padding: 30,
+      rules: [
+        {
+          test: "[A-Z1234567890]",
+          value: { bottom: -0.43, top: -0.13 }
+        },
+        {
+          test: "[Q]",
+          value: { bottom: -0.39, top: -0.13 }
+        },
+        {
+          test: "[acemnorsuvwxz]",
+          value: { bottom: -0.43, top: -0.22 }
+        },
+        {
+          test: "[gpqy]",
+          value: { bottom: -0.3, top: -0.24 }
+        },
+        {
+          test: "[j]",
+          value: { bottom: -0.31, top: -0.13 }
+        },
+        {
+          test: "[bdfhiklt]",
+          value: { bottom: -0.43, top: -0.13 }
+        },
+        {
+          test: "emoji",
+          value: { bottom: -0.34, top: -0.06 }
+        },
+        {
           test: `["*/\\!']`,
-          value: { bottom: -0.37, top: -0.13 }
+          value: { bottom: -0.47, top: -0.13 }
         },
         {
           test: "[(){}@[]]",
-          value: { bottom: -0.28, top: -0.13 }
+          value: { bottom: -0.38, top: -0.13 }
         }
       ]
     }
@@ -43492,6 +43518,7 @@ var assets = {
   images: [...images],
   fonts: [
     "Oi:400",
+    "Bungee Inline:400",
     "Ultra:400",
     "Poppins:400",
     "Poppins:800"
