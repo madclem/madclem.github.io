@@ -42960,6 +42960,64 @@ const style1D = {
   fontSize: 100
 };
 const fontProps = {
+  Oi: {
+    default: {
+      hasLowerCase: true,
+      top: -0.16,
+      bottom: -0.43,
+      padding: 20,
+      rules: [
+        {
+          test: "[A-Z]",
+          value: { bottom: -0.26, top: 0.03 }
+        },
+        {
+          test: "[Q]",
+          value: { bottom: -0.18, top: 0.03 }
+        },
+        {
+          test: "[acemnorsuvwxz]",
+          value: { bottom: -0.34, top: -0.07 }
+        },
+        {
+          test: "[bdfhklt]",
+          value: { bottom: -0.34, top: -0.01 }
+        },
+        {
+          test: "[i]",
+          value: { bottom: -0.36, top: -0.01 }
+        },
+        {
+          test: "[ypq]",
+          value: { bottom: -0.26, top: -0.08 }
+        },
+        {
+          test: "[gj]",
+          value: { bottom: -0.25, top: 0.02 }
+        },
+        {
+          test: "[012]",
+          value: { bottom: -0.33, top: -0.08 }
+        },
+        {
+          test: "[57349]",
+          value: { bottom: -0.26, top: -0.08 }
+        },
+        {
+          test: "[68]",
+          value: { bottom: -0.35, top: -0.04 }
+        },
+        {
+          test: "emoji",
+          value: { bottom: -0.22, top: 0.02 }
+        },
+        {
+          test: "[\"*(){}|`/'\\@[]$]",
+          value: { bottom: -0.22, top: 0.04 }
+        }
+      ]
+    }
+  },
   Poppins: {
     default: {
       hasLowerCase: false,
@@ -43387,13 +43445,10 @@ if (parsed$1.query.config) {
 var assets = {
   images: [...images],
   fonts: [
+    "Oi:400",
     "Poppins:400",
     "Poppins:800"
-  ],
-  customFonts: {
-    families: ["Noto Color Emoji"],
-    urls: ["../fonts.css"]
-  }
+  ]
 };
 var frag$3 = `
 uniform sampler2D uTexture;
@@ -63833,7 +63888,7 @@ class CurveDeform {
       ...this.currentTheme.textStyle.dropShadow,
       ...this.currentTheme.fonts[0],
       ...currentFont,
-      fontFamily: `Noto Color Emoji, ${currentFont.fontFamily}`,
+      fontFamily: ` ${currentFont.fontFamily}`,
       wordWrapWidth: Math.min(1100, textSize),
       wordWrap: true,
       fontSize
@@ -63895,7 +63950,7 @@ class CurveDeform {
           ...this.currentTheme.textStyle.stroke,
           ...this.currentTheme.textStyle.dropShadow,
           ...style,
-          fontFamily: `Noto Color Emoji, ${style.fontFamily}`,
+          fontFamily: ` ${style.fontFamily}`,
           padding: fontProperties.padding || 0
         }),
         startColorAtIndex,
