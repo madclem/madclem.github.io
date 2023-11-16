@@ -43037,55 +43037,55 @@ const fontProps = {
       hasLowerCase: true,
       top: -0.16,
       bottom: -0.43,
-      padding: 20,
+      padding: 30,
       rules: [
         {
           test: "[A-Z]",
-          value: { bottom: -0.26, top: 0.03 }
+          value: { bottom: -0.43, top: -0.05 }
         },
         {
           test: "[Q]",
-          value: { bottom: -0.18, top: 0.03 }
-        },
-        {
-          test: "[acemnorsuvwxz]",
-          value: { bottom: -0.34, top: -0.07 }
-        },
-        {
-          test: "[bdfhklt]",
-          value: { bottom: -0.34, top: -0.01 }
-        },
-        {
-          test: "[i]",
-          value: { bottom: -0.36, top: -0.01 }
-        },
-        {
-          test: "[ypq]",
-          value: { bottom: -0.26, top: -0.08 }
-        },
-        {
-          test: "[gj]",
-          value: { bottom: -0.25, top: 0.02 }
-        },
-        {
-          test: "[012]",
-          value: { bottom: -0.33, top: -0.08 }
-        },
-        {
-          test: "[57349]",
-          value: { bottom: -0.26, top: -0.08 }
-        },
-        {
-          test: "[68]",
           value: { bottom: -0.35, top: -0.04 }
         },
         {
+          test: "[acemnorsuvwxz]",
+          value: { bottom: -0.43, top: -0.08 }
+        },
+        {
+          test: "[bdfhklt]",
+          value: { bottom: -0.43, top: -0.03 }
+        },
+        {
+          test: "[i]",
+          value: { bottom: -0.43, top: 0.02 }
+        },
+        {
+          test: "[ypq]",
+          value: { bottom: -0.36, top: -0.08 }
+        },
+        {
+          test: "[gj]",
+          value: { bottom: -0.35, top: 0.02 }
+        },
+        {
+          test: "[012]",
+          value: { bottom: -0.43, top: -0.08 }
+        },
+        {
+          test: "[57349]",
+          value: { bottom: -0.36, top: -0.08 }
+        },
+        {
+          test: "[68]",
+          value: { bottom: -0.45, top: -0.04 }
+        },
+        {
           test: "emoji",
-          value: { bottom: -0.22, top: 0.02 }
+          value: { bottom: -0.32, top: 0.02 }
         },
         {
           test: "[\"*(){}|`/'\\@[]$]",
-          value: { bottom: -0.22, top: 0.04 }
+          value: { bottom: -0.32, top: 0.04 }
         }
       ]
     }
