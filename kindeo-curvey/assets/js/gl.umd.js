@@ -1631,38 +1631,21 @@ vec3 blendAdd(vec3 base, vec3 blend, float opacity) {
 void main() {
     vec4 color = texture2D(uTexture, vTextureCoord);
     float alpha = color.a;
-    // vec4 bgColor = texture2D(uBackground, vTextureCoord);
-    // float border = 0.008;
-    // vec4 colorOffest = texture2D(uTexture, vTextureCoord + vec2(border, border));
-    // // for(int j = 0; j < 4; j++){
-    //     float a = 3.1415926 / 4. * float(j);
-    //     float xOffset = cos(a) * border;
-    //     float yOffset = -sin(a) * border;
-    //     colorOffset += texture2D(uTexture, vTextureCoord + vec2(xOffset, yOffset));
-    //   }
-    // vec4 colorWithBG = bgColor * alpha;
-    // vec4 c = bgColor * alpha;
-    // vec4 c = vec4(mix(vec3(1.), vec3(0.), colorOffest.a), 1.);
-    // c = mix(c, color, alpha);
     
-    gl_FragColor = color;
+    // gl_FragColor = color;
 
     vec2 uv = rotate((vTextureCoord - 0.5) * 2., uGlareAngle * 3.14 / 180.);
 
-    // float glareSize = 0.1;
 
     float uvX = uv.x + uPercentGlare;
-    // float col = step(uvX, 0. + uGlareSize / 2.) - step(uvX, 0. - uGlareSize / 2.);
 
     float gradientSmooth = uGlareSize / 8.;
     float col = smoothstep(- uGlareSize / 2. - gradientSmooth / 2. * uGlareSmooth, - uGlareSize / 2. + gradientSmooth / 2. * uGlareSmooth, uvX);
     col -= smoothstep(uGlareSize / 2. -gradientSmooth / 2. * uGlareSmooth,  uGlareSize / 2. + gradientSmooth / 2. * uGlareSmooth, uvX);
-    
 
-    // gl_FragColor = vec4(vec3(col), 1.);
 
     float alphaEdge = smoothstep(1., .9, abs(vTextureCoord.x * 2. - 1.));
-    vec3 colWithGlareBlended = blendAdd(color.rgb * alpha * alphaEdge, vec3(col) * uGlareColor * alpha * alphaEdge, uGlareAlpha);
+    vec3 colWithGlareBlended = blendAdd(color.rgb, vec3(col) * uGlareColor * alpha * alphaEdge, uGlareAlpha);
     gl_FragColor = vec4(colWithGlareBlended, alpha * alphaEdge);
     
 }
