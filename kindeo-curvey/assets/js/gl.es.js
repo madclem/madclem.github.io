@@ -43448,7 +43448,11 @@ var assets = {
     "Oi:400",
     "Poppins:400",
     "Poppins:800"
-  ]
+  ],
+  customFonts: {
+    families: ["Noto Color Emoji"],
+    urls: ["../fonts.css"]
+  }
 };
 var frag$3 = `
 uniform sampler2D uTexture;
@@ -63888,7 +63892,7 @@ class CurveDeform {
       ...this.currentTheme.textStyle.dropShadow,
       ...this.currentTheme.fonts[0],
       ...currentFont,
-      fontFamily: ` ${currentFont.fontFamily}`,
+      fontFamily: `${currentFont.fontFamily}, Noto Color Emoji`,
       wordWrapWidth: Math.min(1100, textSize),
       wordWrap: true,
       fontSize
@@ -63950,7 +63954,7 @@ class CurveDeform {
           ...this.currentTheme.textStyle.stroke,
           ...this.currentTheme.textStyle.dropShadow,
           ...style,
-          fontFamily: ` ${style.fontFamily}`,
+          fontFamily: `${style.fontFamily}, Noto Color Emoji`,
           padding: fontProperties.padding || 0
         }),
         startColorAtIndex,
