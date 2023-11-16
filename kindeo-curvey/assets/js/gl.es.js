@@ -63573,7 +63573,7 @@ class CurveDeform {
     this.texts = [];
     this.bg = new Sprite$1(Texture$1.WHITE);
     this.view.addChild(this.bg);
-    this.bgImage = new Sprite$1(Texture$1.WHITE);
+    this.bgImage = new Sprite$1();
     this.bgImage.anchor.set(0.5);
     this.view.addChild(this.bgImage);
     this.radialGradient = new BackgroundGradientRadial();
