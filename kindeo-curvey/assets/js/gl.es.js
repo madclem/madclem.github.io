@@ -43528,7 +43528,7 @@ var assets = {
     urls: ["../fonts.css"]
   }
 };
-var frag$3 = `
+var frag$4 = `
 uniform sampler2D uTexture;
 uniform float uPercentGlare;
 uniform float uGlareSize;
@@ -43618,7 +43618,7 @@ void main(void)
   vTextureCoord=vec3(aTextureCoord,1.).xy;
 }
 `;
-var frag$2 = `
+var frag$3 = `
 
 
 uniform vec2 uCenter;
@@ -43653,7 +43653,7 @@ void main() {
 class BackgroundGradientRadial {
   constructor() {
     const geometry = new PlaneGeometry(1, 1, 2, 2);
-    const shader = Shader$1.from(void 0, frag$2, {
+    const shader = Shader$1.from(void 0, frag$3, {
       uCenter: [0, 0],
       uSize: 1,
       uRatio: 1,
@@ -43684,7 +43684,7 @@ class BackgroundGradientRadial {
     this.geometry.build();
   }
 }
-var frag$1 = `
+var frag$2 = `
 
 uniform float uAngle;
 uniform float uSize;
@@ -43723,7 +43723,7 @@ void main() {
 class BackgroundGradientLinear {
   constructor() {
     const geometry = new PlaneGeometry(1, 1, 2, 2);
-    const shader = Shader$1.from(void 0, frag$1, {
+    const shader = Shader$1.from(void 0, frag$2, {
       uAngle: 0,
       uSize: 1,
       uColor1: [1, 1, 1, 1],
@@ -62838,7 +62838,7 @@ var AssetsClass = function() {
 var Assets = new AssetsClass();
 extensions$1.handleByList(ExtensionType.LoadParser, Assets.loader.parsers).handleByList(ExtensionType.ResolveParser, Assets.resolver.parsers).handleByList(ExtensionType.CacheParser, Assets.cache.parsers).handleByList(ExtensionType.DetectionParser, Assets.detections);
 extensions$1.add(loadTextures, loadSVG, loadTxt, loadJson, loadSpritesheet, loadBitmapFont, loadWebFont, cacheSpritesheet, cacheTextureArray, resolveTextureUrl, resolveSpriteSheetUrl, detectWebp, detectAvif);
-var frag = `
+var frag$1 = `
 uniform float alpha;
 uniform bool coloredNoise;
 uniform float offset;
@@ -62875,7 +62875,7 @@ class GrainFilter extends Filter$1 {
     alpha = 0.6,
     coloredNoise = true
   } = {}) {
-    super(void 0, frag, {
+    super(void 0, frag$1, {
       textureNoise: Texture$1.WHITE,
       alpha,
       offset: Math.random(),
@@ -63349,6 +63349,33 @@ var debugTextStyle = (pane, theme, that) => {
     step: 1
   }).on("change", that.setupText.bind(that));
 };
+var frag = `
+uniform vec3 color;
+uniform sampler2D uSampler;
+
+varying vec2 vTextureCoord;
+
+void main(){
+  vec4 colorTexture = texture2D(uSampler, vTextureCoord);
+  float alpha = colorTexture.a;
+	gl_FragColor = vec4(color * alpha, alpha);
+}
+
+`;
+class FlatColorFilter extends Filter$1 {
+  constructor() {
+    super(void 0, frag, {
+      texture: Texture$1.WHITE,
+      color: [0, 0, 0]
+    });
+  }
+  set texture(val) {
+    this.uniforms.texture = val;
+  }
+  set color(color) {
+    this.uniforms.color = color;
+  }
+}
 const getRGBSmall = (hex) => {
   return rgb2rgbSmall(hex2rgb(hex.replace("#", "0x")));
 };
@@ -63589,17 +63616,17 @@ class CurveDeform {
     this.geometry = new PlaneGeometry(0, 0, this.nbPoints, this.lines.length + 1);
     this.containerPlane = new Container$2();
     this.view.addChild(this.containerPlane);
-    const brtShadow = new BaseRenderTexture$1(1, 1, SCALE_MODES$5.LINEAR, 0.4);
+    const brtShadow = new BaseRenderTexture$1(1, 1, SCALE_MODES$5.LINEAR, 1);
     this.shadowRT = new RenderTexture$1(brtShadow);
     this.shadowBlurFilter = new filters.BlurFilter();
+    this.flatColorFilter = new FlatColorFilter();
     this.shadow = new Sprite$1(this.shadowRT);
     this.shadow.anchor.set(0.5);
     this.shadow.scale.set(1.1);
-    this.shadow.filters = [this.shadowBlurFilter];
-    this.shadow.tint = 0;
+    this.shadow.filters = [this.flatColorFilter];
     this.shadow.alpha = 0.3;
     this.containerPlane.addChild(this.shadow);
-    this.shader = Shader$1.from(vert, frag$3, {
+    this.shader = Shader$1.from(vert, frag$4, {
       uTexture: this.renderTexture,
       uPercentGlare: 0,
       uGlareAlpha: 1,
@@ -63716,7 +63743,7 @@ class CurveDeform {
       this.shadow.scale.set(this.currentTheme.shadow.scale);
     });
     folderShadow.addInput(this.currentTheme.shadow, "color", {}).on("change", () => {
-      this.shadow.tint = this.currentTheme.shadow.color.replace("#", "0x");
+      this.flatColorFilter.color = getRGBSmall(this.currentTheme.shadow.color);
     });
     const folderBackground = pane.addFolder({
       title: "background",
@@ -63839,6 +63866,7 @@ class CurveDeform {
     this.bg.tint = this.currentTheme.bg.flatColor.replace("#", "0x");
     this.shader.uniforms.uGlareAlpha = this.currentTheme.glareAlpha || 0.5;
     this.shadow.alpha = this.currentTheme.shadow.alpha;
+    this.flatColorFilter.color = getRGBSmall(this.currentTheme.shadow.color);
     this.shadow.scale.set(this.currentTheme.shadow.scale);
     this.shader.uniforms.uGlareAlpha = this.currentTheme.glare.alpha;
     this.shader.uniforms.uGlareSmooth = this.currentTheme.glare.smooth;
@@ -63919,12 +63947,12 @@ class CurveDeform {
     this.linearGradient.view.visible = this.currentTheme.bg.linear.active;
   }
   toggleShadowBlur() {
-    if (this.currentTheme.shadow.blur > 0 && !this.shadow.filters) {
-      this.shadow.filters = [this.shadowBlurFilter];
+    if (this.currentTheme.shadow.blur > 0 && this.shadow.filters.length === 1) {
+      this.shadow.filters.push(this.shadowBlurFilter);
       this.shadowRT.setResolution(0.5);
       this.rerenderToTexture();
-    } else {
-      this.shadow.filters = null;
+    } else if (this.currentTheme.shadow.blur === 0 && this.shadow.filters.length === 2) {
+      this.shadow.filters.pop();
       this.shadowRT.setResolution(1);
       this.rerenderToTexture();
     }
@@ -63940,7 +63968,7 @@ class CurveDeform {
       this.shader.uniforms.uPercentGlare = -2;
     }
   }
-  rerenderToTexture(currentPalette) {
+  rerenderToTexture() {
     this.texts.forEach((t) => {
       t.view.cacheAsBitmap = false;
     });
