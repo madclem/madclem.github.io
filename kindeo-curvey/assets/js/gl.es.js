@@ -42960,6 +42960,52 @@ const style1D = {
   fontSize: 100
 };
 const fontProps = {
+  Ultra: {
+    default: {
+      hasLowerCase: true,
+      top: -100,
+      bottom: -100,
+      padding: 20,
+      rules: [
+        {
+          test: "[A-Z1234567890]",
+          value: { bottom: -0.36, top: -0.15 }
+        },
+        {
+          test: "[Q]",
+          value: { bottom: -0.31, top: -0.15 }
+        },
+        {
+          test: "[acemnorsuvwxz]",
+          value: { bottom: -0.34, top: -0.24 }
+        },
+        {
+          test: "[gpqy]",
+          value: { bottom: -0.21, top: -0.24 }
+        },
+        {
+          test: "[j]",
+          value: { bottom: -0.21, top: -0.13 }
+        },
+        {
+          test: "[bdfhiklt]",
+          value: { bottom: -0.36, top: -0.13 }
+        },
+        {
+          test: "emoji",
+          value: { bottom: -0.25, top: -0.09 }
+        },
+        {
+          test: `["*/\\!']`,
+          value: { bottom: -0.37, top: -0.13 }
+        },
+        {
+          test: "[(){}@[]]",
+          value: { bottom: -0.28, top: -0.13 }
+        }
+      ]
+    }
+  },
   Oi: {
     default: {
       hasLowerCase: true,
@@ -43446,6 +43492,7 @@ var assets = {
   images: [...images],
   fonts: [
     "Oi:400",
+    "Ultra:400",
     "Poppins:400",
     "Poppins:800"
   ],
@@ -63615,11 +63662,12 @@ class CurveDeform {
     });
     this.currentTheme.shadow.blur = this.currentTheme.shadow.blur || 8;
     folderShadow.addInput(this.currentTheme.shadow, "blur", {
-      min: 2,
+      min: 0,
       max: 20,
       step: 0.01
     }).on("change", () => {
       this.shadowBlurFilter.blur = this.currentTheme.shadow.blur;
+      this.toggleShadowBlur();
     });
     folderShadow.addInput(this.currentTheme.shadow, "alpha", {
       min: 0,
@@ -63786,6 +63834,7 @@ class CurveDeform {
     this.addFontsToFolder();
     this.addColoredLinesToFolder();
     this.toggleGlare();
+    this.toggleShadowBlur();
     this.toggleRadialGradient();
     this.addFontsToFolder();
     this.toggleLinearGradient();
@@ -63841,6 +63890,17 @@ class CurveDeform {
   }
   toggleLinearGradient() {
     this.linearGradient.view.visible = this.currentTheme.bg.linear.active;
+  }
+  toggleShadowBlur() {
+    if (this.currentTheme.shadow.blur > 0 && !this.shadow.filters) {
+      this.shadow.filters = [this.shadowBlurFilter];
+      this.shadowRT.setResolution(0.5);
+      this.rerenderToTexture();
+    } else {
+      this.shadow.filters = null;
+      this.shadowRT.setResolution(1);
+      this.rerenderToTexture();
+    }
   }
   toggleGlare() {
     if (this.currentTheme.glare.alpha > 0) {
