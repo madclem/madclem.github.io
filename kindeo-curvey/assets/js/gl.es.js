@@ -41431,7 +41431,7 @@ class DefaultText {
   constructor() {
     this.view = new Container$2();
     this.text = new Text();
-    this.text.anchor.set(0.5);
+    this.text.anchor.set(0.5, 0.5);
   }
   reset(letter, x, index, style) {
     this.text.text = letter;
@@ -63359,6 +63359,35 @@ class FlatColorFilter extends Filter$1 {
     this.uniforms.color = color;
   }
 }
+class CurveyText {
+  constructor() {
+    this.view = new Container$2();
+    this.text = new Text();
+    this.text.anchor.set(0.5, 0.5);
+    this.text.resolution = 4;
+  }
+  reset(letter, x, index, style) {
+    this.text.text = letter;
+    this.view.position.x = x;
+    this.text.style = {
+      ...style
+    };
+    this.view.addChild(this.text);
+  }
+  setColor(c) {
+    this.text.style.fill = c;
+  }
+  show() {
+    this.animated = true;
+    this.view.alpha = 1;
+  }
+  hide() {
+    this.animated = false;
+    this.view.alpha = 0;
+  }
+  update() {
+  }
+}
 const getRGBSmall = (hex) => {
   return rgb2rgbSmall(hex2rgb(hex.replace("#", "0x")));
 };
@@ -63591,7 +63620,7 @@ class CurveDeform {
     this.linearGradient = new BackgroundGradientLinear();
     this.view.addChild(this.linearGradient.view);
     this.containerText = new Container$2();
-    const brt = new BaseRenderTexture$1(0, 0, SCALE_MODES$5.LINEAR, 2);
+    const brt = new BaseRenderTexture$1(1, 1, SCALE_MODES$5.LINEAR, 2);
     this.renderTexture = new RenderTexture$1(brt);
     this.sprite = new Sprite$1(this.renderTexture);
     this.view.addChild(this.sprite);
@@ -63936,7 +63965,7 @@ class CurveDeform {
       this.rerenderToTexture();
     } else if (this.currentTheme.shadow.blur === 0 && this.shadow.filters.length === 2) {
       this.shadow.filters.pop();
-      this.shadowRT.setResolution(1);
+      this.shadowRT.setResolution(2);
       this.rerenderToTexture();
     }
   }
@@ -64059,7 +64088,8 @@ class CurveDeform {
         pivotScale: {
           x: 0,
           y: 0
-        }
+        },
+        ClassText: CurveyText
       });
       width += t.width;
       this.texts.push(t);
