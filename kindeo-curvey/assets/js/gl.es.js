@@ -64220,7 +64220,6 @@ class CurveDeform {
         this.containerText.addChildAt(g, 0);
       }
     });
-    this.rerenderToTexture();
     this.geometry.width = this.containerText.width;
     this.geometry.height = this.containerText.height;
     this.geometry.build();
@@ -64287,6 +64286,7 @@ class CurveDeform {
     this.geometry.getBuffer("aVertexPosition").update();
     this.geometry.getBuffer("aTextureCoord").update();
     this.setPlanePosition();
+    this.rerenderToTexture();
   }
   show() {
     setTimeout(() => {
@@ -64296,7 +64296,7 @@ class CurveDeform {
   }
   setPlanePosition() {
     let scale = 1;
-    scale = Math.min(1, (this.w - 20) / this.containerText.width);
+    scale = Math.min(1.25, (this.w - 20) / this.containerText.width);
     this.containerText.width - scale * this.containerText.width;
     this.containerPlane.position.x = this.w / 2;
     this.containerPlane.position.y = this.h / 2;
@@ -64328,6 +64328,7 @@ class CurveDeform {
     this.setPlanePosition();
     this.radialGradient.resize(this.w, this.h);
     this.linearGradient.resize(this.w, this.h);
+    this.rerenderToTexture();
   }
   update() {
     var _a2;

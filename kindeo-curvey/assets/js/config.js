@@ -9,8 +9,8 @@ var WEBGL_CONFIG = {
   TITLE: "Curvey - editor",
   INSTRUCTIONS: "",
   DESCRIPTION: "",
-  COLOR: "black",
+  COLOR: "white",
   BACKGROUND_COLOR:
-    "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(236,204,153,1) 43%, rgba(41,148,137,1) 100%)",
+    "linear-gradient(90deg, rgba(36,16,0,1) 0%, rgba(121,73,9,1) 35%, rgba(168,143,84,1) 100%)",
   CREDITS: [],
 };
