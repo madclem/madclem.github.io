@@ -63666,6 +63666,7 @@ class CurveDeform {
       this.currentTheme.fonts.forEach(this.addFontToList.bind(this));
       this.setupText();
     });
+    var _a2;
     this.debugBG = false;
     this.debugFont = false;
     this.currentTheme = obj;
@@ -63796,7 +63797,7 @@ class CurveDeform {
       title: "Shadow",
       expanded: false
     });
-    this.currentTheme.shadow.blur = this.currentTheme.shadow.blur || 8;
+    this.currentTheme.shadow.blur = (_a2 = this.currentTheme.shadow.blur) != null ? _a2 : 8;
     folderShadow.addInput(this.currentTheme.shadow, "blur", {
       min: 0,
       max: 20,
@@ -63946,8 +63947,9 @@ class CurveDeform {
     this.loadTheme();
   }
   loadTheme() {
+    var _a2;
     this.bg.tint = this.currentTheme.bg.flatColor.replace("#", "0x");
-    this.shader.uniforms.uGlareAlpha = this.currentTheme.glareAlpha || 0.5;
+    this.shader.uniforms.uGlareAlpha = (_a2 = this.currentTheme.glareAlpha) != null ? _a2 : 0.5;
     this.shadow.alpha = this.currentTheme.shadow.alpha;
     this.flatColorFilter.color = getRGBSmall(this.currentTheme.shadow.color);
     this.shadow.scale.set(this.currentTheme.shadow.scale);
