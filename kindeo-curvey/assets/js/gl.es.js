@@ -43583,7 +43583,7 @@ void main() {
     
 }
 `;
-var vert = `
+var vert$1 = `
 attribute vec2 aVertexPosition;
 attribute vec2 aTextureCoord;
 
@@ -43618,13 +43618,8 @@ void main() {
     vec2 uv = (vTextureCoord * 2. - 1.) / 2.;
 
     vec2 center = uCenter;
-    if (uRatio < 1.) {
-        uv.x *= uRatio;
-        center.x *= uRatio;
-    } else {
-        uv.y /= uRatio;
-        center.y /= uRatio;
-    }	
+    uv.x *= uRatio;
+    center.x *= uRatio;
 
     float dist = distance(uv, center) / uSize;
 
@@ -43634,10 +43629,27 @@ void main() {
     // gl_FragColor = vec4(vec3(smoothstep(0.1, 0.8, dist)), 1.);
 }
 `;
+var vert = `
+attribute vec2 aVertexPosition;
+attribute vec2 aTextureCoord;
+
+uniform mat3 projectionMatrix;
+uniform mat3 translationMatrix;
+uniform mat3 uTextureMatrix;
+
+varying vec2 vTextureCoord;
+
+void main(void)
+{
+  gl_Position=vec4((projectionMatrix*translationMatrix*vec3(aVertexPosition,1.)).xy,0.,1.);
+  
+  vTextureCoord=vec3(aTextureCoord,1.).xy;
+}
+`;
 class BackgroundGradientRadial {
   constructor() {
     const geometry = new PlaneGeometry(1, 1, 2, 2);
-    const shader = Shader$1.from(void 0, frag$3, {
+    const shader = Shader$1.from(vert, frag$3, {
       uCenter: [0, 0],
       uSize: 1,
       uRatio: 1,
@@ -43663,7 +43675,7 @@ class BackgroundGradientRadial {
     this.shader.uniforms.uColor1 = colors[0] || this.shader.uniforms.uColor1;
     this.shader.uniforms.uColor2 = colors[1] || this.shader.uniforms.uColor2;
   }
-  resize(w, h) {
+  resize(w, h, realW) {
     this.w = w;
     this.h = h;
     this.shader.uniforms.uRatio = this.w / this.h;
@@ -63693,7 +63705,7 @@ class CurveDeform {
     this.shadow.filters = [this.flatColorFilter];
     this.shadow.alpha = 0.3;
     this.containerPlane.addChild(this.shadow);
-    this.shader = Shader$1.from(vert, frag$4, {
+    this.shader = Shader$1.from(vert$1, frag$4, {
       uTexture: this.renderTexture,
       uPercentGlare: 0,
       uGlareAlpha: 1,
