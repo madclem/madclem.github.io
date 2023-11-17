@@ -43792,6 +43792,7 @@ var debugRadial = (pane, that) => {
     })),
     value: null
   }).on("change", (v) => {
+    alert();
     that.currentTheme.bg.radial.blendMode = BLEND_MODES$5[v.value];
     that.radialGradient.view.blendMode = BLEND_MODES$5[v.value];
   });
@@ -63956,7 +63957,7 @@ class CurveDeform {
     this.shader.uniforms.uGlareAngle = this.currentTheme.glare.angle;
     const colorGlareRGB = getRGBSmall(this.currentTheme.glare.color);
     this.shader.uniforms.uGlareColor = [...colorGlareRGB];
-    this.currentTheme.bg.radial.blendMode = this.currentTheme.bg.radial.blendMode;
+    this.radialGradient.view.blendMode = this.currentTheme.bg.radial.blendMode;
     this.radialGradient.setSize(this.currentTheme.bg.radial.size);
     this.radialGradient.setCenter(this.currentTheme.bg.radial.center.x, this.currentTheme.bg.radial.center.y);
     this.radialGradient.setThreshold(this.currentTheme.bg.radial.threshold || 0);
@@ -64295,15 +64296,15 @@ class CurveDeform {
   }
   setPlanePosition() {
     let scale = 1;
-    scale = Math.min(1.25, (this.w - 20) / this.containerText.width);
+    scale = Math.min(1, (this.w - 20) / this.containerText.width);
     this.containerText.width - scale * this.containerText.width;
     this.containerPlane.position.x = this.w / 2;
     this.containerPlane.position.y = this.h / 2;
     this.plane.position.x = -this.containerText.width / 2;
-    this.plane.position.y = -this.containerText.height / 2;
+    this.plane.position.y = -this.plane.height / 2;
     this.containerPlane.scale.set(scale);
     this.shadow.position.x = this.currentTheme.shadow.offset.x;
-    this.shadow.position.y = this.currentTheme.shadow.offset.y;
+    this.shadow.position.y = this.containerText.height / 2 - this.plane.height / 2 + this.currentTheme.shadow.offset.y;
   }
   resizeBackgroundImage() {
     this.bgImage.scale.set(1);
@@ -64319,12 +64320,12 @@ class CurveDeform {
   resize(w, h) {
     this.w = w;
     this.h = h;
-    this.setPlanePosition();
     this.bg.width = w;
     this.bg.height = h;
     this.resizeText();
     this.resizeBackgroundImage();
     this.resizeTileSprite();
+    this.setPlanePosition();
     this.radialGradient.resize(this.w, this.h);
     this.linearGradient.resize(this.w, this.h);
   }
