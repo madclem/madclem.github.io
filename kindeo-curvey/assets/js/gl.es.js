@@ -22102,9 +22102,9 @@ function __extends$h(d, b) {
   d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
 var tempPoint$3 = new Point$1();
-(function(_super) {
-  __extends$h(TilingSprite, _super);
-  function TilingSprite(texture, width, height) {
+var TilingSprite = function(_super) {
+  __extends$h(TilingSprite2, _super);
+  function TilingSprite2(texture, width, height) {
     if (width === void 0) {
       width = 100;
     }
@@ -22120,7 +22120,7 @@ var tempPoint$3 = new Point$1();
     _this.uvRespectAnchor = false;
     return _this;
   }
-  Object.defineProperty(TilingSprite.prototype, "clampMargin", {
+  Object.defineProperty(TilingSprite2.prototype, "clampMargin", {
     get: function() {
       return this.uvMatrix.clampMargin;
     },
@@ -22131,7 +22131,7 @@ var tempPoint$3 = new Point$1();
     enumerable: false,
     configurable: true
   });
-  Object.defineProperty(TilingSprite.prototype, "tileScale", {
+  Object.defineProperty(TilingSprite2.prototype, "tileScale", {
     get: function() {
       return this.tileTransform.scale;
     },
@@ -22141,7 +22141,7 @@ var tempPoint$3 = new Point$1();
     enumerable: false,
     configurable: true
   });
-  Object.defineProperty(TilingSprite.prototype, "tilePosition", {
+  Object.defineProperty(TilingSprite2.prototype, "tilePosition", {
     get: function() {
       return this.tileTransform.position;
     },
@@ -22151,13 +22151,13 @@ var tempPoint$3 = new Point$1();
     enumerable: false,
     configurable: true
   });
-  TilingSprite.prototype._onTextureUpdate = function() {
+  TilingSprite2.prototype._onTextureUpdate = function() {
     if (this.uvMatrix) {
       this.uvMatrix.texture = this._texture;
     }
     this._cachedTint = 16777215;
   };
-  TilingSprite.prototype._render = function(renderer2) {
+  TilingSprite2.prototype._render = function(renderer2) {
     var texture = this._texture;
     if (!texture || !texture.valid) {
       return;
@@ -22167,14 +22167,14 @@ var tempPoint$3 = new Point$1();
     renderer2.batch.setObjectRenderer(renderer2.plugins[this.pluginName]);
     renderer2.plugins[this.pluginName].render(this);
   };
-  TilingSprite.prototype._calculateBounds = function() {
+  TilingSprite2.prototype._calculateBounds = function() {
     var minX = this._width * -this._anchor._x;
     var minY = this._height * -this._anchor._y;
     var maxX = this._width * (1 - this._anchor._x);
     var maxY = this._height * (1 - this._anchor._y);
     this._bounds.addFrame(this.transform, minX, minY, maxX, maxY);
   };
-  TilingSprite.prototype.getLocalBounds = function(rect) {
+  TilingSprite2.prototype.getLocalBounds = function(rect) {
     if (this.children.length === 0) {
       this._bounds.minX = this._width * -this._anchor._x;
       this._bounds.minY = this._height * -this._anchor._y;
@@ -22190,7 +22190,7 @@ var tempPoint$3 = new Point$1();
     }
     return _super.prototype.getLocalBounds.call(this, rect);
   };
-  TilingSprite.prototype.containsPoint = function(point) {
+  TilingSprite2.prototype.containsPoint = function(point) {
     this.worldTransform.applyInverse(point, tempPoint$3);
     var width = this._width;
     var height = this._height;
@@ -22203,16 +22203,16 @@ var tempPoint$3 = new Point$1();
     }
     return false;
   };
-  TilingSprite.prototype.destroy = function(options) {
+  TilingSprite2.prototype.destroy = function(options) {
     _super.prototype.destroy.call(this, options);
     this.tileTransform = null;
     this.uvMatrix = null;
   };
-  TilingSprite.from = function(source, options) {
+  TilingSprite2.from = function(source, options) {
     var texture = source instanceof Texture$1 ? source : Texture$1.from(source, options);
-    return new TilingSprite(texture, options.width, options.height);
+    return new TilingSprite2(texture, options.width, options.height);
   };
-  Object.defineProperty(TilingSprite.prototype, "width", {
+  Object.defineProperty(TilingSprite2.prototype, "width", {
     get: function() {
       return this._width;
     },
@@ -22222,7 +22222,7 @@ var tempPoint$3 = new Point$1();
     enumerable: false,
     configurable: true
   });
-  Object.defineProperty(TilingSprite.prototype, "height", {
+  Object.defineProperty(TilingSprite2.prototype, "height", {
     get: function() {
       return this._height;
     },
@@ -22232,8 +22232,8 @@ var tempPoint$3 = new Point$1();
     enumerable: false,
     configurable: true
   });
-  return TilingSprite;
-})(Sprite$1);
+  return TilingSprite2;
+}(Sprite$1);
 var fragmentSimpleSrc = "#version 100\n#define SHADER_NAME Tiling-Sprite-Simple-100\n\nprecision lowp float;\n\nvarying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform vec4 uColor;\n\nvoid main(void)\n{\n    vec4 texSample = texture2D(uSampler, vTextureCoord);\n    gl_FragColor = texSample * uColor;\n}\n";
 var gl1VertexSrc = "#version 100\n#define SHADER_NAME Tiling-Sprite-100\n\nprecision lowp float;\n\nattribute vec2 aVertexPosition;\nattribute vec2 aTextureCoord;\n\nuniform mat3 projectionMatrix;\nuniform mat3 translationMatrix;\nuniform mat3 uTransform;\n\nvarying vec2 vTextureCoord;\n\nvoid main(void)\n{\n    gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);\n\n    vTextureCoord = (uTransform * vec3(aTextureCoord, 1.0)).xy;\n}\n";
 var gl1FragmentSrc = "#version 100\n#ifdef GL_EXT_shader_texture_lod\n    #extension GL_EXT_shader_texture_lod : enable\n#endif\n#define SHADER_NAME Tiling-Sprite-100\n\nprecision lowp float;\n\nvarying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform vec4 uColor;\nuniform mat3 uMapCoord;\nuniform vec4 uClampFrame;\nuniform vec2 uClampOffset;\n\nvoid main(void)\n{\n    vec2 coord = vTextureCoord + ceil(uClampOffset - vTextureCoord);\n    coord = (uMapCoord * vec3(coord, 1.0)).xy;\n    vec2 unclamped = coord;\n    coord = clamp(coord, uClampFrame.xy, uClampFrame.zw);\n\n    #ifdef GL_EXT_shader_texture_lod\n        vec4 texSample = unclamped == coord\n            ? texture2D(uSampler, coord) \n            : texture2DLodEXT(uSampler, coord, 0);\n    #else\n        vec4 texSample = texture2D(uSampler, coord);\n    #endif\n\n    gl_FragColor = texSample * uColor;\n}\n";
@@ -43607,6 +43607,7 @@ var frag$3 = `
 uniform vec2 uCenter;
 uniform float uRatio;
 uniform float uSize;
+uniform float uThreshold;
 uniform vec4 uColor1;
 uniform vec4 uColor2;
 
@@ -43625,9 +43626,9 @@ void main() {
         center.y /= uRatio;
     }	
 
-    float dist = distance(uv, center);
+    float dist = distance(uv, center) / uSize;
 
-    dist = smoothstep(0., uSize, dist);
+    dist = smoothstep(uThreshold, 1., dist);
     gl_FragColor = mix(uColor1, uColor2, dist);
     gl_FragColor.rgb *= gl_FragColor.a;
     // gl_FragColor = vec4(vec3(smoothstep(0.1, 0.8, dist)), 1.);
@@ -43640,12 +43641,16 @@ class BackgroundGradientRadial {
       uCenter: [0, 0],
       uSize: 1,
       uRatio: 1,
+      uThreshold: 0,
       uColor1: [1, 1, 1, 1],
       uColor2: [0, 0, 0, 1]
     });
     this.view = new Mesh$1(geometry, shader);
     this.geometry = geometry;
     this.shader = shader;
+  }
+  setThreshold(val) {
+    this.shader.uniforms.uThreshold = val;
   }
   setCenter(x, y) {
     this.shader.uniforms.uCenter = [x, y];
@@ -43737,6 +43742,7 @@ class BackgroundGradientLinear {
   }
 }
 var debugRadial = (pane, that) => {
+  var _a2;
   const folderRadial = pane.addFolder({
     title: "Radial Gr.",
     expanded: false
@@ -43756,6 +43762,14 @@ var debugRadial = (pane, that) => {
     step: 0.01
   }).on("change", () => {
     that.radialGradient.setSize(that.currentTheme.bg.radial.size);
+  });
+  that.currentTheme.bg.radial.threshold = (_a2 = that.currentTheme.bg.radial.threshold) != null ? _a2 : 0;
+  folderRadial.addInput(that.currentTheme.bg.radial, "threshold", {
+    min: 0,
+    max: 1,
+    step: 0.01
+  }).on("change", () => {
+    that.radialGradient.setThreshold(that.currentTheme.bg.radial.threshold);
   });
   folderRadial.addBlade({
     view: "list",
@@ -63388,6 +63402,40 @@ class CurveyText {
   update() {
   }
 }
+var debugTiling = (pane, currentTheme, that) => {
+  const textureFolder = pane.addFolder({
+    title: "texture"
+  });
+  textureFolder.addInput(that.currentTheme.texture, "url").on("change", () => {
+    that.setTilingSpriteTexture(that.currentTheme.texture.url);
+  });
+  textureFolder.addInput(that.currentTheme.texture, "alpha", {
+    min: 0,
+    max: 1,
+    step: 0.01
+  }).on("change", () => {
+    that.setTilingSpriteAlpha();
+  });
+  textureFolder.addInput(that.currentTheme.texture, "scale", {
+    min: 0.01,
+    max: 2,
+    step: 0.01
+  }).on("change", () => {
+    that.resizeTileSprite();
+  });
+  textureFolder.addBlade({
+    view: "list",
+    label: "blend mode",
+    options: Object.values(BLEND_MODES$5).filter((b) => isNaN(b)).map((b) => ({
+      text: b,
+      value: b
+    })),
+    value: null
+  }).on("change", (v) => {
+    that.currentTheme.texture.blendMode = BLEND_MODES$5[v.value];
+    that.tilingSprite.blendMode = BLEND_MODES$5[v.value];
+  });
+};
 const getRGBSmall = (hex) => {
   return rgb2rgbSmall(hex2rgb(hex.replace("#", "0x")));
 };
@@ -63456,6 +63504,7 @@ let obj = {
     },
     radial: {
       active: true,
+      threshold: 1,
       center: { x: 0, y: 0 },
       size: 1,
       blendMode: 0,
@@ -63490,6 +63539,12 @@ let obj = {
     ["#000000", "#000000", "#000000", "#000000"],
     ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]
   ],
+  texture: {
+    alpha: 1,
+    url: "",
+    scale: 1,
+    blendMode: 0
+  },
   ...currentConfig
 };
 const easings = [Sine];
@@ -63687,6 +63742,8 @@ class CurveDeform {
       }
       this.resizeText();
     });
+    this.url = "";
+    this.tilingSprite = new TilingSprite(Texture$1.WHITE, 200, 200);
     debugFolder.addInput(this, "debugBG").on("change", this.resizeText.bind(this));
     debugFolder.addInput(this, "debugFont").on("change", this.resizeText.bind(this));
     this.folderPaddings = debugFolder.addFolder({
@@ -63872,6 +63929,7 @@ class CurveDeform {
       }
     });
     debugEffects(pane, this.currentTheme, this);
+    debugTiling(pane, this.currentTheme, this);
     this.loadTheme();
   }
   loadTheme() {
@@ -63889,6 +63947,7 @@ class CurveDeform {
     this.currentTheme.bg.radial.blendMode = this.currentTheme.bg.radial.blendMode;
     this.radialGradient.setSize(this.currentTheme.bg.radial.size);
     this.radialGradient.setCenter(this.currentTheme.bg.radial.center.x, this.currentTheme.bg.radial.center.y);
+    this.radialGradient.setThreshold(this.currentTheme.bg.radial.threshold || 0);
     this.setRadialGradientColors();
     this.linearGradient.view.blendMode = this.currentTheme.bg.linear.blendMode;
     this.linearGradient.setAngle(this.currentTheme.bg.linear.angle);
@@ -63896,6 +63955,9 @@ class CurveDeform {
     this.setLinearGradientColors();
     if (this.currentTheme.bg.imageURL) {
       this.setBackgroundTexture(this.currentTheme.bg.imageURL);
+    }
+    if (this.currentTheme.texture.url) {
+      this.setTilingSpriteTexture(this.currentTheme.texture.url);
     }
     this.shadowBlurFilter.blur = this.currentTheme.shadow.blur;
     this.addFontsToFolder();
@@ -63906,6 +63968,21 @@ class CurveDeform {
     this.addFontsToFolder();
     this.toggleLinearGradient();
     this.orignalPane.refresh();
+  }
+  async setTilingSpriteTexture(src2) {
+    this.tilingSprite.texture = await Assets.load(src2);
+    this.tilingSprite.blendMode = this.currentTheme.texture.blendMode;
+    this.setTilingSpriteAlpha();
+    this.resizeTileSprite();
+  }
+  setTilingSpriteAlpha() {
+    const alpha = this.currentTheme.texture.alpha;
+    this.tilingSprite.alpha = alpha;
+    if (alpha > 0 && !this.tilingSprite.parent) {
+      this.view.addChild(this.tilingSprite);
+    } else if (alpha === 0) {
+      this.view.removeChild(this.tilingSprite);
+    }
   }
   async setBackgroundTexture(src2) {
     if (typeof src2 === "string") {
@@ -64222,6 +64299,11 @@ class CurveDeform {
     this.bgImage.position.x = this.w / 2;
     this.bgImage.position.y = this.h / 2;
   }
+  resizeTileSprite() {
+    this.tilingSprite.tileScale.x = this.tilingSprite.tileScale.y = this.currentTheme.texture.scale;
+    this.tilingSprite.width = this.w;
+    this.tilingSprite.height = this.h;
+  }
   resize(w, h) {
     this.w = w;
     this.h = h;
@@ -64230,6 +64312,7 @@ class CurveDeform {
     this.bg.height = h;
     this.resizeText();
     this.resizeBackgroundImage();
+    this.resizeTileSprite();
     this.radialGradient.resize(this.w, this.h);
     this.linearGradient.resize(this.w, this.h);
   }
@@ -64253,7 +64336,6 @@ class CurveDeform {
     });
   }
   async animate() {
-    shuffleArray(this.texts);
     const easings2 = [Sine, Cubic, Quad$1];
     const subeasings = ["easeOut"];
     this.animating = true;
