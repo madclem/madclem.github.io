@@ -1645,7 +1645,7 @@ void main() {
 
 
     float alphaEdge = smoothstep(1., .9, abs(vTextureCoord.x * 2. - 1.));
-    vec3 colWithGlareBlended = blendAdd(color.rgb, vec3(col) * uGlareColor * alpha * alphaEdge, uGlareAlpha);
+    vec3 colWithGlareBlended = blendAdd(color.rgb * alphaEdge, vec3(col) * uGlareColor * alpha * alphaEdge, uGlareAlpha);
     gl_FragColor = vec4(colWithGlareBlended, alpha * alphaEdge);
     
 }
