@@ -64051,7 +64051,7 @@ class CurveDeform {
   toggleShadowBlur() {
     if (this.currentTheme.shadow.blur > 0 && this.shadow.filters.length === 1) {
       this.shadow.filters.push(this.shadowBlurFilter);
-      this.shadowRT.setResolution(0.5);
+      this.shadowRT.setResolution(1);
       this.rerenderToTexture();
     } else if (this.currentTheme.shadow.blur === 0 && this.shadow.filters.length === 2) {
       this.shadow.filters.pop();

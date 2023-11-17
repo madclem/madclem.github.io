@@ -11,6 +11,6 @@ var WEBGL_CONFIG = {
   DESCRIPTION: "",
   COLOR: "white",
   BACKGROUND_COLOR:
-    "linear-gradient(90deg, rgba(36,16,0,1) 0%, rgba(121,73,9,1) 35%, rgba(168,143,84,1) 100%)",
+    "radial-gradient(circle, rgba(168,143,84,1) 0%, rgba(121,73,9,1) 35%, rgba(36,16,0,1) 71%)",
   CREDITS: [],
 };
