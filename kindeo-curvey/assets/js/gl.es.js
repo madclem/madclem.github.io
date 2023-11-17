@@ -69027,7 +69027,8 @@ class MainApp extends Emitter {
     this.preloader.loader.onProgress.add((l, p) => {
       this.emit("onProgress", { percent: p });
     });
-    this.preloader.onLoaderComplete.then(() => {
+    this.preloader.onLoaderComplete.then(async () => {
+      await Assets.load("https://cdn-dev.kindeo.com/d844a76f-dbce-4363-8b29-d5b479ffe975/photo.png");
       this._onAssetsLoaded();
     });
   }
