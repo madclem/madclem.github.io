@@ -43583,7 +43583,7 @@ void main() {
     
 }
 `;
-var vert$1 = `
+var vert = `
 attribute vec2 aVertexPosition;
 attribute vec2 aTextureCoord;
 
@@ -43629,27 +43629,10 @@ void main() {
     // gl_FragColor = vec4(vec3(smoothstep(0.1, 0.8, dist)), 1.);
 }
 `;
-var vert = `
-attribute vec2 aVertexPosition;
-attribute vec2 aTextureCoord;
-
-uniform mat3 projectionMatrix;
-uniform mat3 translationMatrix;
-uniform mat3 uTextureMatrix;
-
-varying vec2 vTextureCoord;
-
-void main(void)
-{
-  gl_Position=vec4((projectionMatrix*translationMatrix*vec3(aVertexPosition,1.)).xy,0.,1.);
-  
-  vTextureCoord=vec3(aTextureCoord,1.).xy;
-}
-`;
 class BackgroundGradientRadial {
   constructor() {
     const geometry = new PlaneGeometry(1, 1, 2, 2);
-    const shader = Shader$1.from(vert, frag$3, {
+    const shader = Shader$1.from(void 0, frag$3, {
       uCenter: [0, 0],
       uSize: 1,
       uRatio: 1,
@@ -43792,7 +43775,6 @@ var debugRadial = (pane, that) => {
     })),
     value: null
   }).on("change", (v) => {
-    alert();
     that.currentTheme.bg.radial.blendMode = BLEND_MODES$5[v.value];
     that.radialGradient.view.blendMode = BLEND_MODES$5[v.value];
   });
@@ -63707,7 +63689,7 @@ class CurveDeform {
     this.shadow.filters = [this.flatColorFilter];
     this.shadow.alpha = 0.3;
     this.containerPlane.addChild(this.shadow);
-    this.shader = Shader$1.from(vert$1, frag$4, {
+    this.shader = Shader$1.from(vert, frag$4, {
       uTexture: this.renderTexture,
       uPercentGlare: 0,
       uGlareAlpha: 1,
@@ -63985,6 +63967,7 @@ class CurveDeform {
     this.orignalPane.refresh();
   }
   async setTilingSpriteTexture(src2) {
+    this.srcTilingImage = src2;
     this.tilingSprite.texture = await Assets.load(src2);
     this.tilingSprite.blendMode = this.currentTheme.texture.blendMode;
     this.setTilingSpriteAlpha();
@@ -64001,6 +63984,7 @@ class CurveDeform {
   }
   async setBackgroundTexture(src2) {
     if (typeof src2 === "string") {
+      this.srcBgImage = src2;
       this.bgImage.texture = await Assets.load(src2);
     } else {
       this.bgImage.texture = await new Promise((resolve2) => {
@@ -64299,7 +64283,6 @@ class CurveDeform {
   setPlanePosition() {
     let scale = 1;
     scale = Math.min(1.25, (this.w - 20) / this.containerText.width);
-    this.containerText.width - scale * this.containerText.width;
     this.containerPlane.position.x = this.w / 2;
     this.containerPlane.position.y = this.h / 2;
     this.plane.position.x = -this.containerText.width / 2;
@@ -64378,6 +64361,13 @@ class CurveDeform {
     const theme = {
       ...this.currentTheme
     };
+    theme.assets = [];
+    if (this.srcTilingImage && this.currentTheme.texture.alpha > 0) {
+      theme.assets.push(this.srcTilingImage);
+    }
+    if (this.srcBgImage && this.currentTheme.texture.alpha > 0) {
+      theme.assets.push(this.srcBgImage);
+    }
     theme.fonts = theme.fonts.filter((f) => f.active && !f.hidden);
     theme.coloredLines = [...theme.coloredLines];
     if (!theme.useDifferentFonts) {
