@@ -63830,6 +63830,69 @@ class Recorder {
   resize(w, h) {
   }
 }
+class Screenshot {
+  constructor({ app: app2, currentConfig: currentConfig2, mainApp: mainApp2, pane, scene }) {
+    this.currentConfig = currentConfig2;
+    pane.addButton({
+      title: "screenshot"
+    }).on("click", async () => {
+      this.start();
+    });
+    this.width = 480;
+    this.height = 672;
+    this.scene = scene;
+    this.app = app2;
+    this.mainApp = mainApp2;
+    this.delayedCalls = new DelayedCalls();
+    this.link = document.createElement("a");
+    document.body.appendChild(this.link);
+    this.link.style = "display: none";
+  }
+  downloadBlob(blob) {
+    const url2 = URL.createObjectURL(blob);
+    this.link.href = url2;
+    const name = this.currentConfig.id + "_thumb";
+    this.link.download = name || "preview";
+    this.link.click();
+    window.URL.revokeObjectURL(url2);
+  }
+  async stop() {
+    this.delayedCalls && this.delayedCalls.clear();
+    await new Promise((res) => setTimeout(async () => {
+      this.mainApp.setHardcodedSize(null);
+      this.app.resizeTo = window;
+      this.resizeViewport(this.mainApp.w, this.mainApp.h);
+      await waitFrame(10);
+      window.dispatchEvent(new Event("resize"));
+      res();
+    }, 100));
+    await Promise.resolve();
+  }
+  async resizeViewport(w, h) {
+    this.app.view.style.width = w + "px";
+    this.app.view.style.height = h + "px";
+    this.app.renderer.resize(w, h);
+    this.mainApp.resize(w, h);
+    await waitFrame(10);
+    window.dispatchEvent(new Event("resize"));
+  }
+  async start() {
+    this.mainApp.setHardcodedSize(this.width, this.height);
+    this.app.resizeTo = null;
+    const w = this.width;
+    const h = this.height;
+    await this.resizeViewport(w, h);
+    this.scene.prepareThumbnail();
+    await waitFrame(2);
+    this.app.renderer.resolution;
+    this.app.renderer.extract.canvas(this.scene.view).toBlob((b) => {
+      this.downloadBlob(b);
+      this.stop();
+    }, "image/png");
+  }
+  resize(w, h) {
+  }
+}
 const getRGBSmall = (hex) => {
   return rgb2rgbSmall(hex2rgb(hex.replace("#", "0x")));
 };
@@ -64110,6 +64173,13 @@ class CurveDeform {
     exportImportTab.addInput(this.currentTheme, "id");
     debugThemeColors(exportImportTab, this.currentTheme);
     this.recorder = new Recorder({
+      app,
+      mainApp,
+      currentConfig: this.currentTheme,
+      pane: exportImportTab,
+      scene: this
+    });
+    this.screenshot = new Screenshot({
       app,
       mainApp,
       currentConfig: this.currentTheme,
@@ -64419,11 +64489,15 @@ class CurveDeform {
     }
     this.resizeBackgroundImage();
   }
-  animateGlare() {
+  animateGlare(snap3) {
     const glareSize = this.currentTheme.glare.size;
     this.shader.uniforms.uGlareSize = glareSize;
     this.shader.uniforms.uGlareAlpha = this.currentTheme.glare.alpha;
     this.shader.uniforms.uPercentGlare = -1.5;
+    if (snap3) {
+      this.shader.uniforms.uPercentGlare = 0;
+      return;
+    }
     gsapWithCSS.to(this.shader.uniforms, {
       uPercentGlare: 1.5 + glareSize / 2,
       duration: 0.4 + Math.random() + 0.6,
@@ -64782,6 +64856,9 @@ class CurveDeform {
     this.animating = false;
   }
   hide() {
+  }
+  prepareThumbnail() {
+    this.animateGlare(true);
   }
   share() {
     const theme = {
