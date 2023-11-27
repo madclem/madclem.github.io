@@ -64883,7 +64883,7 @@ class CurveDeform {
       theme.fonts = [font];
     }
     window.history.pushState("Kindeo Title Slide", "Title", window.location.origin + window.location.pathname + "?config=" + encodeURIComponent(JSON.stringify(theme)));
-    theme.name = "";
+    theme.name = theme.id;
     delete theme.text;
     console.log(JSON.stringify(theme));
   }
