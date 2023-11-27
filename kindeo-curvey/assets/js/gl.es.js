@@ -43502,10 +43502,7 @@ const themes = [
     name: ""
   }
 ];
-const images = [
-  { src: "./assets/images/bluenoise.png" },
-  { src: "./assets/images/clement-landscape.jpg" }
-];
+const images = [];
 const parsed$1 = urlparser.parse(window.location.search, true);
 if (parsed$1.query.config) {
   const currentConfig2 = JSON.parse(parsed$1.query.config);
@@ -63431,6 +63428,408 @@ var debugTiling = (pane, currentTheme, that) => {
     that.tilingSprite.blendMode = BLEND_MODES$5[v.value];
   });
 };
+class DelayedCalls {
+  constructor() {
+    this.delayedCalls = [];
+  }
+  clear(obj2) {
+    if (!obj2) {
+      this.delayedCalls = [];
+      Ticker$1.system.remove(this.update, this);
+      this.updating = false;
+    } else {
+      for (let i = 0; i < this.delayedCalls.length; i++) {
+        const delayedObj = this.delayedCalls[i];
+        if (delayedObj === obj2) {
+          this.delayedCalls.splice(i, 1);
+          break;
+        }
+      }
+    }
+  }
+  add(func, delay, args) {
+    const obj2 = {
+      func,
+      args,
+      tick: 0,
+      delay,
+      delete: false
+    };
+    this.delayedCalls.push(obj2);
+    if (!this.updating && !this.paused) {
+      Ticker$1.system.add(this.update, this);
+      this.updating = true;
+    }
+    return obj2;
+  }
+  getRemainingTime(id) {
+    const obj2 = this.delayedCalls[id];
+    if (obj2 && obj2.delay) {
+      return obj2.delay * 60 - obj2.tick;
+    }
+    return 0;
+  }
+  pause() {
+    this.paused = true;
+    Ticker$1.system.remove(this.update, this);
+    this.updating = false;
+  }
+  resume() {
+    if (this.updating)
+      return;
+    if (this.delayedCalls.length > 0) {
+      Ticker$1.system.add(this.update, this);
+      this.updating = true;
+    }
+    this.paused = false;
+  }
+  update(dt) {
+    for (let i = 0; i < this.delayedCalls.length; i++) {
+      const c = this.delayedCalls[i];
+      c.tick += dt;
+      if (c.tick > c.delay * 60) {
+        c.func(c.args);
+        c.delete = true;
+      }
+    }
+    for (let i = 0; i < this.delayedCalls.length; i++) {
+      const c = this.delayedCalls[i];
+      if (c.delete) {
+        this.delayedCalls.splice(i, 1);
+        i--;
+      }
+    }
+    if (this.delayedCalls.length === 0) {
+      Ticker$1.system.remove(this.update, this);
+      this.updating = false;
+    }
+  }
+}
+function waitFrame(framesToWait = 2) {
+  return new Promise((resolve2) => {
+    let framesPassed = 0;
+    const checkFrame = () => {
+      framesPassed++;
+      if (framesPassed >= framesToWait) {
+        resolve2();
+      } else {
+        requestAnimationFrame(checkFrame);
+      }
+    };
+    requestAnimationFrame(checkFrame);
+  });
+}
+class ThreadWorker {
+  constructor(self2, opts = { isNode: false }) {
+    console.info(`AsyncThreadWorker.ThreadWorker`);
+    this._isNode = opts.isNode;
+    this._worker = self2;
+    if (this._isNode) {
+      const { parentPort } = global.require("worker_threads");
+      this._parentPort = parentPort;
+      parentPort.on("message", (e) => this._onMessage(e));
+    } else {
+      self2.onmessage = (e) => this._onMessage(e.data);
+    }
+    this.onCreate(opts);
+  }
+  onCreate(opts) {
+  }
+  _onMessage(e) {
+    const { id, data } = e;
+    this.onRequest(id, data);
+  }
+  onRequest(id, payload) {
+  }
+  _sendResponse(id, data, opts = {}) {
+    const defaults2 = {
+      transferables: [],
+      error: void 0
+    };
+    const actual = Object.assign({}, defaults2, opts);
+    const error = actual.error;
+    const api = this._isNode ? this._parentPort : this._worker;
+    api.postMessage({
+      id,
+      result: { data, error }
+    }, actual.transferables.length > 0 ? actual.transferables : void 0);
+  }
+  sendResponse(id, payload = void 0, transferables = []) {
+    this._sendResponse(id, payload, { transferables });
+  }
+  sendError(id, error) {
+    this._sendResponse(id, void 0, { error });
+  }
+}
+class Thread {
+  constructor(path2, opts = { isNode: false, optsNode: void 0 }) {
+    console.info(`AsyncThreadWorker.Thread`);
+    this._isNode = opts.isNode;
+    let _worker;
+    if (this._isNode) {
+      const { Worker: Worker2 } = global.require("worker_threads");
+      _worker = new Worker2(path2, opts.optsNode);
+    } else {
+      _worker = new Worker(path2);
+    }
+    this._worker = _worker;
+    this._rrRequest = {};
+    if (this._isNode) {
+      _worker.on("message", (e) => this._onMessage(e));
+      _worker.on("error", (e) => this._onError(e));
+    } else {
+      _worker.onmessage = (e) => this._onMessage(e.data);
+      _worker.onerror = (e) => this._onError(e.data);
+    }
+  }
+  _onMessage(e) {
+    const { id, result } = e;
+    console.log("result for id:", id);
+    const { data, error } = result;
+    if (id in this._rrRequest) {
+      const { res, rej } = this._rrRequest[id];
+      delete this._rrRequest[id];
+      error ? rej(error) : res(data);
+    } else {
+      console.log("nop; invalid request id:", id);
+    }
+  }
+  _onError(e) {
+    console.log("_onError(): e:", e);
+    this._cancelPendingRequests();
+  }
+  _sendRequest(data, opts = {}) {
+    const defaults2 = {
+      transferables: []
+    };
+    const actual = Object.assign({}, defaults2, opts);
+    return new Promise((res, rej) => {
+      let id;
+      do {
+        id = `req-id-${Math.random()}`;
+      } while (id in this._rrRequest);
+      console.log("_sendRequest(): id:", id);
+      this._rrRequest[id] = { res, rej };
+      if (this._worker) {
+        this._worker.postMessage({ id, data }, actual.transferables.length > 0 ? actual.transferables : void 0);
+      } else {
+        console.log("_sendRequest(): nop (worker already terminated?)");
+      }
+    });
+  }
+  sendRequest(payload = void 0, transferables = []) {
+    return this._sendRequest(payload, { transferables });
+  }
+  getWorker() {
+    return this._worker;
+  }
+  _cancelPendingRequests() {
+    let count = 0;
+    Object.entries(this._rrRequest).forEach(([id, rr]) => {
+      rr.rej(`canceled: ${id}`);
+      delete this._rrRequest[id];
+      count += 1;
+    });
+    console.log(`_cancelPendingRequests(): canceled ${count} req(s)`);
+    if (Object.keys(this._rrRequest).length !== 0) {
+      throw "panic: the rr map should have been cleared!";
+    }
+  }
+  terminate() {
+    this._cancelPendingRequests();
+    let promise = null;
+    if (this._isNode) {
+      promise = this._worker.terminate();
+    } else {
+      this._worker.terminate();
+    }
+    this._worker = null;
+    return promise || void 0;
+  }
+}
+const AsyncThreadWorker = { ThreadWorker, Thread };
+class Recorder {
+  constructor({ app: app2, currentConfig: currentConfig2, mainApp: mainApp2, pane, scene }) {
+    __publicField(this, "_handleEncode", async (fname, buffer, estimate) => {
+      this._encoding = true;
+      await this.runEncode(fname, buffer, estimate);
+    });
+    this.currentConfig = currentConfig2;
+    const recorderFolder = pane.addFolder({
+      title: "recorder"
+    });
+    this.supportsMp4 = false;
+    if (!this.supportsMp4) {
+      this.thread = null;
+      this.outputChoice = "mp4";
+      this.resetThread("mp4");
+    }
+    this.maxDuration = 3;
+    this.width = 480 / 2;
+    this.height = 672 / 2;
+    recorderFolder.addInput(this, "maxDuration", {
+      min: 1,
+      max: 6,
+      step: 0.1
+    });
+    recorderFolder.addInput(this, "width", {
+      min: 100,
+      max: 1200,
+      step: 1
+    });
+    recorderFolder.addInput(this, "height", {
+      min: 100,
+      max: 1200,
+      step: 1
+    });
+    recorderFolder.addButton({
+      title: "start/stop recording"
+    }).on("click", async () => {
+      if (this.mediaRecorder) {
+        await this.stop();
+      } else {
+        this.start();
+      }
+    });
+    this.scene = scene;
+    this.app = app2;
+    this.mainApp = mainApp2;
+    this.delayedCalls = new DelayedCalls();
+    this.link = document.createElement("a");
+    document.body.appendChild(this.link);
+    this.link.style = "display: none";
+  }
+  resetThread(type) {
+    if (this.thread) {
+      this.thread.terminate();
+      this.logLine(`[info] an old thread terminated \u{1F607}`);
+    }
+    this.thread = Recorder.createThread(type);
+    this.logLine(`[info] a new ${type}-encoder thread created and ready \u{1F600}`);
+  }
+  static createThread(type) {
+    return new AsyncThreadWorker.Thread(`./ffmpeg/ffmpeg-${type}-worker.js`);
+  }
+  static createVideoBlob(buf) {
+    const view = new Uint8ClampedArray(buf);
+    return new Blob([view], { type: "video/mp4" });
+  }
+  logLine(message, color = "white") {
+  }
+  async runEncode(fname, buf, estimate = false) {
+    const mode = estimate ? "estimation mode" : "full length mode";
+    const name = this.currentConfig.id;
+    this.logLine(`[run] ffmpeg -y -i ${fname} ${name || "recording"}.${this.outputChoice}`);
+    const ret = await this._encode(fname, buf, estimate);
+    if (ret.err) {
+      this.logLine(`[info] encoding failed with error: ${ret.err}`);
+    } else {
+      const videoURL = Recorder.createVideoBlob(ret.buf);
+      this.downloadBlob(videoURL);
+      const { sec, stderr, stdout } = ret;
+      this.logLine(`[stdout] ${stdout}`);
+      this.logLine(stderr, null);
+      this.logLine(`[info] (${mode}) done in ${sec.toFixed(2)} seconds`);
+    }
+  }
+  downloadBlob(blob) {
+    const url2 = URL.createObjectURL(blob);
+    this.link.href = url2;
+    const name = this.currentConfig.id;
+    this.link.download = name || "preview";
+    this.link.click();
+    window.URL.revokeObjectURL(url2);
+  }
+  async _encode(fname, bufIn) {
+    try {
+      const ret = await this.thread.sendRequest({
+        task: "encode",
+        nameIn: fname,
+        bufIn
+      }, [bufIn]);
+      return ret;
+    } catch (err) {
+      return { err };
+    }
+  }
+  async stop() {
+    this.delayedCalls && this.delayedCalls.clear();
+    if (this.mediaRecorder) {
+      this.mediaRecorder.stop();
+      this.mediaRecorder = null;
+      await new Promise((res) => setTimeout(async () => {
+        this.mainApp.setHardcodedSize(null);
+        this.app.resizeTo = window;
+        this.resizeViewport(this.mainApp.w, this.mainApp.h);
+        await waitFrame(10);
+        window.dispatchEvent(new Event("resize"));
+        if (this._encoding) {
+          this.logLine(`[info] video encoding in process, do not close or refresh the page`);
+        }
+        res();
+      }, 100));
+    }
+    await Promise.resolve();
+  }
+  async resizeViewport(w, h) {
+    this.app.view.style.width = w + "px";
+    this.app.view.style.height = h + "px";
+    this.app.renderer.resize(w, h);
+    this.mainApp.resize(w, h);
+    await waitFrame(10);
+    window.dispatchEvent(new Event("resize"));
+    this.logLine(`[info] resize viewport - ${w}x${h}`);
+  }
+  async start() {
+    await this.stop();
+    this.mainApp.setHardcodedSize(this.width, this.height);
+    this.logLine(`[info] start recording`);
+    this.app.resizeTo = null;
+    const w = this.width;
+    const h = this.height;
+    await this.resizeViewport(w, h);
+    this.videoStream = this.app.view.captureStream(30);
+    this.mediaRecorder = new MediaRecorder(this.videoStream, {
+      mimeType: `video/${this.supportsMp4 ? "mp4" : "webm"}`,
+      videoBitsPerSecond: 5e6
+    });
+    const chunks = [];
+    this.mediaRecorder.ondataavailable = async (e) => {
+      chunks.push(e.data);
+    };
+    this.mediaRecorder.onstop = async (e) => {
+      const blob = new Blob(chunks, {
+        type: `video/${this.supportsMp4 ? "mp4" : "webm"}`
+      });
+      const estimate = false;
+      const blobBuffer = await blob.arrayBuffer();
+      this.logLine(`[info] new video/webm blob created, buffer length ${blobBuffer.length}`);
+      if (!this.supportsMp4) {
+        try {
+          const name = this.currentConfig.id;
+          await this._handleEncode(name || "preview", blobBuffer, estimate);
+        } catch (e2) {
+          this.logLine(`[Error] when encoding to mp4 ${e2}`);
+          this.downloadBlob(blob);
+        }
+      } else {
+        this.downloadBlob(blob);
+      }
+      this._encoding = false;
+      chunks.length = 0;
+      this.mediaRecorder = null;
+    };
+    this.scene.hide();
+    await waitFrame(10);
+    this.mediaRecorder.start();
+    this.scene.animate();
+    if (this.maxDuration) {
+      this.delayedCalls.add(this.stop.bind(this), this.maxDuration);
+    }
+  }
+  resize(w, h) {
+  }
+}
 const getRGBSmall = (hex) => {
   return rgb2rgbSmall(hex2rgb(hex.replace("#", "0x")));
 };
@@ -63460,7 +63859,10 @@ let currentConfig = parsed.query.config ? JSON.parse(parsed.query.config) : them
 const matrix = new Matrix$1();
 const styles = styles$1[0];
 let obj = {
-  text: "Happy birthday John",
+  id: "",
+  outputs: {
+    title: "Happy Birthday %RECIPIENT_NAME%"
+  },
   shadow: {
     alpha: 0.2,
     blur: 8,
@@ -63471,7 +63873,6 @@ let obj = {
       y: 20
     }
   },
-  debug: false,
   glare: {
     alpha: 1,
     size: 1,
@@ -63649,9 +64050,11 @@ class CurveDeform {
       this.setupText();
     });
     var _a2;
+    this.recipientName = "John";
     this.debugBG = false;
     this.debugFont = false;
     this.currentTheme = obj;
+    delete this.currentTheme.debug;
     this.paddings = {
       top: 0,
       bottom: 0,
@@ -63699,19 +64102,35 @@ class CurveDeform {
     this.plane.visible = false;
     this.containerPlane.addChild(this.plane);
     this.orignalPane = orignalPane;
-    const btnShare = orignalPane.addButton({
+    const tabs = orignalPane.addTab({
+      pages: [{ title: "Parameters" }, { title: "Export" }]
+    });
+    const parametersTab = tabs.pages[0];
+    const exportImportTab = tabs.pages[1];
+    exportImportTab.addInput(this.currentTheme, "id");
+    debugThemeColors(exportImportTab, this.currentTheme);
+    this.recorder = new Recorder({
+      app,
+      mainApp,
+      currentConfig: this.currentTheme,
+      pane: exportImportTab,
+      scene: this
+    });
+    const btnShare = exportImportTab.addButton({
       title: "Share"
     });
-    debugThemeColors(orignalPane, this.currentTheme);
     btnShare.on("click", () => {
       this.share();
     });
-    orignalPane.addButton({
+    parametersTab.addButton({
       title: "Animate"
     }).on("click", () => {
       this.animate();
     });
-    const pane = orignalPane.addFolder({ title: "Settings", expanded: false });
+    const pane = parametersTab.addFolder({
+      title: "Settings",
+      expanded: false
+    });
     const debugFolder = pane.addFolder({
       title: "debug",
       expanded: false
@@ -63767,7 +64186,12 @@ class CurveDeform {
     }).on("change", () => {
       this.resizeText(false);
     });
-    pane.addInput(this.currentTheme, "text").on("change", () => {
+    this.currentTheme.outputs.title = this.currentTheme.text || this.currentTheme.outputs.title;
+    delete this.currentTheme.text;
+    pane.addInput(this.currentTheme.outputs, "title").on("change", () => {
+      this.resizeText();
+    });
+    pane.addInput(this, "recipientName").on("change", () => {
       this.resizeText();
     });
     pane.addInput(this.currentTheme, "useDifferentFonts").on("change", () => {
@@ -64100,7 +64524,7 @@ class CurveDeform {
       wordWrap: true,
       fontSize
     });
-    const lines = TextMetrics$1.measureText(formatText(this.currentTheme.text), style).lines.filter((l) => !!l.trim());
+    const lines = TextMetrics$1.measureText(formatText(this.currentTheme.outputs.title.replace("%RECIPIENT_NAME%", this.recipientName)), style).lines.filter((l) => !!l.trim());
     this.geometry.segHeight = lines.length + 1;
     this.geometry.build();
     this.lines = [...lines];
@@ -64356,6 +64780,8 @@ class CurveDeform {
     });
     await Promise.all(promises);
     this.animating = false;
+  }
+  hide() {
   }
   share() {
     const theme = {
@@ -68967,9 +69393,11 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
 var Emitter = events.exports;
 let app = null;
 let renderer = null;
+let mainApp = null;
 class MainApp extends Emitter {
   constructor(mConfig = {}) {
     super();
+    mainApp = this;
     Assets.init();
     this.isSupported = true;
     this._isPlaying = true;
@@ -68995,6 +69423,8 @@ class MainApp extends Emitter {
       canvas.style.left = 0;
       this.stage = this.app.stage;
       this.preloader = new LoaderPixi({ optimize: false });
+      this.containerScale = new Container$2();
+      this.stage.addChild(this.containerScale);
       this._loadAssets(mConfig.ASSETS_PATH || "assets/");
     } else {
       setTimeout(() => {
@@ -69052,7 +69482,7 @@ class MainApp extends Emitter {
       return;
     setTimeout(() => {
       this.view = new Scene();
-      this.stage.addChild(this.view.view);
+      this.containerScale.addChild(this.view.view);
       this.view.resize(this.w, this.h);
       this.view.show();
     }, 100);
@@ -69062,11 +69492,21 @@ class MainApp extends Emitter {
       return;
     this.view && this.view.update();
   }
+  setHardcodedSize(width, height) {
+    this.hardcodedWidth = width;
+    this.hardcodedHeight = height;
+  }
   resize(w, h) {
-    if (!this.isSupported)
-      return;
-    this.app.resize();
+    this.w = w;
+    this.h = h;
+    w = this.hardcodedWidth || w;
+    h = this.hardcodedHeight || h;
+    const targetH = h;
+    const scaleContent = Math.max(1, targetH / h);
+    this.containerScale.scale.set(Math.min(1, 1 / scaleContent));
+    w *= scaleContent;
+    h *= scaleContent;
     this.view && this.view.resize(w, h);
   }
 }
-export { app, MainApp as default, renderer };
+export { app, MainApp as default, mainApp, renderer };
