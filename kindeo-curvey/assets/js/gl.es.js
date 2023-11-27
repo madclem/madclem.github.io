@@ -64847,6 +64847,9 @@ class CurveDeform {
           x,
           delay,
           duration,
+          onStart: () => {
+            this.containerPlane.visible = true;
+          },
           ease: easings2[Math.floor(Math.random() * easings2.length)][subeasings[Math.floor(Math.random() * subeasings.length)]],
           onComplete: res
         });
@@ -64856,6 +64859,7 @@ class CurveDeform {
     this.animating = false;
   }
   hide() {
+    this.containerPlane.visible = false;
   }
   prepareThumbnail() {
     this.animateGlare(true);
