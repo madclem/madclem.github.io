@@ -63718,7 +63718,7 @@ class Recorder {
   }
   async runEncode(fname, buf, estimate = false) {
     const mode = estimate ? "estimation mode" : "full length mode";
-    const name = this.currentConfig.id;
+    const name = String(this.currentConfig.id);
     this.logLine(`[run] ffmpeg -y -i ${fname} ${name || "recording"}.${this.outputChoice}`);
     const ret = await this._encode(fname, buf, estimate);
     if (ret.err) {
@@ -63735,7 +63735,7 @@ class Recorder {
   downloadBlob(blob) {
     const url2 = URL.createObjectURL(blob);
     this.link.href = url2;
-    const name = this.currentConfig.id;
+    const name = String(this.currentConfig.id);
     this.link.download = name || "preview";
     this.link.click();
     window.URL.revokeObjectURL(url2);
@@ -63806,7 +63806,7 @@ class Recorder {
       this.logLine(`[info] new video/webm blob created, buffer length ${blobBuffer.length}`);
       if (!this.supportsMp4) {
         try {
-          const name = this.currentConfig.id;
+          const name = String(this.currentConfig.id);
           await this._handleEncode(name || "preview", blobBuffer, estimate);
         } catch (e2) {
           this.logLine(`[Error] when encoding to mp4 ${e2}`);
