@@ -63922,6 +63922,7 @@ let currentConfig = parsed.query.config ? JSON.parse(parsed.query.config) : them
 const matrix = new Matrix$1();
 const styles = styles$1[0];
 let obj = {
+  sku: "",
   id: "",
   outputs: {
     title: "Happy Birthday %RECIPIENT_NAME%"
@@ -64113,7 +64114,7 @@ class CurveDeform {
       this.setupText();
     });
     var _a2;
-    this.recipientName = "John";
+    this.recipientName = "Name";
     this.debugBG = false;
     this.debugFont = false;
     this.currentTheme = obj;
@@ -64170,7 +64171,25 @@ class CurveDeform {
     });
     const parametersTab = tabs.pages[0];
     const exportImportTab = tabs.pages[1];
-    exportImportTab.addInput(this.currentTheme, "id");
+    this.currentTheme.sku = this.currentTheme.sku || this.currentTheme.id || "KIN_WARP_";
+    exportImportTab.addInput(this.currentTheme, "sku");
+    this.currentTheme.id = this.currentTheme.id || Date.now();
+    const inputId = exportImportTab.addInput(this.currentTheme, "id", {
+      step: 1
+    });
+    exportImportTab.addButton({
+      title: "generate id"
+    }).on("click", async () => {
+      try {
+        const t = await prompt("Are you creating a new card?", "yes");
+        console.log("t");
+        if (!!t) {
+          this.currentTheme.id = Date.now();
+          inputId.refresh();
+        }
+      } catch (e) {
+      }
+    });
     debugThemeColors(exportImportTab, this.currentTheme);
     this.recorder = new Recorder({
       app,
