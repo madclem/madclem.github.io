@@ -43833,6 +43833,7 @@ var debugLinear = (pane, that) => {
     })),
     value: null
   }).on("change", (v) => {
+    console.log(v.value, BLEND_MODES$5[v.value]);
     that.currentTheme.bg.linear.blendMode = BLEND_MODES$5[v.value];
     that.linearGradient.view.blendMode = BLEND_MODES$5[v.value];
   });
@@ -64799,7 +64800,9 @@ class CurveDeform {
   }
   setPlanePosition() {
     let scale = 1;
-    scale = Math.min(1.25, (this.w - 20) / this.containerText.width);
+    let scaleW = Math.min(1.25, (this.w - 20) / this.containerText.width);
+    let scaleH = Math.min(1.25, this.h * 0.9 / this.containerText.height);
+    scale = Math.min(scaleW, scaleH);
     this.containerPlane.position.x = this.w / 2;
     this.containerPlane.position.y = this.h / 2;
     this.plane.position.x = -this.containerText.width / 2;
