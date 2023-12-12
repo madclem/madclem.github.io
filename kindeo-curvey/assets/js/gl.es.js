@@ -43833,7 +43833,6 @@ var debugLinear = (pane, that) => {
     })),
     value: null
   }).on("change", (v) => {
-    console.log(v.value, BLEND_MODES$5[v.value]);
     that.currentTheme.bg.linear.blendMode = BLEND_MODES$5[v.value];
     that.linearGradient.view.blendMode = BLEND_MODES$5[v.value];
   });
@@ -64010,7 +64009,7 @@ let obj = {
 };
 const easings = [Sine];
 const subEasing = ["easeIn", "easeOut", "easeInOut"];
-const ratioFontMobile = 0.85;
+const ratioFontMobile = 1;
 const fontSizeScale = 1;
 const uniqFonts = Array.from(new Set(assets.fonts.map((f) => f.split(":")[0])));
 const fontsList = [...assets.fonts].sort();
@@ -64598,7 +64597,7 @@ class CurveDeform {
       return;
     this.folderPaddings.hidden = !!!this.debugFont;
     let fontSize = 100 * fontSizeScale;
-    let textSize = Math.min(460, this.w - 20);
+    Math.min(460, this.w - 20);
     if (this.isMobile) {
       fontSize = fontSize * ratioFontMobile * fontSizeScale;
     }
@@ -64614,7 +64613,7 @@ class CurveDeform {
       ...this.currentTheme.fonts[0],
       ...currentFont,
       fontFamily: `${currentFont.fontFamily}, Noto Color Emoji`,
-      wordWrapWidth: Math.min(1100, textSize),
+      wordWrapWidth: 600,
       wordWrap: true,
       fontSize
     });
