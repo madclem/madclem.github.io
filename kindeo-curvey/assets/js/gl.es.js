@@ -64613,7 +64613,7 @@ class CurveDeform {
       ...this.currentTheme.fonts[0],
       ...currentFont,
       fontFamily: `${currentFont.fontFamily}, Noto Color Emoji`,
-      wordWrapWidth: 560,
+      wordWrapWidth: 540,
       wordWrap: true,
       fontSize
     });
