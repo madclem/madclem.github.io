@@ -44030,7 +44030,7 @@ void main()
     ownColor.rgb *= (1. + vColorTint);
     float alpha = ownColor.a;
     gl_FragColor = vec4(ownColor.rgb, alpha);
-    gl_FragColor.rgb *= alpha;
+    gl_FragColor *= alpha;
 }
 `;
 var vert = `
