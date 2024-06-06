@@ -1,0 +1,16 @@
+var WEBGL_CONFIG = {
+  SHOW_LOADER_FAKE: false,
+  MIN_LOADING_TIME: 1,
+  DELAY_FADEOUT_INFOS: 0,
+  ASSETS_PATH: "./assets/",
+  NAME_BUILD: "WebGLAnimation",
+  SOUND: false,
+  START_BUTTON: false,
+  TITLE: "SOHO",
+  INSTRUCTIONS: "",
+  DESCRIPTION: "",
+  COLOR: "white",
+  BACKGROUND_COLOR:
+    "#000000",
+  CREDITS: [],
+};
