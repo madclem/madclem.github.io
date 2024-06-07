@@ -38758,7 +38758,6 @@ class SpheresPhysics {
     copy(this.cursorPrev, this.cursor);
     const centerX = this.w / 2;
     const centerY = this.h / 2;
-    console.log(648 * this.scaleText);
     const rectWidth = TEXT_WIDTH * this.scaleText;
     const rectHeight = TEXT_HEIGHT * this.scaleText;
     const rectLeft = centerX - rectWidth / 2;
