@@ -38679,9 +38679,9 @@ class SphereBody {
   }
   reset({ radius, density, friction, restitution, width, height } = {}) {
     set(this.position0, Math.random() * width, Math.random() * height);
-    scale(this.position0, this.position0, 100);
+    scale(this.position0, this.position0, 1);
     copy(this.velocity0, this.position0);
-    scale(this.velocity0, this.velocity0, -2);
+    scale(this.velocity0, this.velocity0, 0.1);
     this.radius = radius;
     this.density = density;
     this.friction = friction;
@@ -38721,12 +38721,13 @@ class SpheresPhysics {
     __publicField(this, "cursor", create());
     __publicField(this, "cursorPushForce", create());
     __publicField(this, "cursorPrev", create());
+    __publicField(this, "scaleText", 1);
     __publicField(this, "poolSpheres", new ObjectPool(() => {
       return new SphereBody();
     }));
   }
   initWorld(spheres) {
-    for (let i = 0; i < SPHERES_COUNT; i++) {
+    for (let i = 0; i < spheres.length; i++) {
       const sphereData = spheres[i];
       const { radius, density, friction, restitution } = sphereData;
       const sphere = this.poolSpheres.get();
@@ -38757,8 +38758,9 @@ class SpheresPhysics {
     copy(this.cursorPrev, this.cursor);
     const centerX = this.w / 2;
     const centerY = this.h / 2;
-    const rectWidth = 520;
-    const rectHeight = 114;
+    console.log(648 * this.scaleText);
+    const rectWidth = TEXT_WIDTH * this.scaleText;
+    const rectHeight = TEXT_HEIGHT * this.scaleText;
     const rectLeft = centerX - rectWidth / 2;
     const rectRight = centerX + rectWidth / 2;
     const rectTop = centerY - rectHeight / 2;
@@ -38868,9 +38870,10 @@ class SpheresPhysics {
       o.update(frameRate);
     }
   }
-  resize(w, h) {
+  resize(w, h, scaleText) {
     this.w = w;
     this.h = h;
+    this.scaleText = scaleText;
   }
 }
 class SphereView {
@@ -38912,6 +38915,7 @@ const paletteLight = [
   12776178
 ];
 const SPHERES_COUNT = 50;
+const SPHERES_COUNT_MOBILE = 40;
 class Spheres {
   constructor() {
     __publicField(this, "view", new Container$1());
@@ -38920,12 +38924,18 @@ class Spheres {
     __publicField(this, "visibleSphereCount", 0);
     __publicField(this, "spheresPhysics", new SpheresPhysics());
   }
-  init() {
-    this.visibleSphereCount = SPHERES_COUNT;
+  init(isMobile2) {
+    if (this.initialised)
+      return;
+    this.initialised = true;
+    this.visibleSphereCount = isMobile2 ? SPHERES_COUNT_MOBILE : SPHERES_COUNT;
     let ind = 0;
     for (let e = 0; e < this.visibleSphereCount; e++) {
       const isDark = e % 4 === 0;
-      const t = isDark ? 15 + Math.random() * 20 : 50 * (0.1 + Math.random() * 0.9);
+      let t = isDark ? 15 + Math.random() * 20 : 50 * (0.1 + Math.random() * 0.9);
+      if (isMobile2) {
+        t *= 0.75;
+      }
       const i = 10 * (0.2 + Math.random() * 0.8);
       const r = 0.2 + Math.random() * 0.8;
       const n = 0.5 + Math.random() * 0.5;
@@ -38954,16 +38964,16 @@ class Spheres {
     }
     this.spheresPhysics.initWorld(this.spheres);
   }
-  resize(w, h) {
-    this.spheresPhysics.resize(w, h);
+  resize(w, h, scaleText) {
+    this.spheresPhysics.resize(w, h, scaleText);
   }
   reset() {
-    for (let e = 0; e < SPHERES_COUNT; e++)
+    for (let e = 0; e < this.visibleSphereCount; e++)
       this.spheresPhysics.bodies[e].reset();
   }
   update(e, cursor) {
     this.spheresPhysics.update(cursor, e, this.spheres);
-    for (let t = 0; t < SPHERES_COUNT; t++) {
+    for (let t = 0; t < this.visibleSphereCount; t++) {
       const i = this.spheres[t];
       const r = this.spheresPhysics.bodies[t];
       i.sphere.view.position.x = r.position[0];
@@ -38973,6 +38983,8 @@ class Spheres {
   }
 }
 const clamp = (val, min, max) => Math.max(Math.min(val, max), min);
+const TEXT_WIDTH = 880;
+const TEXT_HEIGHT = 170;
 const mat = new Matrix();
 const defaultValues = {
   u_ambientColor: [0.8667, 0.8667, 0.8667],
@@ -39015,14 +39027,13 @@ class Scene extends AbstractScene {
     this.tick = 0;
     this.containerScene = new Container$1();
     this.text = new Text("LIGHTS", {
-      fill: "#000000",
+      fill: "#222222",
       fontSize: 240,
       fontFamily: "Montserrat",
       fontWeight: 600
     });
     this.text.scale.set(0.6);
     this.text.anchor.set(0.5);
-    this.containerScene.addChild(this.text);
     this.containerCursor = new Container$1();
     const g = new Graphics();
     g.beginFill(16777215, 1).drawCircle(0, 0, 10);
@@ -39033,6 +39044,7 @@ class Scene extends AbstractScene {
     gMask.position.y = 8;
     this.containerCursor.addChild(g);
     this.containerScene.addChild(this.containerCursor);
+    this.containerScene.addChild(this.text);
     this.g2 = new Graphics();
     this.g2.beginFill(0).drawCircle(0, 0, 15);
     this.g3 = new Graphics();
@@ -39168,7 +39180,7 @@ class Scene extends AbstractScene {
     this.containerScene.addChildAt(this.spheres.view, 0);
   }
   onShow() {
-    this.spheres.init();
+    this.spheres.init(this.isMobile);
     this.updateLight();
   }
   updateLight() {
@@ -39233,6 +39245,9 @@ class Scene extends AbstractScene {
     this.sharedUniforms.u_cacheFromTexture.value = this.cacheFromRT;
     this.sharedUniforms.u_cacheToTexture.value = this.cacheToRT;
   }
+  get isMobile() {
+    return this.w < 600;
+  }
   update() {
     this.containerCursor.position.x += (this.targetCursor.x - this.containerCursor.position.x) * 0.1;
     this.containerCursor.position.y += (this.targetCursor.y - this.containerCursor.position.y) * 0.1;
@@ -39252,7 +39267,11 @@ class Scene extends AbstractScene {
     this.updateLight();
   }
   onResize(w, h) {
-    this.spheres.resize(w, h);
+    if (this.isMobile) {
+      this.DOWNSCALE = 2;
+    } else {
+      this.DOWNSCALE = 1.5;
+    }
     this.bg.width = w;
     this.bg.height = h;
     w = Math.ceil(w / this.DOWNSCALE);
@@ -39286,11 +39305,14 @@ class Scene extends AbstractScene {
     this.text.y = this.h / 2;
     mat.tx = -(this.w - w) / 2;
     mat.ty = -(this.h - h) / 2;
+    this.text.scale.set(1);
+    this.text.scale.set(Math.min(1, Math.min(670, this.w * 0.9) / this.text.width));
     this.renderSprite.width = this.w;
     this.renderSprite.height = this.h;
     this.geometryRender.width = this.w;
     this.geometryRender.height = this.h;
     this.geometryRender.build();
+    this.spheres.resize(this.w, this.h, this.text.scale.x);
   }
   export() {
     const obj = { test: "name" };
