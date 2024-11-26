@@ -1,0 +1,33 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>Project Template</title>
+	<!-- <link rel="prefetch" href="./assets/images/icons.svg"/> -->
+	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
+</head>
+
+<body>
+
+
+	<div class="experiment-container">
+	</div>
+
+
+	<script type="text/javascript" src=assets/js/config.js></script>
+
+	<script type="module">
+		import MyLib from './assets/js/gl.es.js';
+		window[WEBGL_CONFIG.NAME_BUILD] = MyLib;
+
+		import('./assets/js/app.js');
+
+	</script>
+</body>
+
+</html>
