@@ -1,0 +1,467 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>Project Template</title>
+	<!-- <link rel="prefetch" href="./assets/images/icons.svg"/> -->
+	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
+	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+		}
+
+		.experiment-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: 100vh;
+			background-color: white;
+			flex-direction: column;
+			color: #34C5D2;
+		}
+
+		.dummy {
+			/* display: none; */
+			font-family: "Poppins", sans-serif;
+			font-weight: 900;
+			position: absolute;
+		}
+
+		.flipper-container {
+			position: relative;
+			width: 100px;
+			height: 150px;
+			margin-bottom: 50px;
+			font-size: 72px;
+		}
+
+
+		.word-container {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			perspective: 800px;
+			box-shadow: 1px 1px 8px 0px rgba(0, 0, 0, 0.25);
+
+			border-radius: 21px;
+		}
+
+		.front-bottom {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 50%;
+			overflow: hidden;
+			background-color: #FFFFFF;
+		}
+
+		.front-bottom-content {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 150px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.front-top {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 50%;
+			overflow: hidden;
+			background-color: #F7F7F7;
+			transform-origin: bottom center;
+			transform-style: preserve-3d;
+			backface-visibility: hidden;
+		}
+
+		.front-top-content {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 150px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 72px;
+		}
+
+		/* Back word styling changes */
+		.back-top {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 50%;
+			/* overflow: hidden; */
+			background-color: #F7F7F7;
+			z-index: -1;
+		}
+
+		.back-top-content {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 150px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 72px;
+		}
+
+		.back-bottom {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 50%;
+			overflow: hidden;
+			background-color: #FFFFFF;
+			transform-origin: top center;
+			transform-style: preserve-3d;
+			backface-visibility: hidden;
+			transform: rotateX(180deg);
+			/* Start folded */
+			z-index: -2;
+		}
+
+		.back-bottom-content {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 150px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 72px;
+		}
+
+		.slider-container {
+			width: 300px;
+			margin-top: 20px;
+		}
+
+		.slider {
+			width: 100%;
+			height: 20px;
+		}
+
+		h1 {
+			margin-bottom: 30px;
+		}
+
+		input[type="text"] {
+			padding: 10px;
+			margin: 10px 0;
+			width: 280px;
+			font-size: 16px;
+		}
+
+		button {
+			margin-top: 10px;
+			padding: 10px 20px;
+			background-color: #2ecc71;
+			border: none;
+			color: white;
+			font-size: 16px;
+			cursor: pointer;
+			border-radius: 4px;
+		}
+
+		button:hover {
+			background-color: #27ae60;
+		}
+
+		.divider {
+			position: absolute;
+			top: 50%;
+			height: 1px;
+			transform: translateY(-50%);
+			left: 0;
+			width: 100%;
+			background-color: rgba(0, 0, 0, 0.1);
+			z-index: 10;
+		}
+
+		.top {
+			border-radius: 21px 21px 0 0;
+			top: -1px;
+			border-top: 1px solid rgba(0, 0, 0, 0.1);
+		}
+
+		.bottom {
+			bottom: -1px;
+			border-radius: 0 0 21px 21px;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		}
+
+		.front-top-shadow {
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.5) 80%);
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 2;
+			opacity: 0;
+		}
+
+		.back-bottom-light {
+			background: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 40%);
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 2;
+			opacity: 1;
+		}
+
+		#wordInput {
+			width: 80%;
+			height: 40px;
+			position: absolute;
+			bottom: 20px;
+			left: 10%;
+			border: 1px solid #d7d7d7;
+			border-radius: 5px;
+			padding: 0 10px;
+		}
+
+		.text-content {
+			font-family: "Poppins", sans-serif;
+			font-weight: 900;
+		}
+	</style>
+</head>
+
+<body>
+
+
+	<div class="experiment-container">
+
+		<div class="flipper-container">
+			<div class="dummy text-content"></div>
+			<div class="word-container">
+				<div class="divider"></div>
+				<!-- Front word (initially visible) -->
+				<div class="front-bottom bottom">
+					<!-- <div class="front-bottom-light"></div> -->
+					<div class="front-bottom-content text-content">WORDS</div>
+				</div>
+				<div class="front-top top" id="frontTop">
+					<div class="front-top-shadow"></div>
+					<div class="front-top-content text-content">WORDS</div>
+				</div>
+
+				<!-- Back word (initially hidden) -->
+				<div class="back-top top">
+					<!-- <div class="front-top-shadow"></div> -->
+					<div class="back-top-content text-content">COLOURS</div>
+				</div>
+				<div class="back-bottom bottom" id="backBottom">
+					<div class="back-bottom-light"></div>
+					<div class="back-bottom-content text-content">COLOURS</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- <div class="slider-container">
+		    <input type="range" min="0" max="100" value="0" class="slider" id="flipSlider">
+		  </div> -->
+		<div class="controls">
+			<button id="updateButton">Next</button>
+		</div>
+
+		<input id="wordInput" placeholder="Enter words" value="WRITE WHAT YOU WANT"></input>
+
+	</div>
+	<!-- EXPERIMENT -->
+	<!-- instructions -->
+	<div class="instructions hide-after-delay is-experiment">
+	</div>
+	<!-- credits -->
+	<div class="credit-list hide-after-delay is-experiment">
+	</div>
+	<!-- twitter -->
+	<div class="socials-container">
+		<a class="twitter-container is-experiment" data-display="flex" href="https://twitter.com/mad_clem" target="_blank">
+			@madclem
+		</a>
+		<a class="twitter-container is-experiment" data-display="flex" href="https://bsky.app/profile/clem-dev.bsky.social"
+			target="_blank">
+			@clem-dev.bsky.social
+		</a>
+	</div>
+
+
+	<!-- start button -->
+
+	<!-- BOTH -->
+	<!-- home -->
+	<a href="https://madclem.github.io" target="_blank">
+		<svg class="home-icon icon" width="22" height="22" viewBox="0 0 22 22" fill="none"
+			xmlns="http://www.w3.org/2000/svg">
+			<rect x="0.5" y="0.5" width="21" height="21" stroke="white" />
+			<rect x="1" y="1" width="10" height="10" fill="white" />
+			<rect x="11" y="11" width="10" height="10" fill="white" />
+		</svg>
+
+	</a>
+
+	<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+	<script>
+
+		const map = function (val, inputMin, inputMax, outputMin, outputMax) {
+			return (outputMax - outputMin) * ((val - inputMin) / (inputMax - inputMin)) +
+				outputMin;
+		}
+
+		const clamp = (val, min, max) => Math.max(Math.min(val, max), min);
+
+
+
+		let words = [];
+		document.addEventListener('DOMContentLoaded', function () {
+			const wordInput = document.getElementById('wordInput');
+			const frontTop = document.getElementById('frontTop');
+			const backBottom = document.getElementById('backBottom');
+			const flipSlider = document.getElementById('flipSlider');
+			const frontWordInput = document.getElementById('frontWordInput');
+			const backWordInput = document.getElementById('backWordInput');
+			const updateButton = document.getElementById('updateButton');
+			const frontTopContent = document.querySelector('.front-top-content');
+			const frontBottomContent = document.querySelector('.front-bottom-content');
+			const backTopContent = document.querySelector('.back-top-content');
+			const backBottomContent = document.querySelector('.back-bottom-content');
+			const frontTopShadow = document.querySelector('.front-top-shadow');
+			const backBottomLight = document.querySelector('.back-bottom-light');
+			const container = document.querySelector('.flipper-container');
+			const dummy = document.querySelector('.dummy');
+
+			let indexWord = 0;
+
+			const setWords = function () {
+				frontTopContent.textContent = words[indexWord];
+				frontBottomContent.textContent = words[indexWord];
+
+				let indexNextWord = indexWord + 1;
+				indexNextWord = indexNextWord % words.length;
+				backTopContent.textContent = words[indexNextWord];
+				backBottomContent.textContent = words[indexNextWord];
+			}
+
+			let anim = {
+				percent: 0
+			};
+
+
+			const updateFlapper = function () {
+				const value = anim.percent;
+
+				const opacityShadow = Sine.easeIn(Math.min(50, value) / 50);
+				const opacityLight = Sine.easeIn(map(clamp(value, 50, 100), 50, 100, 1, 0));
+
+				frontTopShadow.style.opacity = opacityShadow;
+				backBottomLight.style.opacity = opacityLight;
+				// Calcul de l'angle de rotation (0 à 180 degrés)
+				const rotationAngle = (value / 100) * 180;
+
+				// Front top half rotates forward
+				frontTop.style.transform = `rotateX(-${rotationAngle}deg)`;
+
+				// Back bottom half rotates from 180 to 0 degrees
+				backBottom.style.transform = `rotateX(${180 - rotationAngle}deg)`;
+
+				// Ajustement des z-index pour gérer la superposition
+				if (rotationAngle > 90) {
+					frontTop.style.zIndex = "-3";
+					backBottom.style.zIndex = "2";
+				} else {
+					frontTop.style.zIndex = "1";
+					backBottom.style.zIndex = "-2";
+				}
+			}
+
+			const animate = function () {
+				return new Promise((resolve, reject) => {
+					gsap.to(anim, {
+						duration: 0.8,
+						percent: 100,
+						ease: "linear",
+						onUpdate: function () {
+							updateFlapper();
+						},
+						onComplete: function () {
+							resolve();
+						}
+					});
+				});
+			}
+
+			let animating = false;
+			// Update words when button is clicked
+			updateButton.addEventListener('click', function () {
+				if (animating) return
+				animating = true;
+				animate().then(() => {
+					animating = false;
+					anim.percent = 0;
+					indexWord++;
+					indexWord = indexWord % words.length;
+					setWords();
+					updateFlapper();
+				});
+			});
+
+			const updateWords = function (text) {
+				words = text.split(" ").map(word => word.toUpperCase());
+				updateWidthContainer();
+			}
+
+			const updateWidthContainer = function () {
+				const longestWord = words.reduce((acc, word) => {
+					dummy.textContent = word;
+					const dummyWidth = dummy.offsetWidth;
+					return dummyWidth > acc ? dummyWidth : acc
+				}, 0);
+
+
+				const padding = 20;
+				container.style.width = `${longestWord + padding * 2}px`;
+			}
+
+			wordInput.addEventListener('change', function (e) {
+				updateWords(e.target.value);
+
+				indexWord = 0;
+				setWords();
+			})
+
+			updateWords(wordInput.value)
+			setWords();
+		});
+	</script>
+
+</body>
+
+</html>
